@@ -1,0 +1,8 @@
+---
+title: "LLM From Scratch"
+author: "Dipankar Baisya"
+date: "2025-10-28"
+categories: [LLM, machine learning, tutorial]
+---
+
+This is a post on building a LLM .
