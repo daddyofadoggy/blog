@@ -2,8 +2,12 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/LLM-From-Scratch/index.html",
-      "/posts/welcome/index.html"
+      "/posts/welcome/index.html",
+      "/posts/LLM-From-Scratch/index.html"
     ]
+  },
+  {
+    "listing": "/posts/LLM-From-Scratch/chapters/ch02.html",
+    "items": []
   }
 ]

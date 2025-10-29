@@ -1,17 +1,36 @@
 {
   "index.qmd": {
-    "index.html": "6696bc4e"
+    "index.html": "f810476e"
   },
-  "posts/post-with-code/index.qmd": {
-    "index.html": "5ee6a9cb"
-  },
-  "posts/welcome/index.qmd": {
-    "index.html": "e4f8368f"
-  },
-  "about.qmd": {
-    "about.html": "facee3f1"
+  "posts/LLM-From-Scratch/chapters/ch02.ipynb": {
+    "ch02.html": "7d701f02",
+    "ch02.out.ipynb": "c070db9f",
+    "ch02-preview.html": "96c6fed7"
   },
   "posts/LLM-From-Scratch/index.qmd": {
-    "index.html": "467e8759"
+    "index.html": "ea53c7d5"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "395476bd"
+  },
+  "posts/LLM-From-Scratch/chapters/ch03.ipynb": {
+    "ch03.out.ipynb": "85108750",
+    "ch03-preview.html": "1a56cdcb",
+    "ch03.html": "afc3048a"
+  },
+  "posts/LLM-From-Scratch/chapters/ch04.ipynb": {
+    "ch04.out.ipynb": "8d37dfa6",
+    "ch04-preview.html": "d1b48b39",
+    "ch04.html": "6d37bb4f"
+  },
+  "posts/LLM-From-Scratch/chapters/ch05.ipynb": {
+    "ch05.out.ipynb": "da6fe723",
+    "ch05-preview.html": "996f9f27",
+    "ch05.html": "d02ca698"
+  },
+  "posts/LLM-From-Scratch/chapters/ch06.ipynb": {
+    "ch06.out.ipynb": "4d167704",
+    "ch06-preview.html": "7318a90c",
+    "ch06.html": "80303736"
   }
 }

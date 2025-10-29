@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="generator" content="quarto-1.8.25">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+    <title>ch04 – My Blogs</title>
+    <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      ul.task-list{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+        vertical-align: middle;
+      }
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+    </style>
+
+    <style>
+      body.hypothesis-enabled #quarto-embed-header {
+        padding-right: 36px;
+      }
+
+      #quarto-embed-header {
+        height: 3em;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid 1px;
+      }
+
+      #quarto-embed-header h6 {
+        font-size: 1.1em;
+        padding-top: 0.6em;
+        margin-left: 1em;
+        margin-right: 1em;
+        font-weight: 400;
+      }
+
+      #quarto-embed-header a.quarto-back-link,
+      #quarto-embed-header a.quarto-download-embed {
+        font-size: 0.8em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+
+      .quarto-back-container {
+        padding-left: 0.5em;
+        display: flex;
+      }
+
+      .headroom {
+          will-change: transform;
+          transition: transform 200ms linear;
+      }
+
+      .headroom--pinned {
+          transform: translateY(0%);
+      }
+
+      .headroom--unpinned {
+          transform: translateY(-100%);
+      }      
+    </style>
+
+    <script>
+    window.document.addEventListener("DOMContentLoaded", function () {
+
+      var header = window.document.querySelector("#quarto-embed-header");
+      const titleBannerEl = window.document.querySelector("body > #title-block-header");
+      if (titleBannerEl) {
+        titleBannerEl.style.paddingTop = header.clientHeight + "px";
+      }
+      const contentEl = window.document.getElementById('quarto-content');
+      for (const child of contentEl.children) {
+        child.style.paddingTop = header.clientHeight + "px";
+        child.style.marginTop = "1em";
+      }
+
+      // Use the article root if the `back` call doesn't work. This isn't perfect
+      // but should typically work
+      window.quartoBackToArticle = () => {
+        var currentUrl = window.location.href;
+        window.history.back();
+        setTimeout(() => {
+            // if location was not changed in 100 ms, then there is no history back
+            if(currentUrl === window.location.href){              
+                // redirect to site root
+                window.location.href = '/';
+            }
+        }, 100);
+      }
+
+      const headroom = new window.Headroom(header, {
+        tolerance: 5,
+        onPin: function () {
+        },
+        onUnpin: function () {
+        },
+      });
+      headroom.init();
+    });
+    </script>
+
+    
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+     <script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script> 
+        <link rel="stylesheet" href="../../../styles.css">
+      </head>
+
+  <body class="floating nav-fixed quarto-notebook quarto-light">
+    <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
+      
+      <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link"><i class="bi bi-caret-left"></i> Back to Article</a>
+      <h6><i class="bi bi-journal-code"></i> 4.1 Coding an LLM architecture</h6>
+
+            <a href="../../../posts/LLM-From-Scratch/chapters/ch04.ipynb" class="btn btn-primary quarto-download-embed" download="ch04.ipynb">Download Notebook</a>
+          </div>
+
+     <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">My Blogs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#coding-an-llm-architecture" id="toc-coding-an-llm-architecture" class="nav-link active" data-scroll-target="#coding-an-llm-architecture">4.1 Coding an LLM architecture</a></li>
+  <li><a href="#normalizing-activations-with-layer-normalization" id="toc-normalizing-activations-with-layer-normalization" class="nav-link" data-scroll-target="#normalizing-activations-with-layer-normalization">4.2 Normalizing activations with layer normalization</a></li>
+  <li><a href="#implementing-a-feed-forward-network-with-gelu-activations" id="toc-implementing-a-feed-forward-network-with-gelu-activations" class="nav-link" data-scroll-target="#implementing-a-feed-forward-network-with-gelu-activations">4.3 Implementing a feed forward network with GELU activations</a></li>
+  <li><a href="#adding-shortcut-connections" id="toc-adding-shortcut-connections" class="nav-link" data-scroll-target="#adding-shortcut-connections">4.4 Adding shortcut connections</a></li>
+  <li><a href="#connecting-attention-and-linear-layers-in-a-transformer-block" id="toc-connecting-attention-and-linear-layers-in-a-transformer-block" class="nav-link" data-scroll-target="#connecting-attention-and-linear-layers-in-a-transformer-block">4.5 Connecting attention and linear layers in a transformer block</a></li>
+  <li><a href="#coding-the-gpt-model" id="toc-coding-the-gpt-model" class="nav-link" data-scroll-target="#coding-the-gpt-model">4.6 Coding the GPT model</a></li>
+  <li><a href="#generating-text" id="toc-generating-text" class="nav-link" data-scroll-target="#generating-text">4.7 Generating text</a></li>
+  <li><a href="#summary-and-takeaways" id="toc-summary-and-takeaways" class="nav-link" data-scroll-target="#summary-and-takeaways">Summary and takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>      <div class="cell-container"><div class="cell-decorator"><pre>In [1]:</pre></div><div id="f9eac223-a125-40f7-bacc-bd0d890450c7" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> importlib.metadata <span class="im">import</span> version</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"matplotlib version:"</span>, version(<span class="st">"matplotlib"</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"torch version:"</span>, version(<span class="st">"torch"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"tiktoken version:"</span>, version(<span class="st">"tiktoken"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>matplotlib version: 3.10.0
+torch version: 2.6.0
+tiktoken version: 0.9.0</code></pre>
+</div>
+</div></div>
+<div id="e7da97ed-e02f-4d7f-b68e-a0eba3716e02" class="cell markdown">
+<ul>
+<li>In this chapter, we implement a GPT-like LLM architecture; the next chapter will focus on training this LLM</li>
+</ul>
+</div>
+<div id="7d4f11e0-4434-4979-9dee-e1207df0eb01" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/01.webp" width="500px"></p>
+</div>
+<div id="53fe99ab-0bcf-4778-a6b5-6db81fb826ef" class="cell markdown">
+<section id="coding-an-llm-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="coding-an-llm-architecture">4.1 Coding an LLM architecture</h2>
+</section>
+</div>
+<div id="ad72d1ff-d82d-4e33-a88e-3c1a8831797b" class="cell markdown">
+<ul>
+<li>Chapter 1 discussed models like GPT and Llama, which generate words sequentially and are based on the decoder part of the original transformer architecture</li>
+<li>Therefore, these LLMs are often referred to as “decoder-like” LLMs</li>
+<li>Compared to conventional deep learning models, LLMs are larger, mainly due to their vast number of parameters, not the amount of code</li>
+<li>We’ll see that many elements are repeated in an LLM’s architecture</li>
+</ul>
+</div>
+<div id="5c5213e9-bd1c-437e-aee8-f5e8fb717251" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/02.webp" width="400px"></p>
+</div>
+<div id="0d43f5e2-fb51-434a-b9be-abeef6b98d99" class="cell markdown">
+<ul>
+<li>In previous chapters, we used small embedding dimensions for token inputs and outputs for ease of illustration, ensuring they fit on a single page</li>
+<li>In this chapter, we consider embedding and model sizes akin to a small GPT-2 model</li>
+<li>We’ll specifically code the architecture of the smallest GPT-2 model (124 million parameters), as outlined in Radford et al.’s <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">Language Models are Unsupervised Multitask Learners</a> (note that the initial report lists it as 117M parameters, but this was later corrected in the model weight repository)</li>
+<li>Chapter 6 will show how to load pretrained weights into our implementation, which will be compatible with model sizes of 345, 762, and 1542 million parameters</li>
+</ul>
+</div>
+<div id="21baa14d-24b8-4820-8191-a2808f7fbabc" class="cell markdown">
+<ul>
+<li>Configuration details for the 124 million parameter GPT-2 model include:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="5ed66875-1f24-445d-add6-006aae3c5707" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>GPT_CONFIG_124M <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"vocab_size"</span>: <span class="dv">50257</span>,    <span class="co"># Vocabulary size</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"context_length"</span>: <span class="dv">1024</span>, <span class="co"># Context length</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"emb_dim"</span>: <span class="dv">768</span>,         <span class="co"># Embedding dimension</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n_heads"</span>: <span class="dv">12</span>,          <span class="co"># Number of attention heads</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n_layers"</span>: <span class="dv">12</span>,         <span class="co"># Number of layers</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"drop_rate"</span>: <span class="fl">0.1</span>,       <span class="co"># Dropout rate</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"qkv_bias"</span>: <span class="va">False</span>       <span class="co"># Query-Key-Value bias</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="c12fcd28-d210-4c57-8be6-06cfcd5d73a4" class="cell markdown">
+<ul>
+<li>We use short variable names to avoid long lines of code later</li>
+<li><code>"vocab_size"</code> indicates a vocabulary size of 50,257 words, supported by the BPE tokenizer discussed in Chapter 2</li>
+<li><code>"context_length"</code> represents the model’s maximum input token count, as enabled by positional embeddings covered in Chapter 2</li>
+<li><code>"emb_dim"</code> is the embedding size for token inputs, converting each input token into a 768-dimensional vector</li>
+<li><code>"n_heads"</code> is the number of attention heads in the multi-head attention mechanism implemented in Chapter 3</li>
+<li><code>"n_layers"</code> is the number of transformer blocks within the model, which we’ll implement in upcoming sections</li>
+<li><code>"drop_rate"</code> is the dropout mechanism’s intensity, discussed in Chapter 3; 0.1 means dropping 10% of hidden units during training to mitigate overfitting</li>
+<li><code>"qkv_bias"</code> decides if the <code>Linear</code> layers in the multi-head attention mechanism (from Chapter 3) should include a bias vector when computing query (Q), key (K), and value (V) tensors; we’ll disable this option, which is standard practice in modern LLMs; however, we’ll revisit this later when loading pretrained GPT-2 weights from OpenAI into our reimplementation in chapter 5</li>
+</ul>
+</div>
+<div id="4adce779-857b-4418-9501-12a7f3818d88" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/03.webp" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="619c2eed-f8ea-4ff5-92c3-feda0f29b227" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DummyGPTModel(nn.Module):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, cfg):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tok_emb <span class="op">=</span> nn.Embedding(cfg[<span class="st">"vocab_size"</span>], cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pos_emb <span class="op">=</span> nn.Embedding(cfg[<span class="st">"context_length"</span>], cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.drop_emb <span class="op">=</span> nn.Dropout(cfg[<span class="st">"drop_rate"</span>])</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use a placeholder for TransformerBlock</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.trf_blocks <span class="op">=</span> nn.Sequential(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>[DummyTransformerBlock(cfg) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(cfg[<span class="st">"n_layers"</span>])])</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use a placeholder for LayerNorm</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.final_norm <span class="op">=</span> DummyLayerNorm(cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_head <span class="op">=</span> nn.Linear(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            cfg[<span class="st">"emb_dim"</span>], cfg[<span class="st">"vocab_size"</span>], bias<span class="op">=</span><span class="va">False</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, in_idx):</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        batch_size, seq_len <span class="op">=</span> in_idx.shape</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        tok_embeds <span class="op">=</span> <span class="va">self</span>.tok_emb(in_idx)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        pos_embeds <span class="op">=</span> <span class="va">self</span>.pos_emb(torch.arange(seq_len, device<span class="op">=</span>in_idx.device))</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> tok_embeds <span class="op">+</span> pos_embeds</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.drop_emb(x)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.trf_blocks(x)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.final_norm(x)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> <span class="va">self</span>.out_head(x)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> logits</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DummyTransformerBlock(nn.Module):</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, cfg):</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># A simple placeholder</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This block does nothing and just returns its input.</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DummyLayerNorm(nn.Module):</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, normalized_shape, eps<span class="op">=</span><span class="fl">1e-5</span>):</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># The parameters here are just to mimic the LayerNorm interface.</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This layer does nothing and just returns its input.</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="9665e8ab-20ca-4100-b9b9-50d9bdee33be" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/04.webp?123" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="794b6b6c-d36f-411e-a7db-8ac566a87fee" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> tiktoken.get_encoding(<span class="st">"gpt2"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>batch <span class="op">=</span> []</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>txt1 <span class="op">=</span> <span class="st">"Every effort moves you"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>txt2 <span class="op">=</span> <span class="st">"Every day holds a"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>batch.append(torch.tensor(tokenizer.encode(txt1)))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>batch.append(torch.tensor(tokenizer.encode(txt2)))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>batch <span class="op">=</span> torch.stack(batch, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(batch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[6109, 3626, 6100,  345],
+        [6109, 1110, 6622,  257]])</code></pre>
+</div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="009238cd-0160-4834-979c-309710986bb0" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DummyGPTModel(GPT_CONFIG_124M)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> model(batch)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output shape:"</span>, logits.shape)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(logits)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Output shape: torch.Size([2, 4, 50257])
+tensor([[[-1.2034,  0.3201, -0.7130,  ..., -1.5548, -0.2390, -0.4667],
+         [-0.1192,  0.4539, -0.4432,  ...,  0.2392,  1.3469,  1.2430],
+         [ 0.5307,  1.6720, -0.4695,  ...,  1.1966,  0.0111,  0.5835],
+         [ 0.0139,  1.6754, -0.3388,  ...,  1.1586, -0.0435, -1.0400]],
+
+        [[-1.0908,  0.1798, -0.9484,  ..., -1.6047,  0.2439, -0.4530],
+         [-0.7860,  0.5581, -0.0610,  ...,  0.4835, -0.0077,  1.6621],
+         [ 0.3567,  1.2698, -0.6398,  ..., -0.0162, -0.1296,  0.3717],
+         [-0.2407, -0.7349, -0.5102,  ...,  2.0057, -0.3694,  0.1814]]],
+       grad_fn=&lt;UnsafeViewBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="f8fad0fe-895d-4493-9e48-962e2d46c66f" class="cell markdown">
+<hr>
+<p><strong>Note</strong></p>
+<ul>
+<li>If you are running this code on Windows or Linux, the resulting values above may look like as follows:</li>
+</ul>
+<pre><code>Output shape: torch.Size([2, 4, 50257])
+tensor([[[-0.9289,  0.2748, -0.7557,  ..., -1.6070,  0.2702, -0.5888],
+         [-0.4476,  0.1726,  0.5354,  ..., -0.3932,  1.5285,  0.8557],
+         [ 0.5680,  1.6053, -0.2155,  ...,  1.1624,  0.1380,  0.7425],
+         [ 0.0447,  2.4787, -0.8843,  ...,  1.3219, -0.0864, -0.5856]],
+
+        [[-1.5474, -0.0542, -1.0571,  ..., -1.8061, -0.4494, -0.6747],
+         [-0.8422,  0.8243, -0.1098,  ..., -0.1434,  0.2079,  1.2046],
+         [ 0.1355,  1.1858, -0.1453,  ...,  0.0869, -0.1590,  0.1552],
+         [ 0.1666, -0.8138,  0.2307,  ...,  2.5035, -0.3055, -0.3083]]],
+       grad_fn=&lt;UnsafeViewBackward0&gt;)</code></pre>
+<ul>
+<li>Since these are just random numbers, this is not a reason for concern, and you can proceed with the remainder of the chapter without issues</li>
+<li>One possible reason for this discrepancy is the differing behavior of <code>nn.Dropout</code> across operating systems, depending on how PyTorch was compiled, as discussed <a href="https://github.com/pytorch/pytorch/issues/121595">here on the PyTorch issue tracker</a></li>
+</ul>
+<hr>
+</div>
+<div id="f8332a00-98da-4eb4-b882-922776a89917" class="cell markdown">
+<section id="normalizing-activations-with-layer-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="normalizing-activations-with-layer-normalization">4.2 Normalizing activations with layer normalization</h2>
+</section>
+</div>
+<div id="066cfb81-d59b-4d95-afe3-e43cf095f292" class="cell markdown">
+<ul>
+<li>Layer normalization, also known as LayerNorm (<a href="https://arxiv.org/abs/1607.06450">Ba et al.&nbsp;2016</a>), centers the activations of a neural network layer around a mean of 0 and normalizes their variance to 1</li>
+<li>This stabilizes training and enables faster convergence to effective weights</li>
+<li>Layer normalization is applied both before and after the multi-head attention module within the transformer block, which we will implement later; it’s also applied before the final output layer</li>
+</ul>
+</div>
+<div id="314ac47a-69cc-4597-beeb-65bed3b5910f" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/05.webp" width="400px"></p>
+</div>
+<div id="5ab49940-6b35-4397-a80e-df8d092770a7" class="cell markdown">
+<ul>
+<li>Let’s see how layer normalization works by passing a small input sample through a simple neural network layer:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="79e1b463-dc3f-44ac-9cdb-9d5b6f64eb9d" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create 2 training examples with 5 dimensions (features) each</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>batch_example <span class="op">=</span> torch.randn(<span class="dv">2</span>, <span class="dv">5</span>) </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>layer <span class="op">=</span> nn.Sequential(nn.Linear(<span class="dv">5</span>, <span class="dv">6</span>), nn.ReLU())</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> layer(batch_example)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.2260, 0.3470, 0.0000, 0.2216, 0.0000, 0.0000],
+        [0.2133, 0.2394, 0.0000, 0.5198, 0.3297, 0.0000]],
+       grad_fn=&lt;ReluBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="8fccc29e-71fc-4c16-898c-6137c6ea5d2e" class="cell markdown">
+<ul>
+<li>Let’s compute the mean and variance for each of the 2 inputs above:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div id="9888f79e-8e69-44aa-8a19-cd34292adbf5" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> out.mean(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> out.var(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean:</span><span class="ch">\n</span><span class="st">"</span>, mean)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance:</span><span class="ch">\n</span><span class="st">"</span>, var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean:
+ tensor([[0.1324],
+        [0.2170]], grad_fn=&lt;MeanBackward1&gt;)
+Variance:
+ tensor([[0.0231],
+        [0.0398]], grad_fn=&lt;VarBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="052eda3e-b395-48c4-acd4-eb8083bab958" class="cell markdown">
+<ul>
+<li>The normalization is applied to each of the two inputs (rows) independently; using dim=-1 applies the calculation across the last dimension (in this case, the feature dimension) instead of the row dimension</li>
+</ul>
+</div>
+<div id="570db83a-205c-4f6f-b219-1f6195dde1a7" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/06.webp" width="400px"></p>
+</div>
+<div id="9f8ecbc7-eb14-4fa1-b5d0-7e1ff9694f99" class="cell markdown">
+<ul>
+<li>Subtracting the mean and dividing by the square-root of the variance (standard deviation) centers the inputs to have a mean of 0 and a variance of 1 across the column (feature) dimension:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div id="9a1d1bb9-3341-4c9a-bc2a-d2489bf89cda" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>out_norm <span class="op">=</span> (out <span class="op">-</span> mean) <span class="op">/</span> torch.sqrt(var)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Normalized layer outputs:</span><span class="ch">\n</span><span class="st">"</span>, out_norm)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> out_norm.mean(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> out_norm.var(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean:</span><span class="ch">\n</span><span class="st">"</span>, mean)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance:</span><span class="ch">\n</span><span class="st">"</span>, var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Normalized layer outputs:
+ tensor([[ 0.6159,  1.4126, -0.8719,  0.5872, -0.8719, -0.8719],
+        [-0.0189,  0.1121, -1.0876,  1.5173,  0.5647, -1.0876]],
+       grad_fn=&lt;DivBackward0&gt;)
+Mean:
+ tensor([[-5.9605e-08],
+        [ 1.9868e-08]], grad_fn=&lt;MeanBackward1&gt;)
+Variance:
+ tensor([[1.0000],
+        [1.0000]], grad_fn=&lt;VarBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="ac62b90c-7156-4979-9a79-ce1fb92969c1" class="cell markdown">
+<ul>
+<li>Each input is centered at 0 and has a unit variance of 1; to improve readability, we can disable PyTorch’s scientific notation:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="3e06c34b-c68a-4b36-afbe-b30eda4eca39" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>torch.set_printoptions(sci_mode<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean:</span><span class="ch">\n</span><span class="st">"</span>, mean)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance:</span><span class="ch">\n</span><span class="st">"</span>, var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean:
+ tensor([[    -0.0000],
+        [     0.0000]], grad_fn=&lt;MeanBackward1&gt;)
+Variance:
+ tensor([[1.0000],
+        [1.0000]], grad_fn=&lt;VarBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="944fb958-d4ed-43cc-858d-00052bb6b31a" class="cell markdown">
+<ul>
+<li>Above, we normalized the features of each input</li>
+<li>Now, using the same idea, we can implement a <code>LayerNorm</code> class:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div id="3333a305-aa3d-460a-bcce-b80662d464d9" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LayerNorm(nn.Module):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, emb_dim):</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.eps <span class="op">=</span> <span class="fl">1e-5</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.scale <span class="op">=</span> nn.Parameter(torch.ones(emb_dim))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.shift <span class="op">=</span> nn.Parameter(torch.zeros(emb_dim))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        mean <span class="op">=</span> x.mean(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        var <span class="op">=</span> x.var(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>, unbiased<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        norm_x <span class="op">=</span> (x <span class="op">-</span> mean) <span class="op">/</span> torch.sqrt(var <span class="op">+</span> <span class="va">self</span>.eps)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.scale <span class="op">*</span> norm_x <span class="op">+</span> <span class="va">self</span>.shift</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="e56c3908-7544-4808-b8cb-5d0a55bcca72" class="cell markdown">
+<p><strong>Scale and shift</strong></p>
+<ul>
+<li>Note that in addition to performing the normalization by subtracting the mean and dividing by the variance, we added two trainable parameters, a <code>scale</code> and a <code>shift</code> parameter</li>
+<li>The initial <code>scale</code> (multiplying by 1) and <code>shift</code> (adding 0) values don’t have any effect; however, <code>scale</code> and <code>shift</code> are trainable parameters that the LLM automatically adjusts during training if it is determined that doing so would improve the model’s performance on its training task</li>
+<li>This allows the model to learn appropriate scaling and shifting that best suit the data it is processing</li>
+<li>Note that we also add a smaller value (<code>eps</code>) before computing the square root of the variance; this is to avoid division-by-zero errors if the variance is 0</li>
+</ul>
+<p><strong>Biased variance</strong> - In the variance calculation above, setting <code>unbiased=False</code> means using the formula <span class="math inline">\(\frac{\sum_i (x_i - \bar{x})^2}{n}\)</span> to compute the variance where n is the sample size (here, the number of features or columns); this formula does not include Bessel’s correction (which uses <code>n-1</code> in the denominator), thus providing a biased estimate of the variance - For LLMs, where the embedding dimension <code>n</code> is very large, the difference between using n and <code>n-1</code> is negligible - However, GPT-2 was trained with a biased variance in the normalization layers, which is why we also adopted this setting for compatibility reasons with the pretrained weights that we will load in later chapters</p>
+<ul>
+<li>Let’s now try out <code>LayerNorm</code> in practice:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div id="23b1000a-e613-4b43-bd90-e54deed8d292" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ln <span class="op">=</span> LayerNorm(emb_dim<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>out_ln <span class="op">=</span> ln(batch_example)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div id="94c12de2-1cab-46e0-a099-e2e470353bff" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> out_ln.mean(dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> out_ln.var(dim<span class="op">=-</span><span class="dv">1</span>, unbiased<span class="op">=</span><span class="va">False</span>, keepdim<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean:</span><span class="ch">\n</span><span class="st">"</span>, mean)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance:</span><span class="ch">\n</span><span class="st">"</span>, var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean:
+ tensor([[    -0.0000],
+        [     0.0000]], grad_fn=&lt;MeanBackward1&gt;)
+Variance:
+ tensor([[1.0000],
+        [1.0000]], grad_fn=&lt;VarBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="e136cfc4-7c89-492e-b120-758c272bca8c" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/07.webp" width="400px"></p>
+</div>
+<div id="11190e7d-8c29-4115-824a-e03702f9dd54" class="cell markdown">
+<section id="implementing-a-feed-forward-network-with-gelu-activations" class="level2">
+<h2 class="anchored" data-anchor-id="implementing-a-feed-forward-network-with-gelu-activations">4.3 Implementing a feed forward network with GELU activations</h2>
+</section>
+</div>
+<div id="b0585dfb-f21e-40e5-973f-2f63ad5cb169" class="cell markdown">
+<ul>
+<li>In this section, we implement a small neural network submodule that is used as part of the transformer block in LLMs</li>
+<li>We start with the activation function</li>
+<li>In deep learning, ReLU (Rectified Linear Unit) activation functions are commonly used due to their simplicity and effectiveness in various neural network architectures</li>
+<li>In LLMs, various other types of activation functions are used beyond the traditional ReLU; two notable examples are GELU (Gaussian Error Linear Unit) and SwiGLU (Swish-Gated Linear Unit)</li>
+<li>GELU and SwiGLU are more complex, smooth activation functions incorporating Gaussian and sigmoid-gated linear units, respectively, offering better performance for deep learning models, unlike the simpler, piecewise linear function of ReLU</li>
+</ul>
+</div>
+<div id="7d482ce7-e493-4bfc-a820-3ea99f564ebc" class="cell markdown">
+<ul>
+<li>GELU (<a href="https://arxiv.org/abs/1606.08415">Hendrycks and Gimpel 2016</a>) can be implemented in several ways; the exact version is defined as GELU(x)=x⋅Φ(x), where Φ(x) is the cumulative distribution function of the standard Gaussian distribution.</li>
+<li>In practice, it’s common to implement a computationally cheaper approximation: <span class="math inline">\(\text{GELU}(x) \approx 0.5 \cdot x \cdot \left(1 + \tanh\left[\sqrt{\frac{2}{\pi}} \cdot \left(x + 0.044715 \cdot x^3\right)\right]\right)\)</span> (the original GPT-2 model was also trained with this approximation)</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div id="f84694b7-95f3-4323-b6d6-0a73df278e82" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GELU(nn.Module):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.5</span> <span class="op">*</span> x <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> torch.tanh(</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>            torch.sqrt(torch.tensor(<span class="fl">2.0</span> <span class="op">/</span> torch.pi)) <span class="op">*</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>            (x <span class="op">+</span> <span class="fl">0.044715</span> <span class="op">*</span> torch.<span class="bu">pow</span>(x, <span class="dv">3</span>))</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div id="fc5487d2-2576-4118-80a7-56c4caac2e71" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>gelu, relu <span class="op">=</span> GELU(), nn.ReLU()</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Some sample data</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>y_gelu, y_relu <span class="op">=</span> gelu(x), relu(x)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>))</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (y, label) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>([y_gelu, y_relu], [<span class="st">"GELU"</span>, <span class="st">"ReLU"</span>]), <span class="dv">1</span>):</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, i)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, y)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">}</span><span class="ss"> activation function"</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">(x)"</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="">
+<figure class="figure">
+<p class=""><img src="ch04_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div></div>
+<div id="1cd01662-14cb-43fd-bffd-2d702813de2d" class="cell markdown">
+<ul>
+<li><p>As we can see, ReLU is a piecewise linear function that outputs the input directly if it is positive; otherwise, it outputs zero</p></li>
+<li><p>GELU is a smooth, non-linear function that approximates ReLU but with a non-zero gradient for negative values (except at approximately -0.75)</p></li>
+<li><p>Next, let’s implement the small neural network module, <code>FeedForward</code>, that we will be using in the LLM’s transformer block later:</p></li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div id="9275c879-b148-4579-a107-86827ca14d4d" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FeedForward(nn.Module):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, cfg):</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layers <span class="op">=</span> nn.Sequential(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            nn.Linear(cfg[<span class="st">"emb_dim"</span>], <span class="dv">4</span> <span class="op">*</span> cfg[<span class="st">"emb_dim"</span>]),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>            GELU(),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">4</span> <span class="op">*</span> cfg[<span class="st">"emb_dim"</span>], cfg[<span class="st">"emb_dim"</span>]),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.layers(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div id="7c4976e2-0261-418e-b042-c5be98c2ccaf" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GPT_CONFIG_124M[<span class="st">"emb_dim"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>768</code></pre>
+</div>
+</div></div>
+<div id="fdcaacfa-3cfc-4c9e-b668-b71a2753145a" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/09.webp?12" width="400px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div id="928e7f7c-d0b1-499f-8d07-4cadb428a6f9" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ffn <span class="op">=</span> FeedForward(GPT_CONFIG_124M)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># input shape: [batch_size, num_token, emb_size]</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.rand(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">768</span>) </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> ffn(x)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([2, 3, 768])</code></pre>
+</div>
+</div></div>
+<div id="8f8756c5-6b04-443b-93d0-e555a316c377" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/10.webp" width="400px"></p>
+</div>
+<div id="e5da2a50-04f4-4388-af23-ad32e405a972" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/11.webp" width="400px"></p>
+</div>
+<div id="4ffcb905-53c7-4886-87d2-4464c5fecf89" class="cell markdown">
+<section id="adding-shortcut-connections" class="level2">
+<h2 class="anchored" data-anchor-id="adding-shortcut-connections">4.4 Adding shortcut connections</h2>
+</section>
+</div>
+<div id="ffae416c-821e-4bfa-a741-8af4ba5db00e" class="cell markdown">
+<ul>
+<li>Next, let’s talk about the concept behind shortcut connections, also called skip or residual connections</li>
+<li>Originally, shortcut connections were proposed in deep networks for computer vision (residual networks) to mitigate vanishing gradient problems</li>
+<li>A shortcut connection creates an alternative shorter path for the gradient to flow through the network</li>
+<li>This is achieved by adding the output of one layer to the output of a later layer, usually skipping one or more layers in between</li>
+<li>Let’s illustrate this idea with a small example network:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/12.webp?123" width="400px"></p>
+</div>
+<div id="14cfd241-a32e-4601-8790-784b82f2f23e" class="cell markdown">
+<ul>
+<li>In code, it looks like this:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div id="05473938-799c-49fd-86d4-8ed65f94fee6" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExampleDeepNeuralNetwork(nn.Module):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, layer_sizes, use_shortcut):</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.use_shortcut <span class="op">=</span> use_shortcut</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layers <span class="op">=</span> nn.ModuleList([</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>            nn.Sequential(nn.Linear(layer_sizes[<span class="dv">0</span>], layer_sizes[<span class="dv">1</span>]), GELU()),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>            nn.Sequential(nn.Linear(layer_sizes[<span class="dv">1</span>], layer_sizes[<span class="dv">2</span>]), GELU()),</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>            nn.Sequential(nn.Linear(layer_sizes[<span class="dv">2</span>], layer_sizes[<span class="dv">3</span>]), GELU()),</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>            nn.Sequential(nn.Linear(layer_sizes[<span class="dv">3</span>], layer_sizes[<span class="dv">4</span>]), GELU()),</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>            nn.Sequential(nn.Linear(layer_sizes[<span class="dv">4</span>], layer_sizes[<span class="dv">5</span>]), GELU())</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>        ])</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> layer <span class="kw">in</span> <span class="va">self</span>.layers:</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Compute the output of the current layer</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>            layer_output <span class="op">=</span> layer(x)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Check if shortcut can be applied</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.use_shortcut <span class="kw">and</span> x.shape <span class="op">==</span> layer_output.shape:</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> x <span class="op">+</span> layer_output</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> layer_output</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_gradients(model, x):</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Forward pass</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> model(x)</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    target <span class="op">=</span> torch.tensor([[<span class="fl">0.</span>]])</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate loss based on how close the target</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and output are</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> nn.MSELoss()</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> loss(output, target)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Backward pass to calculate the gradients</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    loss.backward()</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, param <span class="kw">in</span> model.named_parameters():</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'weight'</span> <span class="kw">in</span> name:</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Print the mean absolute gradient of the weights</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> has gradient mean of </span><span class="sc">{</span>param<span class="sc">.</span>grad<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span>mean()<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="b39bf277-b3db-4bb1-84ce-7a20caff1011" class="cell markdown">
+<ul>
+<li>Let’s print the gradient values first <strong>without</strong> shortcut connections:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div id="c75f43cc-6923-4018-b980-26023086572c" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>layer_sizes <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>]  </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>sample_input <span class="op">=</span> torch.tensor([[<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="op">-</span><span class="fl">1.</span>]])</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>model_without_shortcut <span class="op">=</span> ExampleDeepNeuralNetwork(</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    layer_sizes, use_shortcut<span class="op">=</span><span class="va">False</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>print_gradients(model_without_shortcut, sample_input)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>layers.0.0.weight has gradient mean of 0.00020173587836325169
+layers.1.0.weight has gradient mean of 0.00012011159560643137
+layers.2.0.weight has gradient mean of 0.0007152039906941354
+layers.3.0.weight has gradient mean of 0.0013988736318424344
+layers.4.0.weight has gradient mean of 0.005049645435065031</code></pre>
+</div>
+</div></div>
+<div id="837fd5d4-7345-4663-97f5-38f19dfde621" class="cell markdown">
+<ul>
+<li>Next, let’s print the gradient values <strong>with</strong> shortcut connections:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div id="11b7c0c2-f9dd-4dd5-b096-a05c48c5f6d6" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>model_with_shortcut <span class="op">=</span> ExampleDeepNeuralNetwork(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    layer_sizes, use_shortcut<span class="op">=</span><span class="va">True</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>print_gradients(model_with_shortcut, sample_input)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>layers.0.0.weight has gradient mean of 0.22169792652130127
+layers.1.0.weight has gradient mean of 0.20694106817245483
+layers.2.0.weight has gradient mean of 0.32896995544433594
+layers.3.0.weight has gradient mean of 0.2665732204914093
+layers.4.0.weight has gradient mean of 1.3258540630340576</code></pre>
+</div>
+</div></div>
+<div id="79ff783a-46f0-49c5-a7a9-26a525764b6e" class="cell markdown">
+<ul>
+<li>As we can see based on the output above, shortcut connections prevent the gradients from vanishing in the early layers (towards <code>layer.0</code>)</li>
+<li>We will use this concept of a shortcut connection next when we implement a transformer block</li>
+</ul>
+</div>
+<div id="cae578ca-e564-42cf-8635-a2267047cdff" class="cell markdown">
+<section id="connecting-attention-and-linear-layers-in-a-transformer-block" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-attention-and-linear-layers-in-a-transformer-block">4.5 Connecting attention and linear layers in a transformer block</h2>
+</section>
+</div>
+<div id="a3daac6f-6545-4258-8f2d-f45a7394f429" class="cell markdown">
+<ul>
+<li>In this section, we now combine the previous concepts into a so-called transformer block</li>
+<li>A transformer block combines the causal multi-head attention module from the previous chapter with the linear layers, the feed forward neural network we implemented in an earlier section</li>
+<li>In addition, the transformer block also uses dropout and shortcut connections</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [21]:</pre></div><div id="0e1e8176-e5e3-4152-b1aa-0bbd7891dfd9" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the `previous_chapters.py` file is not available locally,</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># you can import it from the `llms-from-scratch` PyPI package.</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For details, see: https://github.com/rasbt/LLMs-from-scratch/tree/main/pkg</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># E.g.,</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># from llms_from_scratch.ch03 import MultiHeadAttention</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> previous_chapters <span class="im">import</span> MultiHeadAttention</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TransformerBlock(nn.Module):</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, cfg):</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.att <span class="op">=</span> MultiHeadAttention(</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>            d_in<span class="op">=</span>cfg[<span class="st">"emb_dim"</span>],</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>            d_out<span class="op">=</span>cfg[<span class="st">"emb_dim"</span>],</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>            context_length<span class="op">=</span>cfg[<span class="st">"context_length"</span>],</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>            num_heads<span class="op">=</span>cfg[<span class="st">"n_heads"</span>], </span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>            dropout<span class="op">=</span>cfg[<span class="st">"drop_rate"</span>],</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>            qkv_bias<span class="op">=</span>cfg[<span class="st">"qkv_bias"</span>])</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ff <span class="op">=</span> FeedForward(cfg)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm1 <span class="op">=</span> LayerNorm(cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm2 <span class="op">=</span> LayerNorm(cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.drop_shortcut <span class="op">=</span> nn.Dropout(cfg[<span class="st">"drop_rate"</span>])</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Shortcut connection for attention block</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>        shortcut <span class="op">=</span> x</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.norm1(x)</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.att(x)  <span class="co"># Shape [batch_size, num_tokens, emb_size]</span></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.drop_shortcut(x)</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> shortcut  <span class="co"># Add the original input back</span></span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Shortcut connection for feed forward block</span></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>        shortcut <span class="op">=</span> x</span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.norm2(x)</span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.ff(x)</span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.drop_shortcut(x)</span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> shortcut  <span class="co"># Add the original input back</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="36b64d16-94a6-4d13-8c85-9494c50478a9" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/13.webp?1" width="400px"></p>
+</div>
+<div id="54d2d375-87bd-4153-9040-63a1e6a2b7cb" class="cell markdown">
+<ul>
+<li>Suppose we have 2 input samples with 6 tokens each, where each token is a 768-dimensional embedding vector; then this transformer block applies self-attention, followed by linear layers, to produce an output of similar size</li>
+<li>You can think of the output as an augmented version of the context vectors we discussed in the previous chapter</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [22]:</pre></div><div id="3fb45a63-b1f3-4b08-b525-dafbc8228405" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.rand(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">768</span>)  <span class="co"># Shape: [batch_size, num_tokens, emb_dim]</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> TransformerBlock(GPT_CONFIG_124M)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> block(x)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Input shape:"</span>, x.shape)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output shape:"</span>, output.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Input shape: torch.Size([2, 4, 768])
+Output shape: torch.Size([2, 4, 768])</code></pre>
+</div>
+</div></div>
+<div id="8f9e4ee4-cf23-4583-b1fd-317abb4fcd13" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/14.webp?1" width="400px"></p>
+</div>
+<div id="46618527-15ac-4c32-ad85-6cfea83e006e" class="cell markdown">
+<section id="coding-the-gpt-model" class="level2">
+<h2 class="anchored" data-anchor-id="coding-the-gpt-model">4.6 Coding the GPT model</h2>
+</section>
+</div>
+<div id="dec7d03d-9ff3-4ca3-ad67-01b67c2f5457" class="cell markdown">
+<ul>
+<li>We are almost there: now let’s plug in the transformer block into the architecture we coded at the very beginning of this chapter so that we obtain a usable GPT architecture</li>
+<li>Note that the transformer block is repeated multiple times; in the case of the smallest 124M GPT-2 model, we repeat it 12 times:</li>
+</ul>
+</div>
+<div id="9b7b362d-f8c5-48d2-8ebd-722480ac5073" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/15.webp" width="400px"></p>
+</div>
+<div id="324e4b5d-ed89-4fdf-9a52-67deee0593bc" class="cell markdown">
+<ul>
+<li>The corresponding code implementation, where <code>cfg["n_layers"] = 12</code>:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div id="c61de39c-d03c-4a32-8b57-f49ac3834857" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GPTModel(nn.Module):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, cfg):</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tok_emb <span class="op">=</span> nn.Embedding(cfg[<span class="st">"vocab_size"</span>], cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pos_emb <span class="op">=</span> nn.Embedding(cfg[<span class="st">"context_length"</span>], cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.drop_emb <span class="op">=</span> nn.Dropout(cfg[<span class="st">"drop_rate"</span>])</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.trf_blocks <span class="op">=</span> nn.Sequential(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>[TransformerBlock(cfg) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(cfg[<span class="st">"n_layers"</span>])])</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.final_norm <span class="op">=</span> LayerNorm(cfg[<span class="st">"emb_dim"</span>])</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_head <span class="op">=</span> nn.Linear(</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>            cfg[<span class="st">"emb_dim"</span>], cfg[<span class="st">"vocab_size"</span>], bias<span class="op">=</span><span class="va">False</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, in_idx):</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>        batch_size, seq_len <span class="op">=</span> in_idx.shape</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>        tok_embeds <span class="op">=</span> <span class="va">self</span>.tok_emb(in_idx)</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>        pos_embeds <span class="op">=</span> <span class="va">self</span>.pos_emb(torch.arange(seq_len, device<span class="op">=</span>in_idx.device))</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> tok_embeds <span class="op">+</span> pos_embeds  <span class="co"># Shape [batch_size, num_tokens, emb_size]</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.drop_emb(x)</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.trf_blocks(x)</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.final_norm(x)</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> <span class="va">self</span>.out_head(x)</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> logits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="2750270f-c45d-4410-8767-a6adbd05d5c3" class="cell markdown">
+<ul>
+<li>Using the configuration of the 124M parameter model, we can now instantiate this GPT model with random initial weights as follows:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div id="ef94fd9c-4e9d-470d-8f8e-dd23d1bb1f64" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> GPTModel(GPT_CONFIG_124M)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model(batch)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Input batch:</span><span class="ch">\n</span><span class="st">"</span>, batch)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Output shape:"</span>, out.shape)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Input batch:
+ tensor([[6109, 3626, 6100,  345],
+        [6109, 1110, 6622,  257]])
+
+Output shape: torch.Size([2, 4, 50257])
+tensor([[[ 0.3613,  0.4222, -0.0711,  ...,  0.3483,  0.4661, -0.2838],
+         [-0.1792, -0.5660, -0.9485,  ...,  0.0477,  0.5181, -0.3168],
+         [ 0.7120,  0.0332,  0.1085,  ...,  0.1018, -0.4327, -0.2553],
+         [-1.0076,  0.3418, -0.1190,  ...,  0.7195,  0.4023,  0.0532]],
+
+        [[-0.2564,  0.0900,  0.0335,  ...,  0.2659,  0.4454, -0.6806],
+         [ 0.1230,  0.3653, -0.2074,  ...,  0.7705,  0.2710,  0.2246],
+         [ 1.0558,  1.0318, -0.2800,  ...,  0.6936,  0.3205, -0.3178],
+         [-0.1565,  0.3926,  0.3288,  ...,  1.2630, -0.1858,  0.0388]]],
+       grad_fn=&lt;UnsafeViewBackward0&gt;)</code></pre>
+</div>
+</div></div>
+<div id="6d616e7a-568b-4921-af29-bd3f4683cd2e" class="cell markdown">
+<ul>
+<li>We will train this model in the next chapter</li>
+<li>However, a quick note about its size: we previously referred to it as a 124M parameter model; we can double check this number as follows:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [25]:</pre></div><div id="84fb8be4-9d3b-402b-b3da-86b663aac33a" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>total_params <span class="op">=</span> <span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total number of parameters: </span><span class="sc">{</span>total_params<span class="sc">:,}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total number of parameters: 163,009,536</code></pre>
+</div>
+</div></div>
+<div id="b67d13dd-dd01-4ba6-a2ad-31ca8a9fd660" class="cell markdown">
+<ul>
+<li>As we see above, this model has 163M, not 124M parameters; why?</li>
+<li>In the original GPT-2 paper, the researchers applied weight tying, which means that they reused the token embedding layer (<code>tok_emb</code>) as the output layer, which means setting <code>self.out_head.weight = self.tok_emb.weight</code></li>
+<li>The token embedding layer projects the 50,257-dimensional one-hot encoded input tokens to a 768-dimensional embedding representation</li>
+<li>The output layer projects 768-dimensional embeddings back into a 50,257-dimensional representation so that we can convert these back into words (more about that in the next section)</li>
+<li>So, the embedding and output layer have the same number of weight parameters, as we can see based on the shape of their weight matrices</li>
+<li>However, a quick note about its size: we previously referred to it as a 124M parameter model; we can double check this number as follows:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [26]:</pre></div><div id="e3b43233-e9b8-4f5a-b72b-a263ec686982" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Token embedding layer shape:"</span>, model.tok_emb.weight.shape)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output layer shape:"</span>, model.out_head.weight.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Token embedding layer shape: torch.Size([50257, 768])
+Output layer shape: torch.Size([50257, 768])</code></pre>
+</div>
+</div></div>
+<div id="f02259f6-6f79-4c89-a866-4ebeae1c3289" class="cell markdown">
+<ul>
+<li>In the original GPT-2 paper, the researchers reused the token embedding matrix as an output matrix</li>
+<li>Correspondingly, if we subtracted the number of parameters of the output layer, we’d get a 124M parameter model:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div id="95a22e02-50d3-48b3-a4e0-d9863343c164" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>total_params_gpt2 <span class="op">=</span>  total_params <span class="op">-</span> <span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.out_head.parameters())</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of trainable parameters considering weight tying: </span><span class="sc">{</span>total_params_gpt2<span class="sc">:,}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of trainable parameters considering weight tying: 124,412,160</code></pre>
+</div>
+</div></div>
+<div id="40b03f80-b94c-46e7-9d42-d0df399ff3db" class="cell markdown">
+<ul>
+<li>In practice, I found it easier to train the model without weight-tying, which is why we didn’t implement it here</li>
+<li>However, we will revisit and apply this weight-tying idea later when we load the pretrained weights in chapter 5</li>
+<li>Lastly, we can compute the memory requirements of the model as follows, which can be a helpful reference point:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [28]:</pre></div><div id="5131a752-fab8-4d70-a600-e29870b33528" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total size in bytes (assuming float32, 4 bytes per parameter)</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>total_size_bytes <span class="op">=</span> total_params <span class="op">*</span> <span class="dv">4</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to megabytes</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>total_size_mb <span class="op">=</span> total_size_bytes <span class="op">/</span> (<span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total size of the model: </span><span class="sc">{</span>total_size_mb<span class="sc">:.2f}</span><span class="ss"> MB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total size of the model: 621.83 MB</code></pre>
+</div>
+</div></div>
+<div id="309a3be4-c20a-4657-b4e0-77c97510b47c" class="cell markdown">
+<ul>
+<li><p>Exercise: you can try the following other configurations, which are referenced in the <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=dOad5HoAAAAJ&amp;citation_for_view=dOad5HoAAAAJ:YsMSGLbcyi4C">GPT-2 paper</a>, as well.</p>
+<ul>
+<li><strong>GPT2-small</strong> (the 124M configuration we already implemented):
+<ul>
+<li>“emb_dim” = 768</li>
+<li>“n_layers” = 12</li>
+<li>“n_heads” = 12</li>
+</ul></li>
+<li><strong>GPT2-medium:</strong>
+<ul>
+<li>“emb_dim” = 1024</li>
+<li>“n_layers” = 24</li>
+<li>“n_heads” = 16</li>
+</ul></li>
+<li><strong>GPT2-large:</strong>
+<ul>
+<li>“emb_dim” = 1280</li>
+<li>“n_layers” = 36</li>
+<li>“n_heads” = 20</li>
+</ul></li>
+<li><strong>GPT2-XL:</strong>
+<ul>
+<li>“emb_dim” = 1600</li>
+<li>“n_layers” = 48</li>
+<li>“n_heads” = 25</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="da5d9bc0-95ab-45d4-9378-417628d86e35" class="cell markdown">
+<section id="generating-text" class="level2">
+<h2 class="anchored" data-anchor-id="generating-text">4.7 Generating text</h2>
+</section>
+</div>
+<div id="48da5deb-6ee0-4b9b-8dd2-abed7ed65172" class="cell markdown">
+<ul>
+<li>LLMs like the GPT model we implemented above are used to generate one word at a time</li>
+</ul>
+</div>
+<div id="caade12a-fe97-480f-939c-87d24044edff" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/16.webp" width="400px"></p>
+</div>
+<div id="a7061524-a3bd-4803-ade6-2e3b7b79ac13" class="cell markdown">
+<ul>
+<li>The following <code>generate_text_simple</code> function implements greedy decoding, which is a simple and fast method to generate text</li>
+<li>In greedy decoding, at each step, the model chooses the word (or token) with the highest probability as its next output (the highest logit corresponds to the highest probability, so we technically wouldn’t even have to compute the softmax function explicitly)</li>
+<li>In the next chapter, we will implement a more advanced <code>generate_text</code> function</li>
+<li>The figure below depicts how the GPT model, given an input context, generates the next word token</li>
+</ul>
+</div>
+<div id="7ee0f32c-c18c-445e-b294-a879de2aa187" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/17.webp" width="600px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div id="c9b428a9-8764-4b36-80cd-7d4e00595ba6" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_text_simple(model, idx, max_new_tokens, context_size):</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># idx is (batch, n_tokens) array of indices in the current context</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_new_tokens):</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Crop current context if it exceeds the supported context size</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># E.g., if LLM supports only 5 tokens, and the context size is 10</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># then only the last 5 tokens are used as context</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>        idx_cond <span class="op">=</span> idx[:, <span class="op">-</span>context_size:]</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get the predictions</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>            logits <span class="op">=</span> model(idx_cond)</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Focus only on the last time step</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># (batch, n_tokens, vocab_size) becomes (batch, vocab_size)</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> logits[:, <span class="op">-</span><span class="dv">1</span>, :]  </span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Apply softmax to get probabilities</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>        probas <span class="op">=</span> torch.softmax(logits, dim<span class="op">=-</span><span class="dv">1</span>)  <span class="co"># (batch, vocab_size)</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get the idx of the vocab entry with the highest probability value</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>        idx_next <span class="op">=</span> torch.argmax(probas, dim<span class="op">=-</span><span class="dv">1</span>, keepdim<span class="op">=</span><span class="va">True</span>)  <span class="co"># (batch, 1)</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Append sampled index to the running sequence</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>        idx <span class="op">=</span> torch.cat((idx, idx_next), dim<span class="op">=</span><span class="dv">1</span>)  <span class="co"># (batch, n_tokens+1)</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> idx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="6515f2c1-3cc7-421c-8d58-cc2f563b7030" class="cell markdown">
+<ul>
+<li>The <code>generate_text_simple</code> above implements an iterative process, where it creates one token at a time</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch04_compressed/18.webp" width="600px"></p>
+</div>
+<div id="f682eac4-f9bd-438b-9dec-6b1cc7bc05ce" class="cell markdown">
+<ul>
+<li>Let’s prepare an input example:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div id="3d7e3e94-df0f-4c0f-a6a1-423f500ac1d3" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>start_context <span class="op">=</span> <span class="st">"Hello, I am"</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>encoded <span class="op">=</span> tokenizer.encode(start_context)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"encoded:"</span>, encoded)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>encoded_tensor <span class="op">=</span> torch.tensor(encoded).unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"encoded_tensor.shape:"</span>, encoded_tensor.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>encoded: [15496, 11, 314, 716]
+encoded_tensor.shape: torch.Size([1, 4])</code></pre>
+</div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [31]:</pre></div><div id="a72a9b60-de66-44cf-b2f9-1e638934ada4" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>() <span class="co"># disable dropout</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> generate_text_simple(</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model,</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    idx<span class="op">=</span>encoded_tensor, </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    max_new_tokens<span class="op">=</span><span class="dv">6</span>, </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    context_size<span class="op">=</span>GPT_CONFIG_124M[<span class="st">"context_length"</span>]</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output:"</span>, out)</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output length:"</span>, <span class="bu">len</span>(out[<span class="dv">0</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Output: tensor([[15496,    11,   314,   716, 27018, 24086, 47843, 30961, 42348,  7267]])
+Output length: 10</code></pre>
+</div>
+</div></div>
+<div id="1d131c00-1787-44ba-bec3-7c145497b2c3" class="cell markdown">
+<ul>
+<li>Remove batch dimension and convert back into text:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [32]:</pre></div><div id="053d99f6-5710-4446-8d52-117fb34ea9f6" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>decoded_text <span class="op">=</span> tokenizer.decode(out.squeeze(<span class="dv">0</span>).tolist())</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(decoded_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, I am Featureiman Byeswickattribute argue</code></pre>
+</div>
+</div></div>
+<div id="9a894003-51f6-4ccc-996f-3b9c7d5a1d70" class="cell markdown">
+<ul>
+<li>Note that the model is untrained; hence the random output texts above</li>
+<li>We will train the model in the next chapter</li>
+</ul>
+</div>
+<div id="a35278b6-9e5c-480f-83e5-011a1173648f" class="cell markdown">
+<section id="summary-and-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-takeaways">Summary and takeaways</h2>
+<ul>
+<li>See the <a href="./gpt.py">./gpt.py</a> script, a self-contained script containing the GPT model we implement in this Jupyter notebook</li>
+<li>You can find the exercise solutions in <a href="./exercise-solutions.ipynb">./exercise-solutions.ipynb</a></li>
+</ul>
+</section>
+</div>
+
+
+     </main> <!-- /main -->  <script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/your-website-url\.example\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>  </div> <!-- /content --> 
+  
+</body></html>

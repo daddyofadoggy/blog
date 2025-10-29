@@ -1,8 +1,52 @@
 ---
 title: "LLM From Scratch"
 author: "Dipankar Baisya"
-date: "2025-10-28"
-categories: [LLM, machine learning, tutorial]
+date: "2023-10-29"
+categories: [LLM, ML, Deep Learning]
+image: "image.jpg"
+toc: true
+toc-depth: 1  # This shows only level 1 headings (sections, not subsections)
+toc-title: "Table of Contents"  # Customizes the TOC title
+format:
+  html:
+    anchor-sections: true  # Makes headings linkable
 ---
 
-This is a post on building a LLM .
+# 0. Introduction
+
+[Your existing introduction content here...]
+
+# 1. Prerequisites
+
+[Your existing prerequisites content here...]
+
+# 2. Working with text data
+
+This section explores techniques for processing and working with text data for language models.
+```{python}
+#| echo: false
+#| output: false
+
+# This cell is used to set up the environment for the embedded notebook
+# It won't be displayed in the output
+import sys
+import os
+```
+
+{{< embed chapters/ch02.ipynb >}}
+
+# 3. Coding Attention Mechanisms
+
+{{< embed chapters/ch03.ipynb >}}
+
+# 4. Implementing a GPT model from Scratch To Generate Text 
+
+{{< embed chapters/ch04.ipynb >}}
+
+# 5. Pretraining on Unlabeled Data
+
+{{< include chapters/ch05.ipynb >}}
+
+# 6. Finetuning for Text Classification
+
+{{< embed chapters/ch06.ipynb >}}

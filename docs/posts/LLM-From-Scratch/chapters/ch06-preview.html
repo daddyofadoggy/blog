@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="generator" content="quarto-1.8.25">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+    <title>ch06 – My Blogs</title>
+    <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      ul.task-list{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+        vertical-align: middle;
+      }
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+    </style>
+
+    <style>
+      body.hypothesis-enabled #quarto-embed-header {
+        padding-right: 36px;
+      }
+
+      #quarto-embed-header {
+        height: 3em;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid 1px;
+      }
+
+      #quarto-embed-header h6 {
+        font-size: 1.1em;
+        padding-top: 0.6em;
+        margin-left: 1em;
+        margin-right: 1em;
+        font-weight: 400;
+      }
+
+      #quarto-embed-header a.quarto-back-link,
+      #quarto-embed-header a.quarto-download-embed {
+        font-size: 0.8em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+
+      .quarto-back-container {
+        padding-left: 0.5em;
+        display: flex;
+      }
+
+      .headroom {
+          will-change: transform;
+          transition: transform 200ms linear;
+      }
+
+      .headroom--pinned {
+          transform: translateY(0%);
+      }
+
+      .headroom--unpinned {
+          transform: translateY(-100%);
+      }      
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script>
+    window.document.addEventListener("DOMContentLoaded", function () {
+
+      var header = window.document.querySelector("#quarto-embed-header");
+      const titleBannerEl = window.document.querySelector("body > #title-block-header");
+      if (titleBannerEl) {
+        titleBannerEl.style.paddingTop = header.clientHeight + "px";
+      }
+      const contentEl = window.document.getElementById('quarto-content');
+      for (const child of contentEl.children) {
+        child.style.paddingTop = header.clientHeight + "px";
+        child.style.marginTop = "1em";
+      }
+
+      // Use the article root if the `back` call doesn't work. This isn't perfect
+      // but should typically work
+      window.quartoBackToArticle = () => {
+        var currentUrl = window.location.href;
+        window.history.back();
+        setTimeout(() => {
+            // if location was not changed in 100 ms, then there is no history back
+            if(currentUrl === window.location.href){              
+                // redirect to site root
+                window.location.href = '/';
+            }
+        }, 100);
+      }
+
+      const headroom = new window.Headroom(header, {
+        tolerance: 5,
+        onPin: function () {
+        },
+        onUnpin: function () {
+        },
+      });
+      headroom.init();
+    });
+    </script>
+
+    
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+     <script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>  
+        <link rel="stylesheet" href="../../../styles.css">
+      </head>
+
+  <body class="floating nav-fixed quarto-notebook quarto-light">
+    <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
+      
+      <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link"><i class="bi bi-caret-left"></i> Back to Article</a>
+      <h6><i class="bi bi-journal-code"></i> 6.1 Different categories of finetuning</h6>
+
+            <a href="../../../posts/LLM-From-Scratch/chapters/ch06.ipynb" class="btn btn-primary quarto-download-embed" download="ch06.ipynb">Download Notebook</a>
+          </div>
+
+     <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">My Blogs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#different-categories-of-finetuning" id="toc-different-categories-of-finetuning" class="nav-link active" data-scroll-target="#different-categories-of-finetuning">6.1 Different categories of finetuning</a></li>
+  <li><a href="#preparing-the-dataset" id="toc-preparing-the-dataset" class="nav-link" data-scroll-target="#preparing-the-dataset">6.2 Preparing the dataset</a></li>
+  <li><a href="#creating-data-loaders" id="toc-creating-data-loaders" class="nav-link" data-scroll-target="#creating-data-loaders">6.3 Creating data loaders</a></li>
+  <li><a href="#initializing-a-model-with-pretrained-weights" id="toc-initializing-a-model-with-pretrained-weights" class="nav-link" data-scroll-target="#initializing-a-model-with-pretrained-weights">6.4 Initializing a model with pretrained weights</a></li>
+  <li><a href="#adding-a-classification-head" id="toc-adding-a-classification-head" class="nav-link" data-scroll-target="#adding-a-classification-head">6.5 Adding a classification head</a></li>
+  <li><a href="#calculating-the-classification-loss-and-accuracy" id="toc-calculating-the-classification-loss-and-accuracy" class="nav-link" data-scroll-target="#calculating-the-classification-loss-and-accuracy">6.6 Calculating the classification loss and accuracy</a></li>
+  <li><a href="#finetuning-the-model-on-supervised-data" id="toc-finetuning-the-model-on-supervised-data" class="nav-link" data-scroll-target="#finetuning-the-model-on-supervised-data">6.7 Finetuning the model on supervised data</a></li>
+  <li><a href="#using-the-llm-as-a-spam-classifier" id="toc-using-the-llm-as-a-spam-classifier" class="nav-link" data-scroll-target="#using-the-llm-as-a-spam-classifier">6.8 Using the LLM as a spam classifier</a></li>
+  <li><a href="#summary-and-takeaways" id="toc-summary-and-takeaways" class="nav-link" data-scroll-target="#summary-and-takeaways">Summary and takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>      <div class="cell-container"><div class="cell-decorator"><pre>In [1]:</pre></div><div id="5b7e01c2-1c84-4f2a-bb51-2e0b74abda90" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="9495f150-9d79-4910-d6e7-6c0d9aae4a41" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> importlib.metadata <span class="im">import</span> version</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pkgs <span class="op">=</span> [<span class="st">"matplotlib"</span>,  <span class="co"># Plotting library</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"numpy"</span>,       <span class="co"># PyTorch &amp; TensorFlow dependency</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tiktoken"</span>,    <span class="co"># Tokenizer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"torch"</span>,       <span class="co"># Deep learning library</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tensorflow"</span>,  <span class="co"># For OpenAI's pretrained weights</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pandas"</span>       <span class="co"># Dataset loading</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       ]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> pkgs:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>p<span class="sc">}</span><span class="ss"> version: </span><span class="sc">{</span>version(p)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>matplotlib version: 3.10.0
+numpy version: 2.0.2
+tiktoken version: 0.9.0
+torch version: 2.6.0
+tensorflow version: 2.18.0
+pandas version: 2.2.3</code></pre>
+</div>
+</div></div>
+<div id="a445828a-ff10-4efa-9f60-a2e2aed4c87d" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/chapter-overview.webp" width="500px"></p>
+</div>
+<div id="3a84cf35-b37f-4c15-8972-dfafc9fadc1c" class="cell markdown">
+<section id="different-categories-of-finetuning" class="level2">
+<h2 class="anchored" data-anchor-id="different-categories-of-finetuning">6.1 Different categories of finetuning</h2>
+</section>
+</div>
+<div id="ede3d731-5123-4f02-accd-c670ce50a5a3" class="cell markdown">
+<ul>
+<li>No code in this section</li>
+</ul>
+</div>
+<div id="ac45579d-d485-47dc-829e-43be7f4db57b" class="cell markdown">
+<ul>
+<li>The most common ways to finetune language models are instruction-finetuning and classification finetuning</li>
+<li>Instruction-finetuning, depicted below, is the topic of the next chapter</li>
+</ul>
+</div>
+<div id="6c29ef42-46d9-43d4-8bb4-94974e1665e4" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/instructions.webp" width="500px"></p>
+</div>
+<div id="a7f60321-95b8-46a9-97bf-1d07fda2c3dd" class="cell markdown">
+<ul>
+<li>Classification finetuning, the topic of this chapter, is a procedure you may already be familiar with if you have a background in machine learning – it’s similar to training a convolutional network to classify handwritten digits, for example</li>
+<li>In classification finetuning, we have a specific number of class labels (for example, “spam” and “not spam”) that the model can output</li>
+<li>A classification finetuned model can only predict classes it has seen during training (for example, “spam” or “not spam”), whereas an instruction-finetuned model can usually perform many tasks</li>
+<li>We can think of a classification-finetuned model as a very specialized model; in practice, it is much easier to create a specialized model than a generalist model that performs well on many different tasks</li>
+</ul>
+</div>
+<div id="0b37a0c4-0bb1-4061-b1fe-eaa4416d52c3" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/spam-non-spam.webp" width="500px"></p>
+</div>
+<div id="8c7017a2-32aa-4002-a2f3-12aac293ccdf" class="cell markdown">
+<section id="preparing-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-the-dataset">6.2 Preparing the dataset</h2>
+</section>
+</div>
+<div id="5f628975-d2e8-4f7f-ab38-92bb868b7067" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/overview-1.webp" width="500px"></p>
+</div>
+<div id="9fbd459f-63fa-4d8c-8499-e23103156c7d" class="cell markdown">
+<ul>
+<li>This section prepares the dataset we use for classification finetuning</li>
+<li>We use a dataset consisting of spam and non-spam text messages to finetune the LLM to classify them</li>
+<li>First, we download and unzip the dataset</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="def7c09b-af9c-4216-90ce-5e67aed1065c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="424e4423-f623-443c-ab9e-656f9e867559" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>zip_path <span class="op">=</span> <span class="st">"sms_spam_collection.zip"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>extracted_path <span class="op">=</span> <span class="st">"sms_spam_collection"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>data_file_path <span class="op">=</span> Path(extracted_path) <span class="op">/</span> <span class="st">"SMSSpamCollection.tsv"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> download_and_unzip_spam_data(url, zip_path, extracted_path, data_file_path):</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> data_file_path.exists():</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>data_file_path<span class="sc">}</span><span class="ss"> already exists. Skipping download and extraction."</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Downloading the file</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> urllib.request.urlopen(url) <span class="im">as</span> response:</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(zip_path, <span class="st">"wb"</span>) <span class="im">as</span> out_file:</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            out_file.write(response.read())</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Unzipping the file</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> zipfile.ZipFile(zip_path, <span class="st">"r"</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        zip_ref.extractall(extracted_path)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add .tsv file extension</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    original_file_path <span class="op">=</span> Path(extracted_path) <span class="op">/</span> <span class="st">"SMSSpamCollection"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    os.rename(original_file_path, data_file_path)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"File downloaded and saved as </span><span class="sc">{</span>data_file_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    download_and_unzip_spam_data(url, zip_path, extracted_path, data_file_path)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> (urllib.error.HTTPError, urllib.error.URLError, <span class="pp">TimeoutError</span>) <span class="im">as</span> e:</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Primary URL failed: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">. Trying backup URL..."</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://f001.backblazeb2.com/file/LLMs-from-scratch/sms%2Bspam%2Bcollection.zip"</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    download_and_unzip_spam_data(url, zip_path, extracted_path, data_file_path) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>File downloaded and saved as sms_spam_collection/SMSSpamCollection.tsv</code></pre>
+</div>
+</div></div>
+<div id="6aac2d19-06d0-4005-916b-0bd4b1ee50d1" class="cell markdown">
+<ul>
+<li>The dataset is saved as a tab-separated text file, which we can load into a pandas DataFrame</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="da0ed4da-ac31-4e4d-8bdd-2153be4656a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:423}}" data-outputid="a16c5cde-d341-4887-a93f-baa9bec542ab" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(data_file_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>[<span class="st">"Label"</span>, <span class="st">"Text"</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Label</th>
+<th data-quarto-table-cell-role="th">Text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>ham</td>
+<td>Go until jurong point, crazy.. Available only ...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>ham</td>
+<td>Ok lar... Joking wif u oni...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>spam</td>
+<td>Free entry in 2 a wkly comp to win FA Cup fina...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>ham</td>
+<td>U dun say so early hor... U c already then say...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>ham</td>
+<td>Nah I don't think he goes to usf, he lives aro...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">...</th>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5567</th>
+<td>spam</td>
+<td>This is the 2nd time we have tried 2 contact u...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5568</th>
+<td>ham</td>
+<td>Will ü b going to esplanade fr home?</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5569</th>
+<td>ham</td>
+<td>Pity, * was in mood for that. So...any other s...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5570</th>
+<td>ham</td>
+<td>The guy did some bitching but I acted like i'd...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5571</th>
+<td>ham</td>
+<td>Rofl. Its true to its name</td>
+</tr>
+</tbody>
+</table>
+
+<p>5572 rows × 2 columns</p>
+</div>
+</div>
+</div></div>
+<div id="e7b6e631-4f0b-4aab-82b9-8898e6663109" class="cell markdown">
+<ul>
+<li>When we check the class distribution, we see that the data contains “ham” (i.e., “not spam”) much more frequently than “spam”</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="495a5280-9d7c-41d4-9719-64ab99056d4c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="761e0482-43ba-4f46-f4b7-6774dae51b38" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">"Label"</span>].value_counts())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Label
+ham     4825
+spam     747
+Name: count, dtype: int64</code></pre>
+</div>
+</div></div>
+<div id="f773f054-0bdc-4aad-bbf6-397621bf63db" class="cell markdown">
+<ul>
+<li>For simplicity, and because we prefer a small dataset for educational purposes anyway (it will make it possible to finetune the LLM faster), we subsample (undersample) the dataset so that it contains 747 instances from each class</li>
+<li>(Next to undersampling, there are several other ways to deal with class balances, but they are out of the scope of a book on LLMs; you can find examples and more information in the <a href="https://imbalanced-learn.org/stable/user_guide.html"><code>imbalanced-learn</code> user guide</a>)</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="7be4a0a2-9704-4a96-b38f-240339818688" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="396dc415-cb71-4a88-e85d-d88201c6d73f" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_balanced_dataset(df):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count the instances of "spam"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    num_spam <span class="op">=</span> df[df[<span class="st">"Label"</span>] <span class="op">==</span> <span class="st">"spam"</span>].shape[<span class="dv">0</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Randomly sample "ham" instances to match the number of "spam" instances</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    ham_subset <span class="op">=</span> df[df[<span class="st">"Label"</span>] <span class="op">==</span> <span class="st">"ham"</span>].sample(num_spam, random_state<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine ham "subset" with "spam"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    balanced_df <span class="op">=</span> pd.concat([ham_subset, df[df[<span class="st">"Label"</span>] <span class="op">==</span> <span class="st">"spam"</span>]])</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> balanced_df</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>balanced_df <span class="op">=</span> create_balanced_dataset(df)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(balanced_df[<span class="st">"Label"</span>].value_counts())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Label
+ham     747
+spam    747
+Name: count, dtype: int64</code></pre>
+</div>
+</div></div>
+<div id="d3fd2f5a-06d8-4d30-a2e3-230b86c559d6" class="cell markdown">
+<ul>
+<li>Next, we change the string class labels “ham” and “spam” into integer class labels 0 and 1:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div id="c1b10c3d-5d57-42d0-8de8-cf80a06f5ffd" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>balanced_df[<span class="st">"Label"</span>] <span class="op">=</span> balanced_df[<span class="st">"Label"</span>].<span class="bu">map</span>({<span class="st">"ham"</span>: <span class="dv">0</span>, <span class="st">"spam"</span>: <span class="dv">1</span>})    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div id="e6f7f062-ef4e-4020-8275-71990cab4414" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>balanced_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Label</th>
+<th data-quarto-table-cell-role="th">Text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4307</th>
+<td>0</td>
+<td>Awww dat is sweet! We can think of something t...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">4138</th>
+<td>0</td>
+<td>Just got to &amp;lt;#&amp;gt;</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4831</th>
+<td>0</td>
+<td>The word "Checkmate" in chess comes from the P...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">4461</th>
+<td>0</td>
+<td>This is wishing you a great day. Moji told me ...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5440</th>
+<td>0</td>
+<td>Thank you. do you generally date the brothas?</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">...</th>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5537</th>
+<td>1</td>
+<td>Want explicit SEX in 30 secs? Ring 02073162414...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5540</th>
+<td>1</td>
+<td>ASKED 3MOBILE IF 0870 CHATLINES INCLU IN FREE ...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5547</th>
+<td>1</td>
+<td>Had your contract mobile 11 Mnths? Latest Moto...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5566</th>
+<td>1</td>
+<td>REMINDER FROM O2: To get 2.50 pounds free call...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">5567</th>
+<td>1</td>
+<td>This is the 2nd time we have tried 2 contact u...</td>
+</tr>
+</tbody>
+</table>
+
+<p>1494 rows × 2 columns</p>
+</div>
+</div>
+</div></div>
+<div id="5715e685-35b4-4b45-a86c-8a8694de9d6f" class="cell markdown">
+<ul>
+<li>Let’s now define a function that randomly divides the dataset into training, validation, and test subsets</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="uQl0Psdmx15D" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_split(df, train_frac, validation_frac):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the entire DataFrame</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.sample(frac<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">123</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate split indices</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    train_end <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(df) <span class="op">*</span> train_frac)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    validation_end <span class="op">=</span> train_end <span class="op">+</span> <span class="bu">int</span>(<span class="bu">len</span>(df) <span class="op">*</span> validation_frac)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split the DataFrame</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    train_df <span class="op">=</span> df[:train_end]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    validation_df <span class="op">=</span> df[train_end:validation_end]</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    test_df <span class="op">=</span> df[validation_end:]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_df, validation_df, test_df</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>train_df, validation_df, test_df <span class="op">=</span> random_split(balanced_df, <span class="fl">0.7</span>, <span class="fl">0.1</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Test size is implied to be 0.2 as the remainder</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>train_df.to_csv(<span class="st">"train.csv"</span>, index<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>validation_df.to_csv(<span class="st">"validation.csv"</span>, index<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>test_df.to_csv(<span class="st">"test.csv"</span>, index<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="a8d7a0c5-1d5f-458a-b685-3f49520b0094" class="cell markdown">
+<section id="creating-data-loaders" class="level2">
+<h2 class="anchored" data-anchor-id="creating-data-loaders">6.3 Creating data loaders</h2>
+</section>
+</div>
+<div id="7126108a-75e7-4862-b0fb-cbf59a18bb6c" class="cell markdown">
+<ul>
+<li>Note that the text messages have different lengths; if we want to combine multiple training examples in a batch, we have to either
+<ol type="1">
+<li>truncate all messages to the length of the shortest message in the dataset or batch</li>
+<li>pad all messages to the length of the longest message in the dataset or batch</li>
+</ol></li>
+<li>We choose option 2 and pad all messages to the longest message in the dataset</li>
+<li>For that, we use <code>&lt;|endoftext|&gt;</code> as a padding token, as discussed in chapter 2</li>
+</ul>
+</div>
+<div id="0829f33f-1428-4f22-9886-7fee633b3666" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/pad-input-sequences.webp?123" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div id="74c3c463-8763-4cc0-9320-41c7eaad8ab7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="b5b48439-32c8-4b37-cca2-c9dc8fa86563" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> tiktoken.get_encoding(<span class="st">"gpt2"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tokenizer.encode(<span class="st">"&lt;|endoftext|&gt;"</span>, allowed_special<span class="op">=</span>{<span class="st">"&lt;|endoftext|&gt;"</span>}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[50256]</code></pre>
+</div>
+</div></div>
+<div id="04f582ff-68bf-450e-bd87-5fb61afe431c" class="cell markdown">
+<ul>
+<li>The <code>SpamDataset</code> class below identifies the longest sequence in the training dataset and adds the padding token to the others to match that sequence length</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div id="d7791b52-af18-4ac4-afa9-b921068e383e" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> Dataset</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpamDataset(Dataset):</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, csv_file, tokenizer, max_length<span class="op">=</span><span class="va">None</span>, pad_token_id<span class="op">=</span><span class="dv">50256</span>):</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.data <span class="op">=</span> pd.read_csv(csv_file)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Pre-tokenize texts</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.encoded_texts <span class="op">=</span> [</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>            tokenizer.encode(text) <span class="cf">for</span> text <span class="kw">in</span> <span class="va">self</span>.data[<span class="st">"Text"</span>]</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> max_length <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.max_length <span class="op">=</span> <span class="va">self</span>._longest_encoded_length()</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.max_length <span class="op">=</span> max_length</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Truncate sequences if they are longer than max_length</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.encoded_texts <span class="op">=</span> [</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                encoded_text[:<span class="va">self</span>.max_length]</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> encoded_text <span class="kw">in</span> <span class="va">self</span>.encoded_texts</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>            ]</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Pad sequences to the longest sequence</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.encoded_texts <span class="op">=</span> [</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>            encoded_text <span class="op">+</span> [pad_token_id] <span class="op">*</span> (<span class="va">self</span>.max_length <span class="op">-</span> <span class="bu">len</span>(encoded_text))</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> encoded_text <span class="kw">in</span> <span class="va">self</span>.encoded_texts</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, index):</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        encoded <span class="op">=</span> <span class="va">self</span>.encoded_texts[index]</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> <span class="va">self</span>.data.iloc[index][<span class="st">"Label"</span>]</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>            torch.tensor(encoded, dtype<span class="op">=</span>torch.<span class="bu">long</span>),</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>            torch.tensor(label, dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.data)</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _longest_encoded_length(<span class="va">self</span>):</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        max_length <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> encoded_text <span class="kw">in</span> <span class="va">self</span>.encoded_texts:</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>            encoded_length <span class="op">=</span> <span class="bu">len</span>(encoded_text)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> encoded_length <span class="op">&gt;</span> max_length:</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>                max_length <span class="op">=</span> encoded_length</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_length</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Note: A more pythonic version to implement this method</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>        <span class="co"># is the following, which is also used in the next chapter:</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># return max(len(encoded_text) for encoded_text in self.encoded_texts)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div id="uzj85f8ou82h" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="d08f1cf0-c24d-445f-a3f8-793532c3716f" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>train_dataset <span class="op">=</span> SpamDataset(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    csv_file<span class="op">=</span><span class="st">"train.csv"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    max_length<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    tokenizer<span class="op">=</span>tokenizer</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(train_dataset.max_length)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>120</code></pre>
+</div>
+</div></div>
+<div id="15bdd932-97eb-4b88-9cf9-d766ea4c3a60" class="cell markdown">
+<ul>
+<li>We also pad the validation and test set to the longest training sequence</li>
+<li>Note that validation and test set samples that are longer than the longest training example are being truncated via <code>encoded_text[:self.max_length]</code> in the <code>SpamDataset</code> code</li>
+<li>This behavior is entirely optional, and it would also work well if we set <code>max_length=None</code> in both the validation and test set cases</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div id="bb0c502d-a75e-4248-8ea0-196e2b00c61e" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>val_dataset <span class="op">=</span> SpamDataset(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    csv_file<span class="op">=</span><span class="st">"validation.csv"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    max_length<span class="op">=</span>train_dataset.max_length,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    tokenizer<span class="op">=</span>tokenizer</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>test_dataset <span class="op">=</span> SpamDataset(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    csv_file<span class="op">=</span><span class="st">"test.csv"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    max_length<span class="op">=</span>train_dataset.max_length,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    tokenizer<span class="op">=</span>tokenizer</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="20170d89-85a0-4844-9887-832f5d23432a" class="cell markdown">
+<ul>
+<li>Next, we use the dataset to instantiate the data loaders, which is similar to creating the data loaders in previous chapters</li>
+</ul>
+</div>
+<div id="64bcc349-205f-48f8-9655-95ff21f5e72f" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/batch.webp" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div id="8681adc0-6f02-4e75-b01a-a6ab75d05542" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="3266c410-4fdb-4a8c-a142-7f707e2525ab" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>num_workers <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>train_loader <span class="op">=</span> DataLoader(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    dataset<span class="op">=</span>train_dataset,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    batch_size<span class="op">=</span>batch_size,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    shuffle<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    num_workers<span class="op">=</span>num_workers,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    drop_last<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>val_loader <span class="op">=</span> DataLoader(</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    dataset<span class="op">=</span>val_dataset,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    batch_size<span class="op">=</span>batch_size,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    num_workers<span class="op">=</span>num_workers,</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    drop_last<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>test_loader <span class="op">=</span> DataLoader(</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    dataset<span class="op">=</span>test_dataset,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    batch_size<span class="op">=</span>batch_size,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    num_workers<span class="op">=</span>num_workers,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    drop_last<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="ab7335db-e0bb-4e27-80c5-eea11e593a57" class="cell markdown">
+<ul>
+<li>As a verification step, we iterate through the data loaders and ensure that the batches contain 8 training examples each, where each training example consists of 120 tokens</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div id="4dee6882-4c3a-4964-af15-fa31f86ad047" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Train loader:"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> input_batch, target_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Input batch dimensions:"</span>, input_batch.shape)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Label batch dimensions"</span>, target_batch.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train loader:
+Input batch dimensions: torch.Size([8, 120])
+Label batch dimensions torch.Size([8])</code></pre>
+</div>
+</div></div>
+<div id="5cdd7947-7039-49bf-8a5e-c0a2f4281ca1" class="cell markdown">
+<ul>
+<li>Lastly, let’s print the total number of batches in each dataset</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div id="IZfw-TYD2zTj" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="6934bbf2-9797-4fbe-d26b-1a246e18c2fb" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(train_loader)<span class="sc">}</span><span class="ss"> training batches"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(val_loader)<span class="sc">}</span><span class="ss"> validation batches"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(test_loader)<span class="sc">}</span><span class="ss"> test batches"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>130 training batches
+19 validation batches
+38 test batches</code></pre>
+</div>
+</div></div>
+<div id="d1c4f61a-5f5d-4b3b-97cf-151b617d1d6c" class="cell markdown">
+<section id="initializing-a-model-with-pretrained-weights" class="level2">
+<h2 class="anchored" data-anchor-id="initializing-a-model-with-pretrained-weights">6.4 Initializing a model with pretrained weights</h2>
+</section>
+</div>
+<div id="97e1af8b-8bd1-4b44-8b8b-dc031496e208" class="cell markdown">
+<ul>
+<li>In this section, we initialize the pretrained model we worked with in the previous chapter</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/overview-2.webp" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div id="2992d779-f9fb-4812-a117-553eb790a5a9" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>CHOOSE_MODEL <span class="op">=</span> <span class="st">"gpt2-small (124M)"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>INPUT_PROMPT <span class="op">=</span> <span class="st">"Every effort moves"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>BASE_CONFIG <span class="op">=</span> {</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"vocab_size"</span>: <span class="dv">50257</span>,     <span class="co"># Vocabulary size</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"context_length"</span>: <span class="dv">1024</span>,  <span class="co"># Context length</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"drop_rate"</span>: <span class="fl">0.0</span>,        <span class="co"># Dropout rate</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"qkv_bias"</span>: <span class="va">True</span>         <span class="co"># Query-key-value bias</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>model_configs <span class="op">=</span> {</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gpt2-small (124M)"</span>: {<span class="st">"emb_dim"</span>: <span class="dv">768</span>, <span class="st">"n_layers"</span>: <span class="dv">12</span>, <span class="st">"n_heads"</span>: <span class="dv">12</span>},</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gpt2-medium (355M)"</span>: {<span class="st">"emb_dim"</span>: <span class="dv">1024</span>, <span class="st">"n_layers"</span>: <span class="dv">24</span>, <span class="st">"n_heads"</span>: <span class="dv">16</span>},</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gpt2-large (774M)"</span>: {<span class="st">"emb_dim"</span>: <span class="dv">1280</span>, <span class="st">"n_layers"</span>: <span class="dv">36</span>, <span class="st">"n_heads"</span>: <span class="dv">20</span>},</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gpt2-xl (1558M)"</span>: {<span class="st">"emb_dim"</span>: <span class="dv">1600</span>, <span class="st">"n_layers"</span>: <span class="dv">48</span>, <span class="st">"n_heads"</span>: <span class="dv">25</span>},</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>BASE_CONFIG.update(model_configs[CHOOSE_MODEL])</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> train_dataset.max_length <span class="op">&lt;=</span> BASE_CONFIG[<span class="st">"context_length"</span>], (</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Dataset length </span><span class="sc">{</span>train_dataset<span class="sc">.</span>max_length<span class="sc">}</span><span class="ss"> exceeds model's context "</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"length </span><span class="sc">{</span>BASE_CONFIG[<span class="st">'context_length'</span>]<span class="sc">}</span><span class="ss">. Reinitialize data sets with "</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"`max_length=</span><span class="sc">{</span>BASE_CONFIG[<span class="st">'context_length'</span>]<span class="sc">}</span><span class="ss">`"</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div id="022a649a-44f5-466c-8a8e-326c063384f5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="7091e401-8442-4f47-a1d9-ecb42a1ef930" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gpt_download <span class="im">import</span> download_and_load_gpt2</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> previous_chapters <span class="im">import</span> GPTModel, load_weights_into_gpt</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If the `previous_chapters.py` file is not available locally,</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># you can import it from the `llms-from-scratch` PyPI package.</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># For details, see: https://github.com/rasbt/LLMs-from-scratch/tree/main/pkg</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># E.g.,</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># from llms_from_scratch.ch04 import GPTModel</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># from llms_from_scratch.ch05 import download_and_load_gpt2, load_weights_into_gpt</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>model_size <span class="op">=</span> CHOOSE_MODEL.split(<span class="st">" "</span>)[<span class="op">-</span><span class="dv">1</span>].lstrip(<span class="st">"("</span>).rstrip(<span class="st">")"</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>settings, params <span class="op">=</span> download_and_load_gpt2(model_size<span class="op">=</span>model_size, models_dir<span class="op">=</span><span class="st">"gpt2"</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> GPTModel(BASE_CONFIG)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>load_weights_into_gpt(model, params)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>File already exists and is up-to-date: gpt2/124M/checkpoint
+File already exists and is up-to-date: gpt2/124M/encoder.json
+File already exists and is up-to-date: gpt2/124M/hparams.json
+File already exists and is up-to-date: gpt2/124M/model.ckpt.data-00000-of-00001
+File already exists and is up-to-date: gpt2/124M/model.ckpt.index
+File already exists and is up-to-date: gpt2/124M/model.ckpt.meta
+File already exists and is up-to-date: gpt2/124M/vocab.bpe</code></pre>
+</div>
+</div></div>
+<div id="ab8e056c-abe0-415f-b34d-df686204259e" class="cell markdown">
+<ul>
+<li>To ensure that the model was loaded correctly, let’s double-check that it generates coherent text</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div id="d8ac25ff-74b1-4149-8dc5-4c429d464330" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> previous_chapters <span class="im">import</span> (</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    generate_text_simple,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    text_to_token_ids,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    token_ids_to_text</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively:</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># from llms_from_scratch.ch05 import (</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#    generate_text_simple,</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    text_to_token_ids,</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">#    token_ids_to_text</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>text_1 <span class="op">=</span> <span class="st">"Every effort moves you"</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>token_ids <span class="op">=</span> generate_text_simple(</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model,</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    idx<span class="op">=</span>text_to_token_ids(text_1, tokenizer),</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    max_new_tokens<span class="op">=</span><span class="dv">15</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    context_size<span class="op">=</span>BASE_CONFIG[<span class="st">"context_length"</span>]</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(token_ids_to_text(token_ids, tokenizer))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Every effort moves you forward.
+
+The first step is to understand the importance of your work</code></pre>
+</div>
+</div></div>
+<div id="69162550-6a02-4ece-8db1-06c71d61946f" class="cell markdown">
+<ul>
+<li>Before we finetune the model as a classifier, let’s see if the model can perhaps already classify spam messages via prompting</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div id="94224aa9-c95a-4f8a-a420-76d01e3a800c" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>text_2 <span class="op">=</span> (</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Is the following text 'spam'? Answer with 'yes' or 'no':"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">" 'You are a winner you have been specially"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">" selected to receive $1000 cash or a $2000 award.'"</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>token_ids <span class="op">=</span> generate_text_simple(</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    idx<span class="op">=</span>text_to_token_ids(text_2, tokenizer),</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    max_new_tokens<span class="op">=</span><span class="dv">23</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    context_size<span class="op">=</span>BASE_CONFIG[<span class="st">"context_length"</span>]</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(token_ids_to_text(token_ids, tokenizer))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Is the following text 'spam'? Answer with 'yes' or 'no': 'You are a winner you have been specially selected to receive $1000 cash or a $2000 award.'
+
+The following text 'spam'? Answer with 'yes' or 'no': 'You are a winner</code></pre>
+</div>
+</div></div>
+<div id="1ce39ed0-2c77-410d-8392-dd15d4b22016" class="cell markdown">
+<ul>
+<li>As we can see, the model is not very good at following instructions</li>
+<li>This is expected, since it has only been pretrained and not instruction-finetuned (instruction finetuning will be covered in the next chapter)</li>
+</ul>
+</div>
+<div id="4c9ae440-32f9-412f-96cf-fd52cc3e2522" class="cell markdown">
+<section id="adding-a-classification-head" class="level2">
+<h2 class="anchored" data-anchor-id="adding-a-classification-head">6.5 Adding a classification head</h2>
+</section>
+</div>
+<div id="d6e9d66f-76b2-40fc-9ec5-3f972a8db9c0" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/lm-head.webp" width="500px"></p>
+</div>
+<div id="217bac05-78df-4412-bd80-612f8061c01d" class="cell markdown">
+<ul>
+<li>In this section, we are modifying the pretrained LLM to make it ready for classification finetuning</li>
+<li>Let’s take a look at the model architecture first</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [21]:</pre></div><div id="b23aff91-6bd0-48da-88f6-353657e6c981" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="b6a5b9b5-a92f-498f-d7cb-b58dd99e4497" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GPTModel(
+  (tok_emb): Embedding(50257, 768)
+  (pos_emb): Embedding(1024, 768)
+  (drop_emb): Dropout(p=0.0, inplace=False)
+  (trf_blocks): Sequential(
+    (0): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (1): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (2): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (3): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (4): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (5): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (6): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (7): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (8): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (9): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (10): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+    (11): TransformerBlock(
+      (att): MultiHeadAttention(
+        (W_query): Linear(in_features=768, out_features=768, bias=True)
+        (W_key): Linear(in_features=768, out_features=768, bias=True)
+        (W_value): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+      (ff): FeedForward(
+        (layers): Sequential(
+          (0): Linear(in_features=768, out_features=3072, bias=True)
+          (1): GELU()
+          (2): Linear(in_features=3072, out_features=768, bias=True)
+        )
+      )
+      (norm1): LayerNorm()
+      (norm2): LayerNorm()
+      (drop_resid): Dropout(p=0.0, inplace=False)
+    )
+  )
+  (final_norm): LayerNorm()
+  (out_head): Linear(in_features=768, out_features=50257, bias=False)
+)</code></pre>
+</div>
+</div></div>
+<div id="3f640a76-dd00-4769-9bc8-1aed0cec330d" class="cell markdown">
+<ul>
+<li>Above, we can see the architecture we implemented in chapter 4 neatly laid out</li>
+<li>The goal is to replace and finetune the output layer</li>
+<li>To achieve this, we first freeze the model, meaning that we make all layers non-trainable</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [22]:</pre></div><div id="fkMWFl-0etea" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    param.requires_grad <span class="op">=</span> <span class="va">False</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="72155f83-87d9-476a-a978-a15aa2d44147" class="cell markdown">
+<ul>
+<li>Then, we replace the output layer (<code>model.out_head</code>), which originally maps the layer inputs to 50,257 dimensions (the size of the vocabulary)</li>
+<li>Since we finetune the model for binary classification (predicting 2 classes, “spam” and “not spam”), we can replace the output layer as shown below, which will be trainable by default</li>
+<li>Note that we use <code>BASE_CONFIG["emb_dim"]</code> (which is equal to 768 in the <code>"gpt2-small (124M)"</code> model) to keep the code below more general</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div id="7e759fa0-0f69-41be-b576-17e5f20e04cb" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>num_classes <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>model.out_head <span class="op">=</span> torch.nn.Linear(in_features<span class="op">=</span>BASE_CONFIG[<span class="st">"emb_dim"</span>], out_features<span class="op">=</span>num_classes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="30be5475-ae77-4f97-8f3e-dec462b1339f" class="cell markdown">
+<ul>
+<li>Technically, it’s sufficient to only train the output layer</li>
+<li>However, as I found in <a href="https://magazine.sebastianraschka.com/p/finetuning-large-language-models">Finetuning Large Language Models</a>, experiments show that finetuning additional layers can noticeably improve the performance</li>
+<li>So, we are also making the last transformer block and the final <code>LayerNorm</code> module connecting the last transformer block to the output layer trainable</li>
+</ul>
+</div>
+<div id="0be7c1eb-c46c-4065-8525-eea1b8c66d10" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/trainable.webp" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div id="2aedc120-5ee3-48f6-92f2-ad9304ebcdc7" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> param <span class="kw">in</span> model.trf_blocks[<span class="op">-</span><span class="dv">1</span>].parameters():</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    param.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> param <span class="kw">in</span> model.final_norm.parameters():</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    param.requires_grad <span class="op">=</span> <span class="va">True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="f012b899-8284-4d3a-97c0-8a48eb33ba2e" class="cell markdown">
+<ul>
+<li>We can still use this model similar to before in previous chapters</li>
+<li>For example, let’s feed it some text input</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [25]:</pre></div><div id="f645c06a-7df6-451c-ad3f-eafb18224ebc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="27e041b1-d731-48a1-cf60-f22d4565304e" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>inputs <span class="op">=</span> tokenizer.encode(<span class="st">"Do you have time"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>inputs <span class="op">=</span> torch.tensor(inputs).unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Inputs:"</span>, inputs)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Inputs dimensions:"</span>, inputs.shape) <span class="co"># shape: (batch_size, num_tokens)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Inputs: tensor([[5211,  345,  423,  640]])
+Inputs dimensions: torch.Size([1, 4])</code></pre>
+</div>
+</div></div>
+<div id="fbbf8481-772d-467b-851c-a62b86d0cb1b" class="cell markdown">
+<ul>
+<li>What’s different compared to previous chapters is that it now has two output dimensions instead of 50,257</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [26]:</pre></div><div id="48dc84f1-85cc-4609-9cee-94ff539f00f4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="9cae7448-253d-4776-973e-0af190b06354" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    outputs <span class="op">=</span> model(inputs)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Outputs:</span><span class="ch">\n</span><span class="st">"</span>, outputs)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Outputs dimensions:"</span>, outputs.shape) <span class="co"># shape: (batch_size, num_tokens, num_classes)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Outputs:
+ tensor([[[-1.5854,  0.9904],
+         [-3.7235,  7.4548],
+         [-2.2661,  6.6049],
+         [-3.5983,  3.9902]]])
+Outputs dimensions: torch.Size([1, 4, 2])</code></pre>
+</div>
+</div></div>
+<div id="75430a01-ef9c-426a-aca0-664689c4f461" class="cell markdown">
+<ul>
+<li>As discussed in previous chapters, for each input token, there’s one output vector</li>
+<li>Since we fed the model a text sample with 4 input tokens, the output consists of 4 2-dimensional output vectors above</li>
+</ul>
+</div>
+<div id="7df9144f-6817-4be4-8d4b-5d4dadfe4a9b" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/input-and-output.webp" width="500px"></p>
+</div>
+<div id="e3bb8616-c791-4f5c-bac0-5302f663e46a" class="cell markdown">
+<ul>
+<li>In chapter 3, we discussed the attention mechanism, which connects each input token to each other input token</li>
+<li>In chapter 3, we then also introduced the causal attention mask that is used in GPT-like models; this causal mask lets a current token only attend to the current and previous token positions</li>
+<li>Based on this causal attention mechanism, the 4th (last) token contains the most information among all tokens because it’s the only token that includes information about all other tokens</li>
+<li>Hence, we are particularly interested in this last token, which we will finetune for the spam classification task</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div id="49383a8c-41d5-4dab-98f1-238bca0c2ed7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="e79eb155-fa1f-46ed-ff8c-d828c3a3fabd" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Last output token:"</span>, outputs[:, <span class="op">-</span><span class="dv">1</span>, :])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Last output token: tensor([[-3.5983,  3.9902]])</code></pre>
+</div>
+</div></div>
+<div id="8df08ae0-e664-4670-b7c5-8a2280d9b41b" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/attention-mask.webp" width="200px"></p>
+</div>
+<div id="32aa4aef-e1e9-491b-9adf-5aa973e59b8c" class="cell markdown">
+<section id="calculating-the-classification-loss-and-accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-the-classification-loss-and-accuracy">6.6 Calculating the classification loss and accuracy</h2>
+</section>
+</div>
+<div id="669e1fd1-ace8-44b4-b438-185ed0ba8b33" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/overview-3.webp?1" width="500px"></p>
+</div>
+<div id="7a7df4ee-0a34-4a4d-896d-affbbf81e0b3" class="cell markdown">
+<ul>
+<li>Before explaining the loss calculation, let’s have a brief look at how the model outputs are turned into class labels</li>
+</ul>
+</div>
+<div id="557996dd-4c6b-49c4-ab83-f60ef7e1d69e" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/class-argmax.webp" width="600px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [28]:</pre></div><div id="c77faab1-3461-4118-866a-6171f2b89aa0" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Last output token:"</span>, outputs[:, <span class="op">-</span><span class="dv">1</span>, :])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Last output token: tensor([[-3.5983,  3.9902]])</code></pre>
+</div>
+</div></div>
+<div id="7edd71fa-628a-4d00-b81d-6d8bcb2c341d" class="cell markdown">
+<ul>
+<li>Similar to chapter 5, we convert the outputs (logits) into probability scores via the <code>softmax</code> function and then obtain the index position of the largest probability value via the <code>argmax</code> function</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div id="b81efa92-9be1-4b9e-8790-ce1fc7b17f01" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>probas <span class="op">=</span> torch.softmax(outputs[:, <span class="op">-</span><span class="dv">1</span>, :], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>label <span class="op">=</span> torch.argmax(probas)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Class label:"</span>, label.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Class label: 1</code></pre>
+</div>
+</div></div>
+<div id="414a6f02-307e-4147-a416-14d115bf8179" class="cell markdown">
+<ul>
+<li>Note that the softmax function is optional here, as explained in chapter 5, because the largest outputs correspond to the largest probability scores</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div id="f9f9ad66-4969-4501-8239-3ccdb37e71a2" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> outputs[:, <span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>label <span class="op">=</span> torch.argmax(logits)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Class label:"</span>, label.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Class label: 1</code></pre>
+</div>
+</div></div>
+<div id="dcb20d3a-cbba-4ab1-8584-d94e16589505" class="cell markdown">
+<ul>
+<li>We can apply this concept to calculate the so-called classification accuracy, which computes the percentage of correct predictions in a given dataset</li>
+<li>To calculate the classification accuracy, we can apply the preceding <code>argmax</code>-based prediction code to all examples in a dataset and calculate the fraction of correct predictions as follows:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [31]:</pre></div><div id="3ecf9572-aed0-4a21-9c3b-7f9f2aec5f23" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_accuracy_loader(data_loader, model, device, num_batches<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    correct_predictions, num_examples <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num_batches <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>        num_batches <span class="op">=</span> <span class="bu">len</span>(data_loader)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>        num_batches <span class="op">=</span> <span class="bu">min</span>(num_batches, <span class="bu">len</span>(data_loader))</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (input_batch, target_batch) <span class="kw">in</span> <span class="bu">enumerate</span>(data_loader):</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">&lt;</span> num_batches:</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>            input_batch, target_batch <span class="op">=</span> input_batch.to(device), target_batch.to(device)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>                logits <span class="op">=</span> model(input_batch)[:, <span class="op">-</span><span class="dv">1</span>, :]  <span class="co"># Logits of last output token</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>            predicted_labels <span class="op">=</span> torch.argmax(logits, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>            num_examples <span class="op">+=</span> predicted_labels.shape[<span class="dv">0</span>]</span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>            correct_predictions <span class="op">+=</span> (predicted_labels <span class="op">==</span> target_batch).<span class="bu">sum</span>().item()</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> correct_predictions <span class="op">/</span> num_examples</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="7165fe46-a284-410b-957f-7524877d1a1a" class="cell markdown">
+<ul>
+<li>Let’s apply the function to calculate the classification accuracies for the different datasets:</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [32]:</pre></div><div id="390e5255-8427-488c-adef-e1c10ab4fb26" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note:</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncommenting the following lines will allow the code to run on Apple Silicon chips, if applicable,</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># which is approximately 2x faster than on an Apple CPU (as measured on an M3 MacBook Air).</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># As of this writing, in PyTorch 2.4, the results obtained via CPU and MPS were identical.</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co"># However, in earlier versions of PyTorch, you may observe different results when using MPS.</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="co">#if torch.cuda.is_available():</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    device = torch.device("cuda")</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co">#elif torch.backends.mps.is_available():</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co">#    device = torch.device("mps")</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="co">#else:</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="co">#    device = torch.device("cpu")</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"Running on {device} device.")</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>model.to(device) <span class="co"># no assignment model = model.to(device) necessary for nn.Module classes</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>) <span class="co"># For reproducibility due to the shuffling in the training data loader</span></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>train_accuracy <span class="op">=</span> calc_accuracy_loader(train_loader, model, device, num_batches<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>val_accuracy <span class="op">=</span> calc_accuracy_loader(val_loader, model, device, num_batches<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>test_accuracy <span class="op">=</span> calc_accuracy_loader(test_loader, model, device, num_batches<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Training accuracy: </span><span class="sc">{</span>train_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Validation accuracy: </span><span class="sc">{</span>val_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Test accuracy: </span><span class="sc">{</span>test_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Training accuracy: 46.25%
+Validation accuracy: 45.00%
+Test accuracy: 48.75%</code></pre>
+</div>
+</div></div>
+<div id="30345e2a-afed-4d22-9486-f4010f90a871" class="cell markdown">
+<ul>
+<li>As we can see, the prediction accuracies are not very good, since we haven’t finetuned the model, yet</li>
+</ul>
+</div>
+<div id="4f4a9d15-8fc7-48a2-8734-d92a2f265328" class="cell markdown">
+<ul>
+<li><p>Before we can start finetuning (/training), we first have to define the loss function we want to optimize during training</p></li>
+<li><p>The goal is to maximize the spam classification accuracy of the model; however, classification accuracy is not a differentiable function</p></li>
+<li><p>Hence, instead, we minimize the cross-entropy loss as a proxy for maximizing the classification accuracy (you can learn more about this topic in lecture 8 of my freely available <a href="https://sebastianraschka.com/blog/2021/dl-course.html#l08-multinomial-logistic-regression--softmax-regression">Introduction to Deep Learning</a> class)</p></li>
+<li><p>The <code>calc_loss_batch</code> function is the same here as in chapter 5, except that we are only interested in optimizing the last token <code>model(input_batch)[:, -1, :]</code> instead of all tokens <code>model(input_batch)</code></p></li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [33]:</pre></div><div id="2f1e9547-806c-41a9-8aba-3b2822baabe4" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_loss_batch(input_batch, target_batch, model, device):</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    input_batch, target_batch <span class="op">=</span> input_batch.to(device), target_batch.to(device)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> model(input_batch)[:, <span class="op">-</span><span class="dv">1</span>, :]  <span class="co"># Logits of last output token</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> torch.nn.functional.cross_entropy(logits, target_batch)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="a013aab9-f854-4866-ad55-5b8350adb50a" class="cell markdown">
+<p>The <code>calc_loss_loader</code> is exactly the same as in chapter 5</p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [34]:</pre></div><div id="b7b83e10-5720-45e7-ac5e-369417ca846b" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as in chapter 5</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_loss_loader(data_loader, model, device, num_batches<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    total_loss <span class="op">=</span> <span class="fl">0.</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(data_loader) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(<span class="st">"nan"</span>)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> num_batches <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>        num_batches <span class="op">=</span> <span class="bu">len</span>(data_loader)</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Reduce the number of batches to match the total number of batches in the data loader</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># if num_batches exceeds the number of batches in the data loader</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>        num_batches <span class="op">=</span> <span class="bu">min</span>(num_batches, <span class="bu">len</span>(data_loader))</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (input_batch, target_batch) <span class="kw">in</span> <span class="bu">enumerate</span>(data_loader):</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">&lt;</span> num_batches:</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> calc_loss_batch(input_batch, target_batch, model, device)</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>            total_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> total_loss <span class="op">/</span> num_batches</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="56826ecd-6e74-40e6-b772-d3541e585067" class="cell markdown">
+<ul>
+<li>Using the <code>calc_closs_loader</code>, we compute the initial training, validation, and test set losses before we start training</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [35]:</pre></div><div id="f6f00e53-5beb-4e64-b147-f26fd481c6ff" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="49df8648-9e38-4314-854d-9faacd1b2e89" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad(): <span class="co"># Disable gradient tracking for efficiency because we are not training, yet</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> calc_loss_loader(train_loader, model, device, num_batches<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    val_loss <span class="op">=</span> calc_loss_loader(val_loader, model, device, num_batches<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    test_loss <span class="op">=</span> calc_loss_loader(test_loader, model, device, num_batches<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Training loss: </span><span class="sc">{</span>train_loss<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Validation loss: </span><span class="sc">{</span>val_loss<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Test loss: </span><span class="sc">{</span>test_loss<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Training loss: 2.453
+Validation loss: 2.583
+Test loss: 2.322</code></pre>
+</div>
+</div></div>
+<div id="e04b980b-e583-4f62-84a0-4edafaf99d5d" class="cell markdown">
+<ul>
+<li>In the next section, we train the model to improve the loss values and consequently the classification accuracy</li>
+</ul>
+</div>
+<div id="456ae0fd-6261-42b4-ab6a-d24289953083" class="cell markdown">
+<section id="finetuning-the-model-on-supervised-data" class="level2">
+<h2 class="anchored" data-anchor-id="finetuning-the-model-on-supervised-data">6.7 Finetuning the model on supervised data</h2>
+</section>
+</div>
+<div id="6a9b099b-0829-4f72-8a2b-4363e3497026" class="cell markdown">
+<ul>
+<li>In this section, we define and use the training function to improve the classification accuracy of the model</li>
+<li>The <code>train_classifier_simple</code> function below is practically the same as the <code>train_model_simple</code> function we used for pretraining the model in chapter 5</li>
+<li>The only two differences are that we now
+<ol type="1">
+<li>track the number of training examples seen (<code>examples_seen</code>) instead of the number of tokens seen</li>
+<li>calculate the accuracy after each epoch instead of printing a sample text after each epoch</li>
+</ol></li>
+</ul>
+</div>
+<div id="979b6222-1dc2-4530-9d01-b6b04fe3de12" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/training-loop.webp?1" width="500px"></p>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [36]:</pre></div><div id="Csbr60to50FL" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Overall the same as `train_model_simple` in chapter 5</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_classifier_simple(model, train_loader, val_loader, optimizer, device, num_epochs,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>                            eval_freq, eval_iter):</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize lists to track losses and examples seen</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    train_losses, val_losses, train_accs, val_accs <span class="op">=</span> [], [], [], []</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    examples_seen, global_step <span class="op">=</span> <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Main training loop</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>        model.train()  <span class="co"># Set model to training mode</span></span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> input_batch, target_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>            optimizer.zero_grad() <span class="co"># Reset loss gradients from previous batch iteration</span></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> calc_loss_batch(input_batch, target_batch, model, device)</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>            loss.backward() <span class="co"># Calculate loss gradients</span></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>            optimizer.step() <span class="co"># Update model weights using loss gradients</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>            examples_seen <span class="op">+=</span> input_batch.shape[<span class="dv">0</span>] <span class="co"># New: track examples instead of tokens</span></span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>            global_step <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Optional evaluation step</span></span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> global_step <span class="op">%</span> eval_freq <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>                train_loss, val_loss <span class="op">=</span> evaluate_model(</span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>                    model, train_loader, val_loader, device, eval_iter)</span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>                train_losses.append(train_loss)</span>
+<span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>                val_losses.append(val_loss)</span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"Ep </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> (Step </span><span class="sc">{</span>global_step<span class="sc">:06d}</span><span class="ss">): "</span></span>
+<span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>                      <span class="ss">f"Train loss </span><span class="sc">{</span>train_loss<span class="sc">:.3f}</span><span class="ss">, Val loss </span><span class="sc">{</span>val_loss<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate accuracy after each epoch</span></span>
+<span id="cb55-30"><a href="#cb55-30" aria-hidden="true" tabindex="-1"></a>        train_accuracy <span class="op">=</span> calc_accuracy_loader(train_loader, model, device, num_batches<span class="op">=</span>eval_iter)</span>
+<span id="cb55-31"><a href="#cb55-31" aria-hidden="true" tabindex="-1"></a>        val_accuracy <span class="op">=</span> calc_accuracy_loader(val_loader, model, device, num_batches<span class="op">=</span>eval_iter)</span>
+<span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Training accuracy: </span><span class="sc">{</span>train_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% | "</span>, end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Validation accuracy: </span><span class="sc">{</span>val_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a>        train_accs.append(train_accuracy)</span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>        val_accs.append(val_accuracy)</span>
+<span id="cb55-36"><a href="#cb55-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-37"><a href="#cb55-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_losses, val_losses, train_accs, val_accs, examples_seen</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="9624cb30-3e3a-45be-b006-c00475b58ae8" class="cell markdown">
+<ul>
+<li>The <code>evaluate_model</code> function used in the <code>train_classifier_simple</code> is the same as the one we used in chapter 5</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [37]:</pre></div><div id="bcc7bc04-6aa6-4516-a147-460e2f466eab" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as chapter 5</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_model(model, train_loader, val_loader, device, eval_iter):</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>        train_loss <span class="op">=</span> calc_loss_loader(train_loader, model, device, num_batches<span class="op">=</span>eval_iter)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>        val_loss <span class="op">=</span> calc_loss_loader(val_loader, model, device, num_batches<span class="op">=</span>eval_iter)</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loss, val_loss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="e807bfe9-364d-46b2-9e25-3b000c3ef6f9" class="cell markdown">
+<ul>
+<li>The training takes about 5 minutes on a M3 MacBook Air laptop computer and less than half a minute on a V100 or A100 GPU</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [38]:</pre></div><div id="X7kU3aAj7vTJ" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="504a033e-2bf8-41b5-a037-468309845513" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> time.time()</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.AdamW(model.parameters(), lr<span class="op">=</span><span class="fl">5e-5</span>, weight_decay<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>num_epochs <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>train_losses, val_losses, train_accs, val_accs, examples_seen <span class="op">=</span> train_classifier_simple(</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>    model, train_loader, val_loader, optimizer, device,</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>    num_epochs<span class="op">=</span>num_epochs, eval_freq<span class="op">=</span><span class="dv">50</span>, eval_iter<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> time.time()</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>execution_time_minutes <span class="op">=</span> (end_time <span class="op">-</span> start_time) <span class="op">/</span> <span class="dv">60</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Training completed in </span><span class="sc">{</span>execution_time_minutes<span class="sc">:.2f}</span><span class="ss"> minutes."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ep 1 (Step 000000): Train loss 2.153, Val loss 2.392
+Ep 1 (Step 000050): Train loss 0.617, Val loss 0.637
+Ep 1 (Step 000100): Train loss 0.523, Val loss 0.557
+Training accuracy: 70.00% | Validation accuracy: 72.50%
+Ep 2 (Step 000150): Train loss 0.561, Val loss 0.489
+Ep 2 (Step 000200): Train loss 0.419, Val loss 0.397
+Ep 2 (Step 000250): Train loss 0.409, Val loss 0.353
+Training accuracy: 82.50% | Validation accuracy: 85.00%
+Ep 3 (Step 000300): Train loss 0.333, Val loss 0.320
+Ep 3 (Step 000350): Train loss 0.340, Val loss 0.306
+Training accuracy: 90.00% | Validation accuracy: 90.00%
+Ep 4 (Step 000400): Train loss 0.136, Val loss 0.200
+Ep 4 (Step 000450): Train loss 0.153, Val loss 0.132
+Ep 4 (Step 000500): Train loss 0.222, Val loss 0.137
+Training accuracy: 100.00% | Validation accuracy: 97.50%
+Ep 5 (Step 000550): Train loss 0.207, Val loss 0.143
+Ep 5 (Step 000600): Train loss 0.083, Val loss 0.074
+Training accuracy: 100.00% | Validation accuracy: 97.50%
+Training completed in 5.31 minutes.</code></pre>
+</div>
+</div></div>
+<div id="1261bf90-3ce7-4591-895a-044a05538f30" class="cell markdown">
+<ul>
+<li>Similar to chapter 5, we use matplotlib to plot the loss function for the training and validation set</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [39]:</pre></div><div id="cURgnDqdCeka" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_values(epochs_seen, examples_seen, train_values, val_values, label<span class="op">=</span><span class="st">"loss"</span>):</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    fig, ax1 <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot training and validation loss against epochs</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    ax1.plot(epochs_seen, train_values, label<span class="op">=</span><span class="ss">f"Training </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    ax1.plot(epochs_seen, val_values, linestyle<span class="op">=</span><span class="st">"-."</span>, label<span class="op">=</span><span class="ss">f"Validation </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    ax1.set_xlabel(<span class="st">"Epochs"</span>)</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    ax1.set_ylabel(label.capitalize())</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    ax1.legend()</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a second x-axis for examples seen</span></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>    ax2 <span class="op">=</span> ax1.twiny()  <span class="co"># Create a second x-axis that shares the same y-axis</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    ax2.plot(examples_seen, train_values, alpha<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Invisible plot for aligning ticks</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>    ax2.set_xlabel(<span class="st">"Examples seen"</span>)</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    fig.tight_layout()  <span class="co"># Adjust layout to make room</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>    plt.savefig(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">-plot.pdf"</span>)</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [40]:</pre></div><div id="OIqRt466DiGk" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:307}}" data-outputid="b16987cf-0001-4652-ddaf-02f7cffc34db" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>epochs_tensor <span class="op">=</span> torch.linspace(<span class="dv">0</span>, num_epochs, <span class="bu">len</span>(train_losses))</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>examples_seen_tensor <span class="op">=</span> torch.linspace(<span class="dv">0</span>, examples_seen, <span class="bu">len</span>(train_losses))</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>plot_values(epochs_tensor, examples_seen_tensor, train_losses, val_losses)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="">
+<figure class="figure">
+<p class=""><img src="ch06_files/figure-html/cell-40-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div></div>
+<div id="dbd28174-1836-44ba-b6c0-7e0be774fadc" class="cell markdown">
+<ul>
+<li>Above, based on the downward slope, we see that the model learns well</li>
+<li>Furthermore, the fact that the training and validation loss are very close indicates that the model does not tend to overfit the training data</li>
+<li>Similarly, we can plot the accuracy below</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [41]:</pre></div><div id="yz8BIsaF0TUo" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:307}}" data-outputid="3a7ed967-1f2a-4c6d-f4a3-0cc8cc9d6c5f" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>epochs_tensor <span class="op">=</span> torch.linspace(<span class="dv">0</span>, num_epochs, <span class="bu">len</span>(train_accs))</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>examples_seen_tensor <span class="op">=</span> torch.linspace(<span class="dv">0</span>, examples_seen, <span class="bu">len</span>(train_accs))</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>plot_values(epochs_tensor, examples_seen_tensor, train_accs, val_accs, label<span class="op">=</span><span class="st">"accuracy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="">
+<figure class="figure">
+<p class=""><img src="ch06_files/figure-html/cell-41-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div></div>
+<div id="90aba699-21bc-42de-a69c-99f370bb0363" class="cell markdown">
+<ul>
+<li>Based on the accuracy plot above, we can see that the model achieves a relatively high training and validation accuracy after epochs 4 and 5</li>
+<li>However, we have to keep in mind that we specified <code>eval_iter=5</code> in the training function earlier, which means that we only estimated the training and validation set performances</li>
+<li>We can compute the training, validation, and test set performances over the complete dataset as follows below</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [42]:</pre></div><div id="UHWaJFrjY0zW" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="e111e6e6-b147-4159-eb9d-19d4e809ed34" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>train_accuracy <span class="op">=</span> calc_accuracy_loader(train_loader, model, device)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>val_accuracy <span class="op">=</span> calc_accuracy_loader(val_loader, model, device)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>test_accuracy <span class="op">=</span> calc_accuracy_loader(test_loader, model, device)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Training accuracy: </span><span class="sc">{</span>train_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Validation accuracy: </span><span class="sc">{</span>val_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Test accuracy: </span><span class="sc">{</span>test_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Training accuracy: 97.21%
+Validation accuracy: 97.32%
+Test accuracy: 95.67%</code></pre>
+</div>
+</div></div>
+<div id="6882649f-dc7b-401f-84d2-024ff79c74a1" class="cell markdown">
+<ul>
+<li>We can see that the training and validation set performances are practically identical</li>
+<li>However, based on the slightly lower test set performance, we can see that the model overfits the training data to a very small degree, as well as the validation data that has been used for tweaking some of the hyperparameters, such as the learning rate</li>
+<li>This is normal, however, and this gap could potentially be further reduced by increasing the model’s dropout rate (<code>drop_rate</code>) or the <code>weight_decay</code> in the optimizer setting</li>
+</ul>
+</div>
+<div id="a74d9ad7-3ec1-450e-8c9f-4fc46d3d5bb0" class="cell markdown">
+<section id="using-the-llm-as-a-spam-classifier" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-llm-as-a-spam-classifier">6.8 Using the LLM as a spam classifier</h2>
+</section>
+</div>
+<div id="72ebcfa2-479e-408b-9cf0-7421f6144855" class="cell markdown">
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch06_compressed/overview-4.webp" width="500px"></p>
+</div>
+<div id="fd5408e6-83e4-4e5a-8503-c2fba6073f31" class="cell markdown">
+<ul>
+<li>Finally, let’s use the finetuned GPT model in action</li>
+<li>The <code>classify_review</code> function below implements the data preprocessing steps similar to the <code>SpamDataset</code> we implemented earlier</li>
+<li>Then, the function returns the predicted integer class label from the model and returns the corresponding class name</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [43]:</pre></div><div id="aHdn6xvL-IW5" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_review(text, model, tokenizer, device, max_length<span class="op">=</span><span class="va">None</span>, pad_token_id<span class="op">=</span><span class="dv">50256</span>):</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prepare inputs to the model</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>    input_ids <span class="op">=</span> tokenizer.encode(text)</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    supported_context_length <span class="op">=</span> model.pos_emb.weight.shape[<span class="dv">0</span>]</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Note: In the book, this was originally written as pos_emb.weight.shape[1] by mistake</span></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># It didn't break the code but would have caused unnecessary truncation (to 768 instead of 1024)</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Truncate sequences if they too long</span></span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>    input_ids <span class="op">=</span> input_ids[:<span class="bu">min</span>(max_length, supported_context_length)]</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> max_length <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, (</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"max_length must be specified. If you want to use the full model context, "</span></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass max_length=model.pos_emb.weight.shape[0]."</span></span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> max_length <span class="op">&lt;=</span> supported_context_length, (</span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"max_length (</span><span class="sc">{</span>max_length<span class="sc">}</span><span class="ss">) exceeds model's supported context length (</span><span class="sc">{</span>supported_context_length<span class="sc">}</span><span class="ss">)."</span></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>    )    </span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Alternatively, a more robust version is the following one, which handles the max_length=None case better</span></span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># max_len = min(max_length,supported_context_length) if max_length else supported_context_length</span></span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># input_ids = input_ids[:max_len]</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pad sequences to the longest sequence</span></span>
+<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>    input_ids <span class="op">+=</span> [pad_token_id] <span class="op">*</span> (max_length <span class="op">-</span> <span class="bu">len</span>(input_ids))</span>
+<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a>    input_tensor <span class="op">=</span> torch.tensor(input_ids, device<span class="op">=</span>device).unsqueeze(<span class="dv">0</span>) <span class="co"># add batch dimension</span></span>
+<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model inference</span></span>
+<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> model(input_tensor)[:, <span class="op">-</span><span class="dv">1</span>, :]  <span class="co"># Logits of the last output token</span></span>
+<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a>    predicted_label <span class="op">=</span> torch.argmax(logits, dim<span class="op">=-</span><span class="dv">1</span>).item()</span>
+<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Return the classified result</span></span>
+<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"spam"</span> <span class="cf">if</span> predicted_label <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">"not spam"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="f29682d8-a899-4d9b-b973-f8d5ec68172c" class="cell markdown">
+<ul>
+<li>Let’s try it out on a few examples below</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [44]:</pre></div><div id="apU_pf51AWSV" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="d0fde0a5-e7a3-4dbe-d9c5-0567dbab7e62" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>text_1 <span class="op">=</span> (</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You are a winner you have been specially"</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">" selected to receive $1000 cash or a $2000 award."</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classify_review(</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>    text_1, model, tokenizer, device, max_length<span class="op">=</span>train_dataset.max_length</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spam</code></pre>
+</div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [45]:</pre></div><div id="1g5VTOo_Ajs5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="659b08eb-b6a9-4a8a-9af7-d94c757e93c2" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>text_2 <span class="op">=</span> (</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hey, just wanted to check if we're still on"</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">" for dinner tonight? Let me know!"</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classify_review(</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>    text_2, model, tokenizer, device, max_length<span class="op">=</span>train_dataset.max_length</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>not spam</code></pre>
+</div>
+</div></div>
+<div id="bf736e39-0d47-40c1-8d18-1f716cf7a81e" class="cell markdown">
+<ul>
+<li>Finally, let’s save the model in case we want to reuse the model later without having to train it again</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [46]:</pre></div><div id="mYnX-gI1CfQY" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>torch.save(model.state_dict(), <span class="st">"review_classifier.pth"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<div id="ba78cf7c-6b80-4f71-a50e-3ccc73839af6" class="cell markdown">
+<ul>
+<li>Then, in a new session, we could load the model as follows</li>
+</ul>
+</div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [47]:</pre></div><div id="cc4e68a5-d492-493b-87ef-45c475f353f5" class="cell" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>model_state_dict <span class="op">=</span> torch.load(<span class="st">"review_classifier.pth"</span>, map_location<span class="op">=</span>device, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>model.load_state_dict(model_state_dict)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>&lt;All keys matched successfully&gt;</code></pre>
+</div>
+</div></div>
+<div id="5b70ac71-234f-4eeb-b33d-c62726d50cd4" class="cell markdown">
+<section id="summary-and-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-takeaways">Summary and takeaways</h2>
+</section>
+</div>
+<div id="dafdc910-d616-47ab-aa85-f90c6e7ed80e" class="cell markdown">
+<ul>
+<li>See the <a href="./gpt_class_finetune.py">./gpt_class_finetune.py</a> script, a self-contained script for classification finetuning</li>
+<li>You can find the exercise solutions in <a href="./exercise-solutions.ipynb">./exercise-solutions.ipynb</a></li>
+<li>In addition, interested readers can find an introduction to parameter-efficient training with low-rank adaptation (LoRA) in <a href="../../appendix-E">appendix E</a></li>
+</ul>
+</div>
+
+
+     </main> <!-- /main -->  <script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/your-website-url\.example\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>  </div> <!-- /content --> 
+  
+</body></html>

@@ -1,1 +1,18 @@
 /* css styles */
+/* Custom TOC styling */
+#toc-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+  
+  .sidebar-navigation .sidebar-section .sidebar-item {
+    font-size: 1.1em;
+    line-height: 1.5;
+    padding: 0.3em 0;
+  }
+  
+  .sidebar-navigation .sidebar-section-info {
+    font-weight: bold;
+    margin-top: 1em;
+  }

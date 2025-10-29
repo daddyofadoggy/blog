@@ -12,7 +12,7 @@
 <generator>quarto-1.8.25</generator>
 <lastBuildDate>Tue, 28 Oct 2025 07:00:00 GMT</lastBuildDate>
 <item>
-  <title>LLM From Scratch</title>
+  <title>Chapter 2: Working with Text Data</title>
   <dc:creator>Dipankar Baisya</dc:creator>
   <link>https://your-website-url.example.com/posts/LLM-From-Scratch/</link>
   <description><![CDATA[ 
@@ -21,9 +21,570 @@
 
 
 
-<p>This is a post on building a LLM .</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>[Your existing introduction content here…]</p>
+</section>
+<section id="prerequisites" class="level1">
+<h1>Prerequisites</h1>
+<p>[Your existing prerequisites content here…]</p>
+</section>
+<section id="working-with-text-data" class="level1">
+<h1>Working with text data</h1>
+<p>This section explores techniques for processing and working with text data for language models.</p>
+</section>
+<div class="quarto-embed-nb-cell">
+<section id="chapter-2-working-with-text-data" class="level1">
+<h1>Chapter 2: Working with Text Data</h1>
+<p>Packages that are being used in this notebook:</p>
+<div id="4d1305cf-12d5-46fe-a2c9-36fb71c5b3d3" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>torch version: 2.5.1
+tiktoken version: 0.7.0</code></pre>
+</div>
+</div>
+<ul>
+<li>This chapter covers data preparation and sampling to get input data “ready” for the LLM</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/01.webp?timestamp=1" width="500px"></p>
+<section id="understanding-word-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-word-embeddings">2.1 Understanding word embeddings</h2>
+<ul>
+<li><p>No code in this section</p></li>
+<li><p>There are many forms of embeddings; we focus on text embeddings in this book</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/02.webp" width="500px"></p>
+<ul>
+<li>LLMs work with embeddings in high-dimensional spaces (i.e., thousands of dimensions)</li>
+<li>Since we can’t visualize such high-dimensional spaces (we humans think in 1, 2, or 3 dimensions), the figure below illustrates a 2-dimensional embedding space</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/03.webp" width="300px"></p>
+</section>
+<section id="tokenizing-text" class="level2">
+<h2 class="anchored" data-anchor-id="tokenizing-text">2.2 Tokenizing text</h2>
+<ul>
+<li>In this section, we tokenize text, which means breaking text into smaller units, such as individual words and punctuation characters</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/04.webp" width="300px"></p>
+<ul>
+<li><p>Load raw text we want to work with</p></li>
+<li><p><a href="https://en.wikisource.org/wiki/The_Verdict">The Verdict by Edith Wharton</a> is a public domain short story</p></li>
+<li><p>(If you encounter an <code>ssl.SSLCertVerificationError</code> when executing the previous code cell, it might be due to using an outdated Python version; you can find <a href="https://github.com/rasbt/LLMs-from-scratch/pull/403">more information here on GitHub</a>)</p></li>
+</ul>
+<div id="8a769e87-470a-48b9-8bdb-12841b416198" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>Total number of character: 20479
+I HAD always thought Jack Gisburn rather a cheap genius--though a good fellow enough--so it was no </code></pre>
+</div>
+</div>
+<ul>
+<li>The goal is to tokenize and embed this text for an LLM</li>
+<li>Let’s develop a simple tokenizer based on some simple sample text that we can then later apply to the text above</li>
+<li>The following regular expression will split on whitespaces</li>
+</ul>
+<div id="737dd5b0-9dbb-4a97-9ae4-3482c8c04be7" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello,', ' ', 'world.', ' ', 'This,', ' ', 'is', ' ', 'a', ' ', 'test.']</code></pre>
+</div>
+</div>
+<ul>
+<li>We don’t only want to split on whitespaces but also commas and periods, so let’s modify the regular expression to do that as well</li>
+</ul>
+<div id="ea02489d-01f9-4247-b7dd-a0d63f62ef07" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', '', ' ', 'world', '.', '', ' ', 'This', ',', '', ' ', 'is', ' ', 'a', ' ', 'test', '.', '']</code></pre>
+</div>
+</div>
+<ul>
+<li>As we can see, this creates empty strings, let’s remove them</li>
+</ul>
+<div id="4d8a6fb7-2e62-4a12-ad06-ccb04f25fed7" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', 'world', '.', 'This', ',', 'is', 'a', 'test', '.']</code></pre>
+</div>
+</div>
+<ul>
+<li>This looks pretty good, but let’s also handle other types of punctuation, such as periods, question marks, and so on</li>
+</ul>
+<div id="ed3a9467-04b4-49d9-96c5-b8042bcf8374" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', 'world', '.', 'Is', 'this', '--', 'a', 'test', '?']</code></pre>
+</div>
+</div>
+<ul>
+<li>This is pretty good, and we are now ready to apply this tokenization to the raw text</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/05.webp" width="350px"></p>
+<div id="8c567caa-8ff5-49a8-a5cc-d365b0a78a99" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-stdout">
+<pre><code>['I', 'HAD', 'always', 'thought', 'Jack', 'Gisburn', 'rather', 'a', 'cheap', 'genius', '--', 'though', 'a', 'good', 'fellow', 'enough', '--', 'so', 'it', 'was', 'no', 'great', 'surprise', 'to', 'me', 'to', 'hear', 'that', ',', 'in']</code></pre>
+</div>
+</div>
+<ul>
+<li>Let’s calculate the total number of tokens</li>
+</ul>
+<div id="35db7b5e-510b-4c45-995f-f5ad64a8e19c" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-stdout">
+<pre><code>4690</code></pre>
+</div>
+</div>
+</section>
+<section id="converting-tokens-into-token-ids" class="level2">
+<h2 class="anchored" data-anchor-id="converting-tokens-into-token-ids">2.3 Converting tokens into token IDs</h2>
+<ul>
+<li>Next, we convert the text tokens into token IDs that we can process via embedding layers later</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/06.webp" width="500px"></p>
+<ul>
+<li>From these tokens, we can now build a vocabulary that consists of all the unique tokens</li>
+</ul>
+<div id="7fdf0533-5ab6-42a5-83fa-a3b045de6396" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-stdout">
+<pre><code>1130</code></pre>
+</div>
+</div>
+<ul>
+<li>Below are the first 50 entries in this vocabulary:</li>
+</ul>
+<div id="e1c5de4a-aa4e-4aec-b532-10bb364039d6" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-stdout">
+<pre><code>('!', 0)
+('"', 1)
+("'", 2)
+('(', 3)
+(')', 4)
+(',', 5)
+('--', 6)
+('.', 7)
+(':', 8)
+(';', 9)
+('?', 10)
+('A', 11)
+('Ah', 12)
+('Among', 13)
+('And', 14)
+('Are', 15)
+('Arrt', 16)
+('As', 17)
+('At', 18)
+('Be', 19)
+('Begin', 20)
+('Burlington', 21)
+('But', 22)
+('By', 23)
+('Carlo', 24)
+('Chicago', 25)
+('Claude', 26)
+('Come', 27)
+('Croft', 28)
+('Destroyed', 29)
+('Devonshire', 30)
+('Don', 31)
+('Dubarry', 32)
+('Emperors', 33)
+('Florence', 34)
+('For', 35)
+('Gallery', 36)
+('Gideon', 37)
+('Gisburn', 38)
+('Gisburns', 39)
+('Grafton', 40)
+('Greek', 41)
+('Grindle', 42)
+('Grindles', 43)
+('HAD', 44)
+('Had', 45)
+('Hang', 46)
+('Has', 47)
+('He', 48)
+('Her', 49)
+('Hermia', 50)</code></pre>
+</div>
+</div>
+<ul>
+<li>Below, we illustrate the tokenization of a short sample text using a small vocabulary:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/07.webp?123" width="500px"></p>
+<ul>
+<li><p>Putting it now all together into a tokenizer class</p></li>
+<li><p>The <code>encode</code> function turns text into token IDs</p></li>
+<li><p>The <code>decode</code> function turns token IDs back into text</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/08.webp?123" width="500px"></p>
+<ul>
+<li>We can use the tokenizer to encode (that is, tokenize) texts into integers</li>
+<li>These integers can then be embedded (later) as input of/for the LLM</li>
+</ul>
+<div id="647364ec-7995-4654-9b4a-7607ccf5f1e4" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 56, 2, 850, 988, 602, 533, 746, 5, 1126, 596, 5, 1, 67, 7, 38, 851, 1108, 754, 793, 7]</code></pre>
+</div>
+</div>
+<ul>
+<li>We can decode the integers back into text</li>
+</ul>
+<div id="01d8c8fb-432d-4a49-b332-99f23b233746" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>'" It\' s the last he painted, you know," Mrs. Gisburn said with pardonable pride.'</code></pre>
+</div>
+</div>
+<div id="54f6aa8b-9827-412e-9035-e827296ab0fe" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'" It\' s the last he painted, you know," Mrs. Gisburn said with pardonable pride.'</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-special-context-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="adding-special-context-tokens">2.4 Adding special context tokens</h2>
+<ul>
+<li>It’s useful to add some “special” tokens for unknown words and to denote the end of a text</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/09.webp?123" width="500px"></p>
+<ul>
+<li><p>Some tokenizers use special tokens to help the LLM with additional context</p></li>
+<li><p>Some of these special tokens are</p>
+<ul>
+<li><code>[BOS]</code> (beginning of sequence) marks the beginning of text</li>
+<li><code>[EOS]</code> (end of sequence) marks where the text ends (this is usually used to concatenate multiple unrelated texts, e.g., two different Wikipedia articles or two different books, and so on)</li>
+<li><code>[PAD]</code> (padding) if we train LLMs with a batch size greater than 1 (we may include multiple texts with different lengths; with the padding token we pad the shorter texts to the longest length so that all texts have an equal length)</li>
+</ul></li>
+<li><p><code>[UNK]</code> to represent words that are not included in the vocabulary</p></li>
+<li><p>Note that GPT-2 does not need any of these tokens mentioned above but only uses an <code>&lt;|endoftext|&gt;</code> token to reduce complexity</p></li>
+<li><p>The <code>&lt;|endoftext|&gt;</code> is analogous to the <code>[EOS]</code> token mentioned above</p></li>
+<li><p>GPT also uses the <code>&lt;|endoftext|&gt;</code> for padding (since we typically use a mask when training on batched inputs, we would not attend padded tokens anyways, so it does not matter what these tokens are)</p></li>
+<li><p>GPT-2 does not use an <code>&lt;UNK&gt;</code> token for out-of-vocabulary words; instead, GPT-2 uses a byte-pair encoding (BPE) tokenizer, which breaks down words into subword units which we will discuss in a later section</p></li>
+<li><p>We use the <code>&lt;|endoftext|&gt;</code> tokens between two independent sources of text:</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/10.webp" width="500px"></p>
+<ul>
+<li>Let’s see what happens if we tokenize the following text:</li>
+</ul>
+<div id="d5767eff-440c-4de1-9289-f789349d6b85" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[17], line 5</span>
+<span class="ansi-green-fg ansi-bold">      1</span> tokenizer <span style="color:rgb(98,98,98)">=</span> SimpleTokenizerV1(vocab)
+<span class="ansi-green-fg ansi-bold">      3</span> text <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Hello, do you like tea. Is this-- a test?</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg">----&gt; 5</span> tokenizer<span style="color:rgb(98,98,98)">.</span>encode(text)
+
+Cell <span class="ansi-green-fg">In[13], line 12</span>, in <span class="ansi-cyan-fg">SimpleTokenizerV1.encode</span><span class="ansi-blue-fg">(self, text)</span>
+<span class="ansi-green-fg ansi-bold">      7</span> preprocessed <span style="color:rgb(98,98,98)">=</span> re<span style="color:rgb(98,98,98)">.</span>split(<span style="color:rgb(175,0,0)">r</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">([,.:;?_!</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">()</span><span style="font-weight:bold;color:rgb(175,95,0)">\'</span><span style="color:rgb(175,0,0)">]|--|</span><span style="color:rgb(175,0,0)">\</span><span style="color:rgb(175,0,0)">s)</span><span style="color:rgb(175,0,0)">'</span>, text)
+<span class="ansi-green-fg ansi-bold">      9</span> preprocessed <span style="color:rgb(98,98,98)">=</span> [
+<span class="ansi-green-fg ansi-bold">     10</span>     item<span style="color:rgb(98,98,98)">.</span>strip() <span style="font-weight:bold;color:rgb(0,135,0)">for</span> item <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed <span style="font-weight:bold;color:rgb(0,135,0)">if</span> item<span style="color:rgb(98,98,98)">.</span>strip()
+<span class="ansi-green-fg ansi-bold">     11</span> ]
+<span class="ansi-green-fg">---&gt; 12</span> ids <span style="color:rgb(98,98,98)">=</span> [<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>str_to_int[s] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> s <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed]
+<span class="ansi-green-fg ansi-bold">     13</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> ids
+
+Cell <span class="ansi-green-fg">In[13], line 12</span>, in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-fg ansi-bold">      7</span> preprocessed <span style="color:rgb(98,98,98)">=</span> re<span style="color:rgb(98,98,98)">.</span>split(<span style="color:rgb(175,0,0)">r</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">([,.:;?_!</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">()</span><span style="font-weight:bold;color:rgb(175,95,0)">\'</span><span style="color:rgb(175,0,0)">]|--|</span><span style="color:rgb(175,0,0)">\</span><span style="color:rgb(175,0,0)">s)</span><span style="color:rgb(175,0,0)">'</span>, text)
+<span class="ansi-green-fg ansi-bold">      9</span> preprocessed <span style="color:rgb(98,98,98)">=</span> [
+<span class="ansi-green-fg ansi-bold">     10</span>     item<span style="color:rgb(98,98,98)">.</span>strip() <span style="font-weight:bold;color:rgb(0,135,0)">for</span> item <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed <span style="font-weight:bold;color:rgb(0,135,0)">if</span> item<span style="color:rgb(98,98,98)">.</span>strip()
+<span class="ansi-green-fg ansi-bold">     11</span> ]
+<span class="ansi-green-fg">---&gt; 12</span> ids <span style="color:rgb(98,98,98)">=</span> [<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>str_to_int[s] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> s <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed]
+<span class="ansi-green-fg ansi-bold">     13</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> ids
+
+<span class="ansi-red-fg">KeyError</span>: 'Hello'</pre>
+</div>
+</div>
+</div>
+<ul>
+<li>The above produces an error because the word “Hello” is not contained in the vocabulary</li>
+<li>To deal with such cases, we can add special tokens like <code>"&lt;|unk|&gt;"</code> to the vocabulary to represent unknown words</li>
+<li>Since we are already extending the vocabulary, let’s add another token called <code>"&lt;|endoftext|&gt;"</code> which is used in GPT-2 training to denote the end of a text (and it’s also used between concatenated text, like if our training datasets consists of multiple articles, books, etc.)</li>
+</ul>
+<div id="57c3143b-e860-4d3b-a22a-de22b547a6a9" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>1132</code></pre>
+</div>
+</div>
+<div id="50e51bb1-ae05-4aa8-a9ff-455b65ed1959" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-stdout">
+<pre><code>('younger', 1127)
+('your', 1128)
+('yourself', 1129)
+('&lt;|endoftext|&gt;', 1130)
+('&lt;|unk|&gt;', 1131)</code></pre>
+</div>
+</div>
+<ul>
+<li>We also need to adjust the tokenizer accordingly so that it knows when and how to use the new <code>&lt;unk&gt;</code> token</li>
+</ul>
+<p>Let’s try to tokenize text with the modified tokenizer:</p>
+<div id="4133c502-18ac-4412-9f43-01caf4efa3dc" class="cell" data-execution_count="22">
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, do you like tea? &lt;|endoftext|&gt; In the sunlit terraces of the palace.</code></pre>
+</div>
+</div>
+<div id="7ed395fe-dc1b-4ed2-b85b-457cc35aab60" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>[1131, 5, 355, 1126, 628, 975, 10, 1130, 55, 988, 956, 984, 722, 988, 1131, 7]</code></pre>
+</div>
+</div>
+<div id="059367f9-7a60-4c0d-8a00-7c4c766d0ebc" class="cell" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>'&lt;|unk|&gt;, do you like tea? &lt;|endoftext|&gt; In the sunlit terraces of the &lt;|unk|&gt;.'</code></pre>
+</div>
+</div>
+</section>
+<section id="bytepair-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="bytepair-encoding">2.5 BytePair encoding</h2>
+<ul>
+<li>GPT-2 used BytePair encoding (BPE) as its tokenizer</li>
+<li>it allows the model to break down words that aren’t in its predefined vocabulary into smaller subword units or even individual characters, enabling it to handle out-of-vocabulary words</li>
+<li>For instance, if GPT-2’s vocabulary doesn’t have the word “unfamiliarword,” it might tokenize it as [“unfam”, “iliar”, “word”] or some other subword breakdown, depending on its trained BPE merges</li>
+<li>The original BPE tokenizer can be found here: <a href="https://github.com/openai/gpt-2/blob/master/src/encoder.py">https://github.com/openai/gpt-2/blob/master/src/encoder.py</a></li>
+<li>In this chapter, we are using the BPE tokenizer from OpenAI’s open-source <a href="https://github.com/openai/tiktoken">tiktoken</a> library, which implements its core algorithms in Rust to improve computational performance</li>
+<li>I created a notebook in the <a href="../02_bonus_bytepair-encoder">./bytepair_encoder</a> that compares these two implementations side-by-side (tiktoken was about 5x faster on the sample text)</li>
+</ul>
+<div id="48967a77-7d17-42bf-9e92-fc619d63a59e" class="cell" data-execution_count="26">
+<div class="cell-output cell-output-stdout">
+<pre><code>tiktoken version: 0.7.0</code></pre>
+</div>
+</div>
+<div id="5ff2cd85-7cfb-4325-b390-219938589428" class="cell" data-execution_count="28">
+<div class="cell-output cell-output-stdout">
+<pre><code>[15496, 11, 466, 345, 588, 8887, 30, 220, 50256, 554, 262, 4252, 18250, 8812, 2114, 1659, 617, 34680, 27271, 13]</code></pre>
+</div>
+</div>
+<div id="d26a48bb-f82e-41a8-a955-a1c9cf9d50ab" class="cell" data-execution_count="29">
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, do you like tea? &lt;|endoftext|&gt; In the sunlit terracesof someunknownPlace.</code></pre>
+</div>
+</div>
+<ul>
+<li>BPE tokenizers break down unknown words into subwords and individual characters:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/11.webp" width="300px"></p>
+</section>
+<section id="data-sampling-with-a-sliding-window" class="level2">
+<h2 class="anchored" data-anchor-id="data-sampling-with-a-sliding-window">2.6 Data sampling with a sliding window</h2>
+<ul>
+<li>We train LLMs to generate one word at a time, so we want to prepare the training data accordingly where the next word in a sequence represents the target to predict:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/12.webp" width="400px"></p>
+<div id="848d5ade-fd1f-46c3-9e31-1426e315c71b" class="cell" data-execution_count="30">
+<div class="cell-output cell-output-stdout">
+<pre><code>5145</code></pre>
+</div>
+</div>
+<ul>
+<li>For each text chunk, we want the inputs and targets</li>
+<li>Since we want the model to predict the next word, the targets are the inputs shifted by one position to the right</li>
+</ul>
+<div id="dfbff852-a92f-48c8-a46d-143a0f109f40" class="cell" data-execution_count="32">
+<div class="cell-output cell-output-stdout">
+<pre><code>x: [290, 4920, 2241, 287]
+y:      [4920, 2241, 287, 257]</code></pre>
+</div>
+</div>
+<ul>
+<li>One by one, the prediction would look like as follows:</li>
+</ul>
+<div id="d97b031e-ed55-409d-95f2-aeb38c6fe366" class="cell" data-execution_count="33">
+<div class="cell-output cell-output-stdout">
+<pre><code>[290] ----&gt; 4920
+[290, 4920] ----&gt; 2241
+[290, 4920, 2241] ----&gt; 287
+[290, 4920, 2241, 287] ----&gt; 257</code></pre>
+</div>
+</div>
+<div id="f57bd746-dcbf-4433-8e24-ee213a8c34a1" class="cell" data-execution_count="34">
+<div class="cell-output cell-output-stdout">
+<pre><code> and ----&gt;  established
+ and established ----&gt;  himself
+ and established himself ----&gt;  in
+ and established himself in ----&gt;  a</code></pre>
+</div>
+</div>
+<ul>
+<li><p>We will take care of the next-word prediction in a later chapter after we covered the attention mechanism</p></li>
+<li><p>For now, we implement a simple data loader that iterates over the input dataset and returns the inputs and targets shifted by one</p></li>
+<li><p>Install and import PyTorch (see Appendix A for installation tips)</p></li>
+</ul>
+<div id="e1770134-e7f3-4725-a679-e04c3be48cac" class="cell" data-execution_count="35">
+<div class="cell-output cell-output-stdout">
+<pre><code>PyTorch version: 2.5.1</code></pre>
+</div>
+</div>
+<ul>
+<li>We use a sliding window approach, changing the position by +1:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/13.webp?123" width="500px"></p>
+<ul>
+<li><p>Create dataset and dataloader that extract chunks from the input text dataset</p></li>
+<li><p>Let’s test the dataloader with a batch size of 1 for an LLM with a context size of 4:</p></li>
+</ul>
+<div id="9226d00c-ad9a-4949-a6e4-9afccfc7214f" class="cell" data-execution_count="39">
+<div class="cell-output cell-output-stdout">
+<pre><code>[tensor([[  40,  367, 2885, 1464]]), tensor([[ 367, 2885, 1464, 1807]])]</code></pre>
+</div>
+</div>
+<div id="10deb4bc-4de1-4d20-921e-4b1c7a0e1a6d" class="cell" data-execution_count="40">
+<div class="cell-output cell-output-stdout">
+<pre><code>[tensor([[ 367, 2885, 1464, 1807]]), tensor([[2885, 1464, 1807, 3619]])]</code></pre>
+</div>
+</div>
+<ul>
+<li>An example using stride equal to the context length (here: 4) as shown below:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/14.webp" width="500px"></p>
+<ul>
+<li>We can also create batched outputs</li>
+<li>Note that we increase the stride here so that we don’t have overlaps between the batches, since more overlap could lead to increased overfitting</li>
+</ul>
+<div id="1916e7a6-f03d-4f09-91a6-d0bdbac5a58c" class="cell" data-execution_count="41">
+<div class="cell-output cell-output-stdout">
+<pre><code>Inputs:
+ tensor([[   40,   367,  2885,  1464],
+        [ 1807,  3619,   402,   271],
+        [10899,  2138,   257,  7026],
+        [15632,   438,  2016,   257],
+        [  922,  5891,  1576,   438],
+        [  568,   340,   373,   645],
+        [ 1049,  5975,   284,   502],
+        [  284,  3285,   326,    11]])
+
+Targets:
+ tensor([[  367,  2885,  1464,  1807],
+        [ 3619,   402,   271, 10899],
+        [ 2138,   257,  7026, 15632],
+        [  438,  2016,   257,   922],
+        [ 5891,  1576,   438,   568],
+        [  340,   373,   645,  1049],
+        [ 5975,   284,   502,   284],
+        [ 3285,   326,    11,   287]])</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-token-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="creating-token-embeddings">2.7 Creating token embeddings</h2>
+<ul>
+<li>The data is already almost ready for an LLM</li>
+<li>But lastly let us embed the tokens in a continuous vector representation using an embedding layer</li>
+<li>Usually, these embedding layers are part of the LLM itself and are updated (trained) during model training</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/15.webp" width="400px"></p>
+<ul>
+<li><p>Suppose we have the following four input examples with input ids 2, 3, 5, and 1 (after tokenization):</p></li>
+<li><p>For the sake of simplicity, suppose we have a small vocabulary of only 6 words and we want to create embeddings of size 3:</p></li>
+<li><p>This would result in a 6x3 weight matrix:</p></li>
+</ul>
+<div id="a686eb61-e737-4351-8f1c-222913d47468" class="cell" data-execution_count="44">
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter containing:
+tensor([[ 0.3374, -0.1778, -0.1690],
+        [ 0.9178,  1.5810,  1.3010],
+        [ 1.2753, -0.2010, -0.1606],
+        [-0.4015,  0.9666, -1.1481],
+        [-1.1589,  0.3255, -0.6315],
+        [-2.8400, -0.7849, -1.4096]], requires_grad=True)</code></pre>
+</div>
+</div>
+<ul>
+<li><p>For those who are familiar with one-hot encoding, the embedding layer approach above is essentially just a more efficient way of implementing one-hot encoding followed by matrix multiplication in a fully-connected layer, which is described in the supplementary code in <a href="../03_bonus_embedding-vs-matmul">./embedding_vs_matmul</a></p></li>
+<li><p>Because the embedding layer is just a more efficient implementation that is equivalent to the one-hot encoding and matrix-multiplication approach it can be seen as a neural network layer that can be optimized via backpropagation</p></li>
+<li><p>To convert a token with id 3 into a 3-dimensional vector, we do the following:</p></li>
+</ul>
+<div id="e43600ba-f287-4746-8ddf-d0f71a9023ca" class="cell" data-execution_count="45">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[-0.4015,  0.9666, -1.1481]], grad_fn=&lt;EmbeddingBackward0&gt;)</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the above is the 4th row in the <code>embedding_layer</code> weight matrix</li>
+<li>To embed all four <code>input_ids</code> values above, we do</li>
+</ul>
+<div id="50280ead-0363-44c8-8c35-bb885d92c8b7" class="cell" data-execution_count="46">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 1.2753, -0.2010, -0.1606],
+        [-0.4015,  0.9666, -1.1481],
+        [-2.8400, -0.7849, -1.4096],
+        [ 0.9178,  1.5810,  1.3010]], grad_fn=&lt;EmbeddingBackward0&gt;)</code></pre>
+</div>
+</div>
+<ul>
+<li>An embedding layer is essentially a look-up operation:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/16.webp?123" width="500px"></p>
+<ul>
+<li><strong>You may be interested in the bonus content comparing embedding layers with regular linear layers: <a href="../03_bonus_embedding-vs-matmul">../03_bonus_embedding-vs-matmul</a></strong></li>
+</ul>
+</section>
+<section id="encoding-word-positions" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-word-positions">2.8 Encoding word positions</h2>
+<ul>
+<li>Embedding layer convert IDs into identical vector representations regardless of where they are located in the input sequence:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/17.webp" width="400px"></p>
+<ul>
+<li>Positional embeddings are combined with the token embedding vector to form the input embeddings for a large language model:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/18.webp" width="500px"></p>
+<ul>
+<li><p>The BytePair encoder has a vocabulary size of 50,257:</p></li>
+<li><p>Suppose we want to encode the input tokens into a 256-dimensional vector representation:</p></li>
+<li><p>If we sample data from the dataloader, we embed the tokens in each batch into a 256-dimensional vector</p></li>
+<li><p>If we have a batch size of 8 with 4 tokens each, this results in a 8 x 4 x 256 tensor:</p></li>
+</ul>
+<div id="84416b60-3707-4370-bcbc-da0b62f2b64d" class="cell" data-execution_count="49">
+<div class="cell-output cell-output-stdout">
+<pre><code>Token IDs:
+ tensor([[   40,   367,  2885,  1464],
+        [ 1807,  3619,   402,   271],
+        [10899,  2138,   257,  7026],
+        [15632,   438,  2016,   257],
+        [  922,  5891,  1576,   438],
+        [  568,   340,   373,   645],
+        [ 1049,  5975,   284,   502],
+        [  284,  3285,   326,    11]])
+
+Inputs shape:
+ torch.Size([8, 4])</code></pre>
+</div>
+</div>
+<div id="7766ec38-30d0-4128-8c31-f49f063c43d1" class="cell" data-execution_count="50">
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([8, 4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>GPT-2 uses absolute position embeddings, so we just create another embedding layer:</li>
+</ul>
+<div id="c369a1e7-d566-4b53-b398-d6adafb44105" class="cell" data-execution_count="52">
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>To create the input embeddings used in an LLM, we simply add the token and the positional embeddings:</li>
+</ul>
+<div id="b22fab89-526e-43c8-9035-5b7018e34288" class="cell" data-execution_count="53">
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([8, 4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>In the initial phase of the input processing workflow, the input text is segmented into separate tokens</li>
+<li>Following this segmentation, these tokens are transformed into token IDs based on a predefined vocabulary:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/19.webp" width="400px"></p>
+</section>
+</section>
+<section id="summary-and-takeaways" class="level1">
+<h1>Summary and takeaways</h1>
+<p>See the <a href="./dataloader.ipynb">./dataloader.ipynb</a> code notebook, which is a concise version of the data loader that we implemented in this chapter and will need for training the GPT model in upcoming chapters.</p>
+<p>See <a href="./exercise-solutions.ipynb">./exercise-solutions.ipynb</a> for the exercise solutions.</p>
+<p>See the <a href="../02_bonus_bytepair-encoder/compare-bpe-tiktoken.ipynb">Byte Pair Encoding (BPE) Tokenizer From Scratch</a> notebook if you are interested in learning how the GPT-2 tokenizer can be implemented and trained from scratch.</p>
+</section>
+<a class="quarto-notebook-link" id="nblink-1" href="chapters/ch02-preview.html#c9f9f920">Source: Chapter 2: Working with Text Data</a></div>
+<section id="next-section" class="level1">
+<h1>Next Section</h1>
+<p>[Your next section content here…]</p>
 
 
+</section>
 
  ]]></description>
   <category>LLM</category>
@@ -52,6 +613,2011 @@
   <category>news</category>
   <guid>https://your-website-url.example.com/posts/welcome/</guid>
   <pubDate>Sat, 25 Oct 2025 07:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Chapter 2: Working with Text Data</title>
+  <link>https://your-website-url.example.com/posts/LLM-From-Scratch/chapters/ch02.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="chapter-2-working-with-text-data" class="level1">
+<h1>Chapter 2: Working with Text Data</h1>
+<p>Packages that are being used in this notebook:</p>
+<div id="4d1305cf-12d5-46fe-a2c9-36fb71c5b3d3" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> importlib.metadata <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> version</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"torch version:"</span>, version(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"torch"</span>))</span>
+<span id="cb1-4"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tiktoken version:"</span>, version(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tiktoken"</span>))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch version: 2.5.1
+tiktoken version: 0.7.0</code></pre>
+</div>
+</div>
+<ul>
+<li>This chapter covers data preparation and sampling to get input data “ready” for the LLM</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/01.webp?timestamp=1" width="500px"></p>
+<section id="understanding-word-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-word-embeddings">2.1 Understanding word embeddings</h2>
+<ul>
+<li><p>No code in this section</p></li>
+<li><p>There are many forms of embeddings; we focus on text embeddings in this book</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/02.webp" width="500px"></p>
+<ul>
+<li>LLMs work with embeddings in high-dimensional spaces (i.e., thousands of dimensions)</li>
+<li>Since we can’t visualize such high-dimensional spaces (we humans think in 1, 2, or 3 dimensions), the figure below illustrates a 2-dimensional embedding space</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/03.webp" width="300px"></p>
+</section>
+<section id="tokenizing-text" class="level2">
+<h2 class="anchored" data-anchor-id="tokenizing-text">2.2 Tokenizing text</h2>
+<ul>
+<li>In this section, we tokenize text, which means breaking text into smaller units, such as individual words and punctuation characters</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/04.webp" width="300px"></p>
+<ul>
+<li>Load raw text we want to work with</li>
+<li><a href="https://en.wikisource.org/wiki/The_Verdict">The Verdict by Edith Wharton</a> is a public domain short story</li>
+</ul>
+<div id="40f9d9b1-6d32-485a-825a-a95392a86d79" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb3-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> urllib.request</span>
+<span id="cb3-3"></span>
+<span id="cb3-4"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> os.path.exists(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span>):</span>
+<span id="cb3-5">    url <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://raw.githubusercontent.com/rasbt/"</span></span>
+<span id="cb3-6">           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"LLMs-from-scratch/main/ch02/01_main-chapter-code/"</span></span>
+<span id="cb3-7">           <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span>)</span>
+<span id="cb3-8">    file_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span></span>
+<span id="cb3-9">    urllib.request.urlretrieve(url, file_path)</span></code></pre></div></div>
+</div>
+<ul>
+<li>(If you encounter an <code>ssl.SSLCertVerificationError</code> when executing the previous code cell, it might be due to using an outdated Python version; you can find <a href="https://github.com/rasbt/LLMs-from-scratch/pull/403">more information here on GitHub</a>)</li>
+</ul>
+<div id="8a769e87-470a-48b9-8bdb-12841b416198" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>, encoding<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"utf-8"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> f:</span>
+<span id="cb4-2">    raw_text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f.read()</span>
+<span id="cb4-3">    </span>
+<span id="cb4-4"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Total number of character:"</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(raw_text))</span>
+<span id="cb4-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(raw_text[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">99</span>])</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total number of character: 20479
+I HAD always thought Jack Gisburn rather a cheap genius--though a good fellow enough--so it was no </code></pre>
+</div>
+</div>
+<ul>
+<li>The goal is to tokenize and embed this text for an LLM</li>
+<li>Let’s develop a simple tokenizer based on some simple sample text that we can then later apply to the text above</li>
+<li>The following regular expression will split on whitespaces</li>
+</ul>
+<div id="737dd5b0-9dbb-4a97-9ae4-3482c8c04be7" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> re</span>
+<span id="cb6-2"></span>
+<span id="cb6-3">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, world. This, is a test."</span></span>
+<span id="cb6-4">result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb6-5"></span>
+<span id="cb6-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(result)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello,', ' ', 'world.', ' ', 'This,', ' ', 'is', ' ', 'a', ' ', 'test.']</code></pre>
+</div>
+</div>
+<ul>
+<li>We don’t only want to split on whitespaces but also commas and periods, so let’s modify the regular expression to do that as well</li>
+</ul>
+<div id="ea02489d-01f9-4247-b7dd-a0d63f62ef07" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.]</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb8-2"></span>
+<span id="cb8-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(result)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', '', ' ', 'world', '.', '', ' ', 'This', ',', '', ' ', 'is', ' ', 'a', ' ', 'test', '.', '']</code></pre>
+</div>
+</div>
+<ul>
+<li>As we can see, this creates empty strings, let’s remove them</li>
+</ul>
+<div id="4d8a6fb7-2e62-4a12-ad06-ccb04f25fed7" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Strip whitespace from each item and then filter out any empty strings.</span></span>
+<span id="cb10-2">result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [item <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> result <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item.strip()]</span>
+<span id="cb10-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(result)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', 'world', '.', 'This', ',', 'is', 'a', 'test', '.']</code></pre>
+</div>
+</div>
+<ul>
+<li>This looks pretty good, but let’s also handle other types of punctuation, such as periods, question marks, and so on</li>
+</ul>
+<div id="ed3a9467-04b4-49d9-96c5-b8042bcf8374" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, world. Is this-- a test?"</span></span>
+<span id="cb12-2"></span>
+<span id="cb12-3">result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.:;?_!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">--</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb12-4">result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [item.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> result <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item.strip()]</span>
+<span id="cb12-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(result)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Hello', ',', 'world', '.', 'Is', 'this', '--', 'a', 'test', '?']</code></pre>
+</div>
+</div>
+<ul>
+<li>This is pretty good, and we are now ready to apply this tokenization to the raw text</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/05.webp" width="350px"></p>
+<div id="8c567caa-8ff5-49a8-a5cc-d365b0a78a99" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.:;?_!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">--</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, raw_text)</span>
+<span id="cb14-2">preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [item.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item.strip()]</span>
+<span id="cb14-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(preprocessed[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>])</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['I', 'HAD', 'always', 'thought', 'Jack', 'Gisburn', 'rather', 'a', 'cheap', 'genius', '--', 'though', 'a', 'good', 'fellow', 'enough', '--', 'so', 'it', 'was', 'no', 'great', 'surprise', 'to', 'me', 'to', 'hear', 'that', ',', 'in']</code></pre>
+</div>
+</div>
+<ul>
+<li>Let’s calculate the total number of tokens</li>
+</ul>
+<div id="35db7b5e-510b-4c45-995f-f5ad64a8e19c" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(preprocessed))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4690</code></pre>
+</div>
+</div>
+</section>
+<section id="converting-tokens-into-token-ids" class="level2">
+<h2 class="anchored" data-anchor-id="converting-tokens-into-token-ids">2.3 Converting tokens into token IDs</h2>
+<ul>
+<li>Next, we convert the text tokens into token IDs that we can process via embedding layers later</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/06.webp" width="500px"></p>
+<ul>
+<li>From these tokens, we can now build a vocabulary that consists of all the unique tokens</li>
+</ul>
+<div id="7fdf0533-5ab6-42a5-83fa-a3b045de6396" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">all_words <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">set</span>(preprocessed))</span>
+<span id="cb18-2">vocab_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(all_words)</span>
+<span id="cb18-3"></span>
+<span id="cb18-4"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(vocab_size)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1130</code></pre>
+</div>
+</div>
+<div id="77d00d96-881f-4691-bb03-84fec2a75a26" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">vocab <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {token:integer <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> integer,token <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(all_words)}</span></code></pre></div></div>
+</div>
+<ul>
+<li>Below are the first 50 entries in this vocabulary:</li>
+</ul>
+<div id="e1c5de4a-aa4e-4aec-b532-10bb364039d6" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i, item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(vocab.items()):</span>
+<span id="cb21-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(item)</span>
+<span id="cb21-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>:</span>
+<span id="cb21-4">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">break</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('!', 0)
+('"', 1)
+("'", 2)
+('(', 3)
+(')', 4)
+(',', 5)
+('--', 6)
+('.', 7)
+(':', 8)
+(';', 9)
+('?', 10)
+('A', 11)
+('Ah', 12)
+('Among', 13)
+('And', 14)
+('Are', 15)
+('Arrt', 16)
+('As', 17)
+('At', 18)
+('Be', 19)
+('Begin', 20)
+('Burlington', 21)
+('But', 22)
+('By', 23)
+('Carlo', 24)
+('Chicago', 25)
+('Claude', 26)
+('Come', 27)
+('Croft', 28)
+('Destroyed', 29)
+('Devonshire', 30)
+('Don', 31)
+('Dubarry', 32)
+('Emperors', 33)
+('Florence', 34)
+('For', 35)
+('Gallery', 36)
+('Gideon', 37)
+('Gisburn', 38)
+('Gisburns', 39)
+('Grafton', 40)
+('Greek', 41)
+('Grindle', 42)
+('Grindles', 43)
+('HAD', 44)
+('Had', 45)
+('Hang', 46)
+('Has', 47)
+('He', 48)
+('Her', 49)
+('Hermia', 50)</code></pre>
+</div>
+</div>
+<ul>
+<li>Below, we illustrate the tokenization of a short sample text using a small vocabulary:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/07.webp?123" width="500px"></p>
+<ul>
+<li>Putting it now all together into a tokenizer class</li>
+</ul>
+<div id="f531bf46-7c25-4ef8-bff8-0d27518676d5" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> SimpleTokenizerV1:</span>
+<span id="cb23-2">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, vocab):</span>
+<span id="cb23-3">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.str_to_int <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vocab</span>
+<span id="cb23-4">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int_to_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {i:s <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> s,i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> vocab.items()}</span>
+<span id="cb23-5">    </span>
+<span id="cb23-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> encode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, text):</span>
+<span id="cb23-7">        preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.:;?_!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">--</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb23-8">                                </span>
+<span id="cb23-9">        preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb23-10">            item.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item.strip()</span>
+<span id="cb23-11">        ]</span>
+<span id="cb23-12">        ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.str_to_int[s] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> s <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed]</span>
+<span id="cb23-13">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ids</span>
+<span id="cb23-14">        </span>
+<span id="cb23-15">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> decode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, ids):</span>
+<span id="cb23-16">        text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" "</span>.join([<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int_to_str[i] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ids])</span>
+<span id="cb23-17">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Replace spaces before the specified punctuations</span></span>
+<span id="cb23-18">        text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.sub(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.?!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, <span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\1</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb23-19">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text</span></code></pre></div></div>
+</div>
+<ul>
+<li>The <code>encode</code> function turns text into token IDs</li>
+<li>The <code>decode</code> function turns token IDs back into text</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/08.webp?123" width="500px"></p>
+<ul>
+<li>We can use the tokenizer to encode (that is, tokenize) texts into integers</li>
+<li>These integers can then be embedded (later) as input of/for the LLM</li>
+</ul>
+<div id="647364ec-7995-4654-9b4a-7607ccf5f1e4" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> SimpleTokenizerV1(vocab)</span>
+<span id="cb24-2"></span>
+<span id="cb24-3">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""""It's the last he painted, you know," </span></span>
+<span id="cb24-4"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">           Mrs. Gisburn said with pardonable pride."""</span></span>
+<span id="cb24-5">ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.encode(text)</span>
+<span id="cb24-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(ids)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 56, 2, 850, 988, 602, 533, 746, 5, 1126, 596, 5, 1, 67, 7, 38, 851, 1108, 754, 793, 7]</code></pre>
+</div>
+</div>
+<ul>
+<li>We can decode the integers back into text</li>
+</ul>
+<div id="01d8c8fb-432d-4a49-b332-99f23b233746" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">tokenizer.decode(ids)</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>'" It\' s the last he painted, you know," Mrs. Gisburn said with pardonable pride.'</code></pre>
+</div>
+</div>
+<div id="54f6aa8b-9827-412e-9035-e827296ab0fe" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1">tokenizer.decode(tokenizer.encode(text))</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'" It\' s the last he painted, you know," Mrs. Gisburn said with pardonable pride.'</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-special-context-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="adding-special-context-tokens">2.4 Adding special context tokens</h2>
+<ul>
+<li>It’s useful to add some “special” tokens for unknown words and to denote the end of a text</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/09.webp?123" width="500px"></p>
+<ul>
+<li><p>Some tokenizers use special tokens to help the LLM with additional context</p></li>
+<li><p>Some of these special tokens are</p>
+<ul>
+<li><code>[BOS]</code> (beginning of sequence) marks the beginning of text</li>
+<li><code>[EOS]</code> (end of sequence) marks where the text ends (this is usually used to concatenate multiple unrelated texts, e.g., two different Wikipedia articles or two different books, and so on)</li>
+<li><code>[PAD]</code> (padding) if we train LLMs with a batch size greater than 1 (we may include multiple texts with different lengths; with the padding token we pad the shorter texts to the longest length so that all texts have an equal length)</li>
+</ul></li>
+<li><p><code>[UNK]</code> to represent words that are not included in the vocabulary</p></li>
+<li><p>Note that GPT-2 does not need any of these tokens mentioned above but only uses an <code>&lt;|endoftext|&gt;</code> token to reduce complexity</p></li>
+<li><p>The <code>&lt;|endoftext|&gt;</code> is analogous to the <code>[EOS]</code> token mentioned above</p></li>
+<li><p>GPT also uses the <code>&lt;|endoftext|&gt;</code> for padding (since we typically use a mask when training on batched inputs, we would not attend padded tokens anyways, so it does not matter what these tokens are)</p></li>
+<li><p>GPT-2 does not use an <code>&lt;UNK&gt;</code> token for out-of-vocabulary words; instead, GPT-2 uses a byte-pair encoding (BPE) tokenizer, which breaks down words into subword units which we will discuss in a later section</p></li>
+<li><p>We use the <code>&lt;|endoftext|&gt;</code> tokens between two independent sources of text:</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/10.webp" width="500px"></p>
+<ul>
+<li>Let’s see what happens if we tokenize the following text:</li>
+</ul>
+<div id="d5767eff-440c-4de1-9289-f789349d6b85" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> SimpleTokenizerV1(vocab)</span>
+<span id="cb30-2"></span>
+<span id="cb30-3">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, do you like tea. Is this-- a test?"</span></span>
+<span id="cb30-4"></span>
+<span id="cb30-5">tokenizer.encode(text)</span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[17], line 5</span>
+<span class="ansi-green-fg ansi-bold">      1</span> tokenizer <span style="color:rgb(98,98,98)">=</span> SimpleTokenizerV1(vocab)
+<span class="ansi-green-fg ansi-bold">      3</span> text <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Hello, do you like tea. Is this-- a test?</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg">----&gt; 5</span> tokenizer<span style="color:rgb(98,98,98)">.</span>encode(text)
+
+Cell <span class="ansi-green-fg">In[13], line 12</span>, in <span class="ansi-cyan-fg">SimpleTokenizerV1.encode</span><span class="ansi-blue-fg">(self, text)</span>
+<span class="ansi-green-fg ansi-bold">      7</span> preprocessed <span style="color:rgb(98,98,98)">=</span> re<span style="color:rgb(98,98,98)">.</span>split(<span style="color:rgb(175,0,0)">r</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">([,.:;?_!</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">()</span><span style="font-weight:bold;color:rgb(175,95,0)">\'</span><span style="color:rgb(175,0,0)">]|--|</span><span style="color:rgb(175,0,0)">\</span><span style="color:rgb(175,0,0)">s)</span><span style="color:rgb(175,0,0)">'</span>, text)
+<span class="ansi-green-fg ansi-bold">      9</span> preprocessed <span style="color:rgb(98,98,98)">=</span> [
+<span class="ansi-green-fg ansi-bold">     10</span>     item<span style="color:rgb(98,98,98)">.</span>strip() <span style="font-weight:bold;color:rgb(0,135,0)">for</span> item <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed <span style="font-weight:bold;color:rgb(0,135,0)">if</span> item<span style="color:rgb(98,98,98)">.</span>strip()
+<span class="ansi-green-fg ansi-bold">     11</span> ]
+<span class="ansi-green-fg">---&gt; 12</span> ids <span style="color:rgb(98,98,98)">=</span> [<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>str_to_int[s] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> s <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed]
+<span class="ansi-green-fg ansi-bold">     13</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> ids
+
+Cell <span class="ansi-green-fg">In[13], line 12</span>, in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-fg ansi-bold">      7</span> preprocessed <span style="color:rgb(98,98,98)">=</span> re<span style="color:rgb(98,98,98)">.</span>split(<span style="color:rgb(175,0,0)">r</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">([,.:;?_!</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">()</span><span style="font-weight:bold;color:rgb(175,95,0)">\'</span><span style="color:rgb(175,0,0)">]|--|</span><span style="color:rgb(175,0,0)">\</span><span style="color:rgb(175,0,0)">s)</span><span style="color:rgb(175,0,0)">'</span>, text)
+<span class="ansi-green-fg ansi-bold">      9</span> preprocessed <span style="color:rgb(98,98,98)">=</span> [
+<span class="ansi-green-fg ansi-bold">     10</span>     item<span style="color:rgb(98,98,98)">.</span>strip() <span style="font-weight:bold;color:rgb(0,135,0)">for</span> item <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed <span style="font-weight:bold;color:rgb(0,135,0)">if</span> item<span style="color:rgb(98,98,98)">.</span>strip()
+<span class="ansi-green-fg ansi-bold">     11</span> ]
+<span class="ansi-green-fg">---&gt; 12</span> ids <span style="color:rgb(98,98,98)">=</span> [<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>str_to_int[s] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> s <span style="font-weight:bold;color:rgb(175,0,255)">in</span> preprocessed]
+<span class="ansi-green-fg ansi-bold">     13</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> ids
+
+<span class="ansi-red-fg">KeyError</span>: 'Hello'</pre>
+</div>
+</div>
+</div>
+<ul>
+<li>The above produces an error because the word “Hello” is not contained in the vocabulary</li>
+<li>To deal with such cases, we can add special tokens like <code>"&lt;|unk|&gt;"</code> to the vocabulary to represent unknown words</li>
+<li>Since we are already extending the vocabulary, let’s add another token called <code>"&lt;|endoftext|&gt;"</code> which is used in GPT-2 training to denote the end of a text (and it’s also used between concatenated text, like if our training datasets consists of multiple articles, books, etc.)</li>
+</ul>
+<div id="ce9df29c-6c5b-43f1-8c1a-c7f7b79db78f" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1">all_tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">set</span>(preprocessed)))</span>
+<span id="cb31-2">all_tokens.extend([<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&lt;|endoftext|&gt;"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&lt;|unk|&gt;"</span>])</span>
+<span id="cb31-3"></span>
+<span id="cb31-4">vocab <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {token:integer <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> integer,token <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(all_tokens)}</span></code></pre></div></div>
+</div>
+<div id="57c3143b-e860-4d3b-a22a-de22b547a6a9" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(vocab.items())</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>1132</code></pre>
+</div>
+</div>
+<div id="50e51bb1-ae05-4aa8-a9ff-455b65ed1959" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i, item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(vocab.items())[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>:]):</span>
+<span id="cb34-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(item)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('younger', 1127)
+('your', 1128)
+('yourself', 1129)
+('&lt;|endoftext|&gt;', 1130)
+('&lt;|unk|&gt;', 1131)</code></pre>
+</div>
+</div>
+<ul>
+<li>We also need to adjust the tokenizer accordingly so that it knows when and how to use the new <code>&lt;unk&gt;</code> token</li>
+</ul>
+<div id="948861c5-3f30-4712-a234-725f20d26f68" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> SimpleTokenizerV2:</span>
+<span id="cb36-2">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, vocab):</span>
+<span id="cb36-3">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.str_to_int <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vocab</span>
+<span id="cb36-4">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int_to_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> { i:s <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> s,i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> vocab.items()}</span>
+<span id="cb36-5">    </span>
+<span id="cb36-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> encode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, text):</span>
+<span id="cb36-7">        preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.split(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.:;?_!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">--</span><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb36-8">        preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [item.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item.strip()]</span>
+<span id="cb36-9">        preprocessed <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb36-10">            item <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.str_to_int </span>
+<span id="cb36-11">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&lt;|unk|&gt;"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed</span>
+<span id="cb36-12">        ]</span>
+<span id="cb36-13"></span>
+<span id="cb36-14">        ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.str_to_int[s] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> s <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> preprocessed]</span>
+<span id="cb36-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ids</span>
+<span id="cb36-16">        </span>
+<span id="cb36-17">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> decode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, ids):</span>
+<span id="cb36-18">        text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" "</span>.join([<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int_to_str[i] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ids])</span>
+<span id="cb36-19">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Replace spaces before the specified punctuations</span></span>
+<span id="cb36-20">        text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> re.sub(<span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\s</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">(</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[,.:;?!"()</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\'</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, <span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\1</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>, text)</span>
+<span id="cb36-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text</span></code></pre></div></div>
+</div>
+<p>Let’s try to tokenize text with the modified tokenizer:</p>
+<div id="4133c502-18ac-4412-9f43-01caf4efa3dc" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> SimpleTokenizerV2(vocab)</span>
+<span id="cb37-2"></span>
+<span id="cb37-3">text1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, do you like tea?"</span></span>
+<span id="cb37-4">text2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In the sunlit terraces of the palace."</span></span>
+<span id="cb37-5"></span>
+<span id="cb37-6">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" &lt;|endoftext|&gt; "</span>.join((text1, text2))</span>
+<span id="cb37-7"></span>
+<span id="cb37-8"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(text)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, do you like tea? &lt;|endoftext|&gt; In the sunlit terraces of the palace.</code></pre>
+</div>
+</div>
+<div id="7ed395fe-dc1b-4ed2-b85b-457cc35aab60" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1">tokenizer.encode(text)</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>[1131, 5, 355, 1126, 628, 975, 10, 1130, 55, 988, 956, 984, 722, 988, 1131, 7]</code></pre>
+</div>
+</div>
+<div id="059367f9-7a60-4c0d-8a00-7c4c766d0ebc" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1">tokenizer.decode(tokenizer.encode(text))</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>'&lt;|unk|&gt;, do you like tea? &lt;|endoftext|&gt; In the sunlit terraces of the &lt;|unk|&gt;.'</code></pre>
+</div>
+</div>
+</section>
+<section id="bytepair-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="bytepair-encoding">2.5 BytePair encoding</h2>
+<ul>
+<li>GPT-2 used BytePair encoding (BPE) as its tokenizer</li>
+<li>it allows the model to break down words that aren’t in its predefined vocabulary into smaller subword units or even individual characters, enabling it to handle out-of-vocabulary words</li>
+<li>For instance, if GPT-2’s vocabulary doesn’t have the word “unfamiliarword,” it might tokenize it as [“unfam”, “iliar”, “word”] or some other subword breakdown, depending on its trained BPE merges</li>
+<li>The original BPE tokenizer can be found here: <a href="https://github.com/openai/gpt-2/blob/master/src/encoder.py">https://github.com/openai/gpt-2/blob/master/src/encoder.py</a></li>
+<li>In this chapter, we are using the BPE tokenizer from OpenAI’s open-source <a href="https://github.com/openai/tiktoken">tiktoken</a> library, which implements its core algorithms in Rust to improve computational performance</li>
+<li>I created a notebook in the <a href="../02_bonus_bytepair-encoder">./bytepair_encoder</a> that compares these two implementations side-by-side (tiktoken was about 5x faster on the sample text)</li>
+</ul>
+<div id="ede1d41f-934b-4bf4-8184-54394a257a94" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pip install tiktoken</span></span></code></pre></div></div>
+</div>
+<div id="48967a77-7d17-42bf-9e92-fc619d63a59e" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> importlib</span>
+<span id="cb44-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> tiktoken</span>
+<span id="cb44-3"></span>
+<span id="cb44-4"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tiktoken version:"</span>, importlib.metadata.version(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tiktoken"</span>))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tiktoken version: 0.7.0</code></pre>
+</div>
+</div>
+<div id="6ad3312f-a5f7-4efc-9d7d-8ea09d7b5128" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tiktoken.get_encoding(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt2"</span>)</span></code></pre></div></div>
+</div>
+<div id="5ff2cd85-7cfb-4325-b390-219938589428" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb47-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello, do you like tea? &lt;|endoftext|&gt; In the sunlit terraces"</span></span>
+<span id="cb47-3">     <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"of someunknownPlace."</span></span>
+<span id="cb47-4">)</span>
+<span id="cb47-5"></span>
+<span id="cb47-6">integers <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.encode(text, allowed_special<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&lt;|endoftext|&gt;"</span>})</span>
+<span id="cb47-7"></span>
+<span id="cb47-8"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(integers)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[15496, 11, 466, 345, 588, 8887, 30, 220, 50256, 554, 262, 4252, 18250, 8812, 2114, 1659, 617, 34680, 27271, 13]</code></pre>
+</div>
+</div>
+<div id="d26a48bb-f82e-41a8-a955-a1c9cf9d50ab" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1">strings <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.decode(integers)</span>
+<span id="cb49-2"></span>
+<span id="cb49-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(strings)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, do you like tea? &lt;|endoftext|&gt; In the sunlit terracesof someunknownPlace.</code></pre>
+</div>
+</div>
+<ul>
+<li>BPE tokenizers break down unknown words into subwords and individual characters:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/11.webp" width="300px"></p>
+</section>
+<section id="data-sampling-with-a-sliding-window" class="level2">
+<h2 class="anchored" data-anchor-id="data-sampling-with-a-sliding-window">2.6 Data sampling with a sliding window</h2>
+<ul>
+<li>We train LLMs to generate one word at a time, so we want to prepare the training data accordingly where the next word in a sequence represents the target to predict:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/12.webp" width="400px"></p>
+<div id="848d5ade-fd1f-46c3-9e31-1426e315c71b" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>, encoding<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"utf-8"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> f:</span>
+<span id="cb51-2">    raw_text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f.read()</span>
+<span id="cb51-3"></span>
+<span id="cb51-4">enc_text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.encode(raw_text)</span>
+<span id="cb51-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(enc_text))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5145</code></pre>
+</div>
+</div>
+<ul>
+<li>For each text chunk, we want the inputs and targets</li>
+<li>Since we want the model to predict the next word, the targets are the inputs shifted by one position to the right</li>
+</ul>
+<div id="e84424a7-646d-45b6-99e3-80d15fb761f2" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1">enc_sample <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_text[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>:]</span></code></pre></div></div>
+</div>
+<div id="dfbff852-a92f-48c8-a46d-143a0f109f40" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1">context_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span>
+<span id="cb54-2"></span>
+<span id="cb54-3">x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[:context_size]</span>
+<span id="cb54-4">y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:context_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb54-5"></span>
+<span id="cb54-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"x: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb54-7"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"y:      </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>y<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x: [290, 4920, 2241, 287]
+y:      [4920, 2241, 287, 257]</code></pre>
+</div>
+</div>
+<ul>
+<li>One by one, the prediction would look like as follows:</li>
+</ul>
+<div id="d97b031e-ed55-409d-95f2-aeb38c6fe366" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, context_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>):</span>
+<span id="cb56-2">    context <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[:i]</span>
+<span id="cb56-3">    desired <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[i]</span>
+<span id="cb56-4"></span>
+<span id="cb56-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(context, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"----&gt;"</span>, desired)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[290] ----&gt; 4920
+[290, 4920] ----&gt; 2241
+[290, 4920, 2241] ----&gt; 287
+[290, 4920, 2241, 287] ----&gt; 257</code></pre>
+</div>
+</div>
+<div id="f57bd746-dcbf-4433-8e24-ee213a8c34a1" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, context_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>):</span>
+<span id="cb58-2">    context <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[:i]</span>
+<span id="cb58-3">    desired <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> enc_sample[i]</span>
+<span id="cb58-4"></span>
+<span id="cb58-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(tokenizer.decode(context), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"----&gt;"</span>, tokenizer.decode([desired]))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> and ----&gt;  established
+ and established ----&gt;  himself
+ and established himself ----&gt;  in
+ and established himself in ----&gt;  a</code></pre>
+</div>
+</div>
+<ul>
+<li><p>We will take care of the next-word prediction in a later chapter after we covered the attention mechanism</p></li>
+<li><p>For now, we implement a simple data loader that iterates over the input dataset and returns the inputs and targets shifted by one</p></li>
+<li><p>Install and import PyTorch (see Appendix A for installation tips)</p></li>
+</ul>
+<div id="e1770134-e7f3-4725-a679-e04c3be48cac" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb60-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PyTorch version:"</span>, torch.__version__)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PyTorch version: 2.5.1</code></pre>
+</div>
+</div>
+<ul>
+<li>We use a sliding window approach, changing the position by +1:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/13.webp?123" width="500px"></p>
+<ul>
+<li>Create dataset and dataloader that extract chunks from the input text dataset</li>
+</ul>
+<div id="74b41073-4c9f-46e2-a1bd-d38e4122b375" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> torch.utils.data <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Dataset, DataLoader</span>
+<span id="cb62-2"></span>
+<span id="cb62-3"></span>
+<span id="cb62-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> GPTDatasetV1(Dataset):</span>
+<span id="cb62-5">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, txt, tokenizer, max_length, stride):</span>
+<span id="cb62-6">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.input_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb62-7">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.target_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb62-8"></span>
+<span id="cb62-9">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Tokenize the entire text</span></span>
+<span id="cb62-10">        token_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.encode(txt, allowed_special<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&lt;|endoftext|&gt;"</span>})</span>
+<span id="cb62-11">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">assert</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(token_ids) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> max_length, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Number of tokenized inputs must at least be equal to max_length+1"</span></span>
+<span id="cb62-12"></span>
+<span id="cb62-13">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Use a sliding window to chunk the book into overlapping sequences of max_length</span></span>
+<span id="cb62-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(token_ids) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> max_length, stride):</span>
+<span id="cb62-15">            input_chunk <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> token_ids[i:i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> max_length]</span>
+<span id="cb62-16">            target_chunk <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> token_ids[i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>: i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> max_length <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb62-17">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.input_ids.append(torch.tensor(input_chunk))</span>
+<span id="cb62-18">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.target_ids.append(torch.tensor(target_chunk))</span>
+<span id="cb62-19"></span>
+<span id="cb62-20">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__len__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>):</span>
+<span id="cb62-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.input_ids)</span>
+<span id="cb62-22"></span>
+<span id="cb62-23">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__getitem__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, idx):</span>
+<span id="cb62-24">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.input_ids[idx], <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.target_ids[idx]</span></code></pre></div></div>
+</div>
+<div id="5eb30ebe-97b3-43c5-9ff1-a97d621b3c4e" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> create_dataloader_v1(txt, batch_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, max_length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span>, </span>
+<span id="cb63-2">                         stride<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">128</span>, shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, drop_last<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb63-3">                         num_workers<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>):</span>
+<span id="cb63-4"></span>
+<span id="cb63-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Initialize the tokenizer</span></span>
+<span id="cb63-6">    tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tiktoken.get_encoding(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt2"</span>)</span>
+<span id="cb63-7"></span>
+<span id="cb63-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Create dataset</span></span>
+<span id="cb63-9">    dataset <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GPTDatasetV1(txt, tokenizer, max_length, stride)</span>
+<span id="cb63-10"></span>
+<span id="cb63-11">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Create dataloader</span></span>
+<span id="cb63-12">    dataloader <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> DataLoader(</span>
+<span id="cb63-13">        dataset,</span>
+<span id="cb63-14">        batch_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>batch_size,</span>
+<span id="cb63-15">        shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>shuffle,</span>
+<span id="cb63-16">        drop_last<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>drop_last,</span>
+<span id="cb63-17">        num_workers<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>num_workers</span>
+<span id="cb63-18">    )</span>
+<span id="cb63-19"></span>
+<span id="cb63-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> dataloader</span></code></pre></div></div>
+</div>
+<ul>
+<li>Let’s test the dataloader with a batch size of 1 for an LLM with a context size of 4:</li>
+</ul>
+<div id="df31d96c-6bfd-4564-a956-6192242d7579" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"the-verdict.txt"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>, encoding<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"utf-8"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> f:</span>
+<span id="cb64-2">    raw_text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f.read()</span></code></pre></div></div>
+</div>
+<div id="9226d00c-ad9a-4949-a6e4-9afccfc7214f" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1">dataloader <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> create_dataloader_v1(</span>
+<span id="cb65-2">    raw_text, batch_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, max_length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, stride<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span></span>
+<span id="cb65-3">)</span>
+<span id="cb65-4"></span>
+<span id="cb65-5">data_iter <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">iter</span>(dataloader)</span>
+<span id="cb65-6">first_batch <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>(data_iter)</span>
+<span id="cb65-7"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(first_batch)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[tensor([[  40,  367, 2885, 1464]]), tensor([[ 367, 2885, 1464, 1807]])]</code></pre>
+</div>
+</div>
+<div id="10deb4bc-4de1-4d20-921e-4b1c7a0e1a6d" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1">second_batch <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>(data_iter)</span>
+<span id="cb67-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(second_batch)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[tensor([[ 367, 2885, 1464, 1807]]), tensor([[2885, 1464, 1807, 3619]])]</code></pre>
+</div>
+</div>
+<ul>
+<li>An example using stride equal to the context length (here: 4) as shown below:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/14.webp" width="500px"></p>
+<ul>
+<li>We can also create batched outputs</li>
+<li>Note that we increase the stride here so that we don’t have overlaps between the batches, since more overlap could lead to increased overfitting</li>
+</ul>
+<div id="1916e7a6-f03d-4f09-91a6-d0bdbac5a58c" class="cell" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1">dataloader <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> create_dataloader_v1(raw_text, batch_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>, max_length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, stride<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb69-2"></span>
+<span id="cb69-3">data_iter <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">iter</span>(dataloader)</span>
+<span id="cb69-4">inputs, targets <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>(data_iter)</span>
+<span id="cb69-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Inputs:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, inputs)</span>
+<span id="cb69-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Targets:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, targets)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Inputs:
+ tensor([[   40,   367,  2885,  1464],
+        [ 1807,  3619,   402,   271],
+        [10899,  2138,   257,  7026],
+        [15632,   438,  2016,   257],
+        [  922,  5891,  1576,   438],
+        [  568,   340,   373,   645],
+        [ 1049,  5975,   284,   502],
+        [  284,  3285,   326,    11]])
+
+Targets:
+ tensor([[  367,  2885,  1464,  1807],
+        [ 3619,   402,   271, 10899],
+        [ 2138,   257,  7026, 15632],
+        [  438,  2016,   257,   922],
+        [ 5891,  1576,   438,   568],
+        [  340,   373,   645,  1049],
+        [ 5975,   284,   502,   284],
+        [ 3285,   326,    11,   287]])</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-token-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="creating-token-embeddings">2.7 Creating token embeddings</h2>
+<ul>
+<li>The data is already almost ready for an LLM</li>
+<li>But lastly let us embed the tokens in a continuous vector representation using an embedding layer</li>
+<li>Usually, these embedding layers are part of the LLM itself and are updated (trained) during model training</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/15.webp" width="400px"></p>
+<ul>
+<li>Suppose we have the following four input examples with input ids 2, 3, 5, and 1 (after tokenization):</li>
+</ul>
+<div id="15a6304c-9474-4470-b85d-3991a49fa653" class="cell" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1">input_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])</span></code></pre></div></div>
+</div>
+<ul>
+<li>For the sake of simplicity, suppose we have a small vocabulary of only 6 words and we want to create embeddings of size 3:</li>
+</ul>
+<div id="93cb2cee-9aa6-4bb8-8977-c65661d16eda" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1">vocab_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb72-2">output_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb72-3"></span>
+<span id="cb72-4">torch.manual_seed(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">123</span>)</span>
+<span id="cb72-5">embedding_layer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Embedding(vocab_size, output_dim)</span></code></pre></div></div>
+</div>
+<ul>
+<li>This would result in a 6x3 weight matrix:</li>
+</ul>
+<div id="a686eb61-e737-4351-8f1c-222913d47468" class="cell" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(embedding_layer.weight)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter containing:
+tensor([[ 0.3374, -0.1778, -0.1690],
+        [ 0.9178,  1.5810,  1.3010],
+        [ 1.2753, -0.2010, -0.1606],
+        [-0.4015,  0.9666, -1.1481],
+        [-1.1589,  0.3255, -0.6315],
+        [-2.8400, -0.7849, -1.4096]], requires_grad=True)</code></pre>
+</div>
+</div>
+<ul>
+<li><p>For those who are familiar with one-hot encoding, the embedding layer approach above is essentially just a more efficient way of implementing one-hot encoding followed by matrix multiplication in a fully-connected layer, which is described in the supplementary code in <a href="../03_bonus_embedding-vs-matmul">./embedding_vs_matmul</a></p></li>
+<li><p>Because the embedding layer is just a more efficient implementation that is equivalent to the one-hot encoding and matrix-multiplication approach it can be seen as a neural network layer that can be optimized via backpropagation</p></li>
+<li><p>To convert a token with id 3 into a 3-dimensional vector, we do the following:</p></li>
+</ul>
+<div id="e43600ba-f287-4746-8ddf-d0f71a9023ca" class="cell" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(embedding_layer(torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>])))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[-0.4015,  0.9666, -1.1481]], grad_fn=&lt;EmbeddingBackward0&gt;)</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the above is the 4th row in the <code>embedding_layer</code> weight matrix</li>
+<li>To embed all four <code>input_ids</code> values above, we do</li>
+</ul>
+<div id="50280ead-0363-44c8-8c35-bb885d92c8b7" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(embedding_layer(input_ids))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 1.2753, -0.2010, -0.1606],
+        [-0.4015,  0.9666, -1.1481],
+        [-2.8400, -0.7849, -1.4096],
+        [ 0.9178,  1.5810,  1.3010]], grad_fn=&lt;EmbeddingBackward0&gt;)</code></pre>
+</div>
+</div>
+<ul>
+<li>An embedding layer is essentially a look-up operation:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/16.webp?123" width="500px"></p>
+<ul>
+<li><strong>You may be interested in the bonus content comparing embedding layers with regular linear layers: <a href="../03_bonus_embedding-vs-matmul">../03_bonus_embedding-vs-matmul</a></strong></li>
+</ul>
+</section>
+<section id="encoding-word-positions" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-word-positions">2.8 Encoding word positions</h2>
+<ul>
+<li>Embedding layer convert IDs into identical vector representations regardless of where they are located in the input sequence:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/17.webp" width="400px"></p>
+<ul>
+<li>Positional embeddings are combined with the token embedding vector to form the input embeddings for a large language model:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/18.webp" width="500px"></p>
+<ul>
+<li>The BytePair encoder has a vocabulary size of 50,257:</li>
+<li>Suppose we want to encode the input tokens into a 256-dimensional vector representation:</li>
+</ul>
+<div id="0b9e344d-03a6-4f2c-b723-67b6a20c5041" class="cell" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1">vocab_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50257</span></span>
+<span id="cb79-2">output_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span></span>
+<span id="cb79-3"></span>
+<span id="cb79-4">token_embedding_layer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Embedding(vocab_size, output_dim)</span></code></pre></div></div>
+</div>
+<ul>
+<li>If we sample data from the dataloader, we embed the tokens in each batch into a 256-dimensional vector</li>
+<li>If we have a batch size of 8 with 4 tokens each, this results in a 8 x 4 x 256 tensor:</li>
+</ul>
+<div id="ad56a263-3d2e-4d91-98bf-d0b68d3c7fc3" class="cell" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1">max_length <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span>
+<span id="cb80-2">dataloader <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> create_dataloader_v1(</span>
+<span id="cb80-3">    raw_text, batch_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>, max_length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>max_length,</span>
+<span id="cb80-4">    stride<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>max_length, shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span></span>
+<span id="cb80-5">)</span>
+<span id="cb80-6">data_iter <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">iter</span>(dataloader)</span>
+<span id="cb80-7">inputs, targets <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>(data_iter)</span></code></pre></div></div>
+</div>
+<div id="84416b60-3707-4370-bcbc-da0b62f2b64d" class="cell" data-execution_count="49">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Token IDs:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, inputs)</span>
+<span id="cb81-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Inputs shape:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, inputs.shape)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Token IDs:
+ tensor([[   40,   367,  2885,  1464],
+        [ 1807,  3619,   402,   271],
+        [10899,  2138,   257,  7026],
+        [15632,   438,  2016,   257],
+        [  922,  5891,  1576,   438],
+        [  568,   340,   373,   645],
+        [ 1049,  5975,   284,   502],
+        [  284,  3285,   326,    11]])
+
+Inputs shape:
+ torch.Size([8, 4])</code></pre>
+</div>
+</div>
+<div id="7766ec38-30d0-4128-8c31-f49f063c43d1" class="cell" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1">token_embeddings <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> token_embedding_layer(inputs)</span>
+<span id="cb83-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(token_embeddings.shape)</span>
+<span id="cb83-3"></span>
+<span id="cb83-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># uncomment &amp; execute the following line to see how the embeddings look like</span></span>
+<span id="cb83-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># print(token_embeddings)</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([8, 4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>GPT-2 uses absolute position embeddings, so we just create another embedding layer:</li>
+</ul>
+<div id="cc048e20-7ac8-417e-81f5-8fe6f9a4fe07" class="cell" data-execution_count="51">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1">context_length <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> max_length</span>
+<span id="cb85-2">pos_embedding_layer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Embedding(context_length, output_dim)</span>
+<span id="cb85-3"></span>
+<span id="cb85-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># uncomment &amp; execute the following line to see how the embedding layer weights look like</span></span>
+<span id="cb85-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># print(pos_embedding_layer.weight)</span></span></code></pre></div></div>
+</div>
+<div id="c369a1e7-d566-4b53-b398-d6adafb44105" class="cell" data-execution_count="52">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1">pos_embeddings <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pos_embedding_layer(torch.arange(max_length))</span>
+<span id="cb86-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(pos_embeddings.shape)</span>
+<span id="cb86-3"></span>
+<span id="cb86-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># uncomment &amp; execute the following line to see how the embeddings look like</span></span>
+<span id="cb86-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># print(pos_embeddings)</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>To create the input embeddings used in an LLM, we simply add the token and the positional embeddings:</li>
+</ul>
+<div id="b22fab89-526e-43c8-9035-5b7018e34288" class="cell" data-execution_count="53">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1">input_embeddings <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> token_embeddings <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> pos_embeddings</span>
+<span id="cb88-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(input_embeddings.shape)</span>
+<span id="cb88-3"></span>
+<span id="cb88-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># uncomment &amp; execute the following line to see how the embeddings look like</span></span>
+<span id="cb88-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># print(input_embeddings)</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([8, 4, 256])</code></pre>
+</div>
+</div>
+<ul>
+<li>In the initial phase of the input processing workflow, the input text is segmented into separate tokens</li>
+<li>Following this segmentation, these tokens are transformed into token IDs based on a predefined vocabulary:</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch02_compressed/19.webp" width="400px"></p>
+</section>
+</section>
+<section id="summary-and-takeaways" class="level1">
+<h1>Summary and takeaways</h1>
+<p>See the <a href="./dataloader.ipynb">./dataloader.ipynb</a> code notebook, which is a concise version of the data loader that we implemented in this chapter and will need for training the GPT model in upcoming chapters.</p>
+<p>See <a href="./exercise-solutions.ipynb">./exercise-solutions.ipynb</a> for the exercise solutions.</p>
+<p>See the <a href="../02_bonus_bytepair-encoder/compare-bpe-tiktoken.ipynb">Byte Pair Encoding (BPE) Tokenizer From Scratch</a> notebook if you are interested in learning how the GPT-2 tokenizer can be implemented and trained from scratch.</p>
+
+
+
+</section>
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div> ]]></description>
+  <guid>https://your-website-url.example.com/posts/LLM-From-Scratch/chapters/ch02.html</guid>
+  <pubDate>Tue, 28 Oct 2025 23:30:55 GMT</pubDate>
 </item>
 </channel>
 </rss>
