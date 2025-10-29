@@ -45,7 +45,7 @@ import os
 
 # 5. Pretraining on Unlabeled Data
 
-{{< include chapters/ch05.ipynb >}}
+{{< embed chapters/ch05.ipynb >}}
 
 # 6. Finetuning for Text Classification
 
