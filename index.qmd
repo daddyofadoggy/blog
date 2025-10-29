@@ -5,7 +5,6 @@ listing:
     contents: 
       - "posts/LLM-From-Scratch/index.qmd"
       - "posts/welcome/index.qmd"
-      # Add other posts explicitly
     type: default
     sort: "date desc"
 ---

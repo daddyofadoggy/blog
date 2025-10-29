@@ -1,7 +1,7 @@
 ---
 title: "LLM From Scratch"
 author: "Dipankar Baisya"
-date: "2023-10-29"
+date: "2025-10-29"
 categories: [LLM, ML, Deep Learning]
 image: "image.jpg"
 toc: true
@@ -50,4 +50,347 @@ import os
 # 6. Finetuning for Text Classification
 
 {{< embed chapters/ch06.ipynb >}}
+
+# 7. Finetuning to Follow Instruction
+
+{{< embed chapters/ch07.ipynb >}}
+
+# 8. Deployment in HF-Hub using Gradio
+
+```{python}
+#| echo: true 
+#| output: false
+#| eval: false
+#| code-line-numbers: true
+#| code-copy: true
+
+from pathlib import Path
+import sys
+
+import tiktoken
+import torch
+import gradio as gr
+
+# For llms_from_scratch installation instructions, see:
+# https://github.com/rasbt/LLMs-from-scratch/tree/main/pkg
+from previous_chapters import GPTModel
+
+from previous_chapters import (
+    generate,
+    text_to_token_ids,
+    token_ids_to_text,
+)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+def get_model_and_tokenizer():
+    """
+    Code to load a GPT-2 model with finetuned weights generated in chapter 7.
+    This requires that you run the code in chapter 7 first, which generates the necessary gpt2-medium355M-sft.pth file.
+    """
+
+    GPT_CONFIG_355M = {
+        "vocab_size": 50257,     # Vocabulary size
+        "context_length": 1024,  # Shortened context length (orig: 1024)
+        "emb_dim": 768,         # Embedding dimension
+        "n_heads": 12,           # Number of attention heads
+        "n_layers": 12,          # Number of layers
+        "drop_rate": 0.0,        # Dropout rate
+        "qkv_bias": True         # Query-key-value bias
+    }
+
+    tokenizer = tiktoken.get_encoding("gpt2")
+
+    # For local development
+    model_path = Path("gpt2-small124M-sft.pth")
+    
+    # For Hugging Face deployment
+    hf_model_path = Path("gpt2-small124M-sft.pth")
+    
+    # Try loading from the Hugging Face model path first, then fall back to local
+    if hf_model_path.exists():
+        model_path = hf_model_path
+    elif not model_path.exists():
+        print(
+            f"Could not find the model file. Please run the chapter 7 code "
+            "to generate the gpt2-medium355M-sft.pth file or upload it to this directory."
+        )
+        sys.exit()
+
+    checkpoint = torch.load(model_path, weights_only=True)
+    model = GPTModel(GPT_CONFIG_355M)
+    model.load_state_dict(checkpoint)
+    model.to(device)
+    model.eval()  # Set to evaluation mode
+
+    return tokenizer, model, GPT_CONFIG_355M
+
+
+def extract_response(response_text, input_text):
+    return response_text[len(input_text):].replace("### Response:", "").strip()
+
+
+# Load model and tokenizer
+tokenizer, model, model_config = get_model_and_tokenizer()
+
+
+def generate_response(message, max_new_tokens=100):
+    """Generate a response using the fine-tuned GPT model"""
+    torch.manual_seed(123)
+    
+    prompt = f"""Below is an instruction that describes a task. Write a response
+    that appropriately completes the request.
+
+    ### Instruction:
+    {message}
+    """
+    
+    with torch.no_grad():  # Ensure no gradients are computed during inference
+        token_ids = generate(
+            model=model,
+            idx=text_to_token_ids(prompt, tokenizer).to(device),
+            max_new_tokens=max_new_tokens,
+            context_size=model_config["context_length"],
+            eos_id=50256
+        )
+
+    text = token_ids_to_text(token_ids, tokenizer)
+    response = extract_response(text, prompt)
+    
+    return response
+
+
+# Create a custom chat interface without using ChatInterface class
+def respond(message, chat_history):
+    bot_message = generate_response(message)
+    chat_history.append((message, bot_message))
+    return "", chat_history
+
+
+with gr.Blocks(theme="soft") as demo:
+    gr.Markdown("# Fine-tuned GPT Model Chat")
+    gr.Markdown("Chat with a fine-tuned GPT model from 'Build a Large Language Model From Scratch' by Sebastian Raschka")
+    
+    chatbot = gr.Chatbot(height=600)
+    msg = gr.Textbox(placeholder="Ask me something...", container=False, scale=7)
+    clear = gr.Button("Clear")
+    
+    msg.submit(respond, [msg, chatbot], [msg, chatbot])
+    clear.click(lambda: [], None, chatbot)
+    
+    gr.Examples(
+        examples=[
+            "What is the capital of France?",
+            "What is the opposite of 'wet'?",
+            "what is the capital of USA?"
+        ],
+        inputs=msg
+    )
+
+
+# Launch the interface
+if __name__ == "__main__":
+    demo.launch(share=True)
+
+```
+
+## Fine-tuned GPT Model Demo
+
+This interactive demo showcases a GPT model fine-tuned using techniques from "Build a Large Language Model From Scratch" by Sebastian Raschka. Try asking questions or giving it instructions to see the model in action.
+
+```{=html}
+<div class="gradio-embed-container">
+  <!-- Fallback image that displays if iframe fails to load -->
+  <div id="fallback-container" style="display: none; text-align: center; margin: 20px 0;">
+    <p style="color: #d32f2f; font-weight: bold;">Interactive demo could not be loaded</p>
+    <img 
+      src="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned/resolve/main/thumbnail.png" 
+      alt="Screenshot of the Fine-tuned GPT Model interface" 
+      style="max-width: 100%; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 15px;"
+    >
+    <p>
+      <a 
+        href="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned" 
+        target="_blank" 
+        style="display: inline-block; background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;"
+      >
+        Open the demo in Hugging Face Spaces
+      </a>
+    </p>
+  </div>
+
+  <!-- Main iframe for the Gradio app -->
+  <iframe
+    id="gradio-iframe"
+    src="https://doggdad-instructgptfinetuned.hf.space/?__theme=light"
+    frameborder="0"
+    width="100%" 
+    height="800px"
+    style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"
+    allow="camera; microphone; clipboard-read; clipboard-write; fullscreen"
+    loading="lazy"
+    title="Fine-tuned GPT Model Interactive Demo"
+    onload="document.getElementById('loading-container').style.display = 'none';"
+    onerror="handleIframeError();"
+  ></iframe>
+  
+  <!-- Loading indicator -->
+  <div id="loading-container" style="text-align: center; padding: 40px; background-color: #f5f5f5; border-radius: 10px; margin-bottom: 20px;">
+    <div class="loading-spinner"></div>
+    <p style="margin-top: 20px; color: #333;">Loading interactive demo...</p>
+  </div>
+
+  <!-- Notes and instructions -->
+  <div class="gradio-notes">
+    <p>
+      <strong>Tips for using the model:</strong> 
+      Try asking questions, requesting creative content, or giving specific instructions.
+    </p>
+    <div class="example-prompts">
+      <button class="example-button" onclick="copyToInput('What is the capital of France?')">What is the capital of France?</button>
+      <button class="example-button" onclick="copyToInput('Write a short poem about artificial intelligence')">Write a poem about AI</button>
+      <button class="example-button" onclick="copyToInput('Explain the concept of neural networks in simple terms')">Explain neural networks</button>
+      <button class="example-button" onclick="copyToInput('What are the main differences between supervised and unsupervised learning?')">Supervised vs. unsupervised</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gradio-embed-container {
+    margin: 2rem 0;
+    padding: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    position: relative;
+  }
+  
+  .gradio-notes {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #2196F3;
+    font-size: 0.9rem;
+  }
+  
+  .example-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .example-button {
+    background-color: #e8eaf6;
+    border: 1px solid #c5cae9;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .example-button:hover {
+    background-color: #c5cae9;
+  }
+  
+  /* Loading spinner */
+  .loading-spinner {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #2196F3;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .example-prompts {
+      flex-direction: column;
+    }
+    
+    .example-button {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    
+    #gradio-iframe {
+      height: 600px;
+    }
+  }
+</style>
+
+<script>
+  // Wait for document to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set a timeout to check if iframe loaded successfully
+    setTimeout(function() {
+      checkIframeLoaded();
+    }, 10000); // 10 seconds timeout
+  });
+  
+  // Function to check if iframe loaded
+  function checkIframeLoaded() {
+    const iframe = document.getElementById('gradio-iframe');
+    const loadingContainer = document.getElementById('loading-container');
+    
+    // If loading container is still visible after timeout, show fallback
+    if (loadingContainer.style.display !== 'none') {
+      handleIframeError();
+    }
+  }
+  
+  // Handle iframe loading error
+  function handleIframeError() {
+    document.getElementById('gradio-iframe').style.display = 'none';
+    document.getElementById('loading-container').style.display = 'none';
+    document.getElementById('fallback-container').style.display = 'block';
+  }
+  
+  // Function to copy example prompts to input (this won't work directly with iframe,
+  // but is included in case you want to implement message passing to the iframe later)
+  function copyToInput(text) {
+    // This is a placeholder - it won't actually work with the iframe
+    // unless you implement message passing using postMessage
+    alert("Example selected: " + text + "\n\nPlease copy and paste this into the input field in the demo.");
+    
+    // Attempt to copy to clipboard
+    navigator.clipboard.writeText(text).then(function() {
+      console.log("Text copied to clipboard");
+    }).catch(function(err) {
+      console.error("Could not copy text: ", err);
+    });
+  }
+</script>
+```
+
+### Try the demo above or visit the [full Hugging Face Space](https://huggingface.co/spaces/doggdad/InstructGPTFinetuned) for the best experience.
+
+
+
+
+# 9. Key Technical Achievements
+
+1. **Complete GPT Implementation**: Full transformer architecture with multi-head attention, layer normalization, and residual connections
+2. **From-Scratch Components**: Custom tokenizer, attention mechanisms, and training loops
+3. **Weight Transfer**: Successfully loading OpenAI GPT-2 pretrained weights (124M-1558M parameters)
+4. **Two Finetuning Approaches**: Classification (spam detection) and instruction-following
+5. **Advanced Sampling**: Temperature scaling and top-k sampling for controlled generation
+6. **Automated Evaluation**: LLM-based evaluation using local Ollama models
+7. **Laptop-Scale Training**: All code designed to run on conventional laptops without specialized hardware
+
+# References
+
+- **Book**: *Build a Large Language Model (From Scratch)* by Sebastian Raschka
+- **Publisher**: Manning Publications
+- **ISBN**: 9781633437166
+- **GitHub**: https://github.com/rasbt/LLMs-from-scratch
 

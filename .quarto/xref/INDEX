@@ -35,5 +35,10 @@
   },
   "posts/LLM-From-Scratch/chapters/ch05.md": {
     "ch05.html": "636e05a1"
+  },
+  "posts/LLM-From-Scratch/chapters/ch07.ipynb": {
+    "ch07.out.ipynb": "70a6d2d1",
+    "ch07-preview.html": "b028c0e5",
+    "ch07.html": "4a1a5829"
   }
 }

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dipankar Baisya">
-<meta name="dcterms.date" content="2023-10-29">
+<meta name="dcterms.date" content="2025-10-29">
 
 <title>LLM From Scratch – My Blogs</title>
 <style>
@@ -60,7 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -105,9 +105,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -208,7 +205,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 29, 2023</p>
+        <p class="date">October 29, 2025</p>
       </div>
     </div>
     
@@ -232,8 +229,12 @@ window.Quarto = {
   <li><a href="#pretraining-on-unlabeled-data" id="toc-pretraining-on-unlabeled-data" class="nav-link" data-scroll-target="#pretraining-on-unlabeled-data">5. Pretraining on Unlabeled Data</a></li>
   <li><a href="#chapter-5-pretraining-on-unlabeled-data" id="toc-chapter-5-pretraining-on-unlabeled-data" class="nav-link" data-scroll-target="#chapter-5-pretraining-on-unlabeled-data">Chapter 5: Pretraining on Unlabeled Data</a></li>
   <li><a href="#finetuning-for-text-classification" id="toc-finetuning-for-text-classification" class="nav-link" data-scroll-target="#finetuning-for-text-classification">6. Finetuning for Text Classification</a></li>
+  <li><a href="#finetuning-to-follow-instruction" id="toc-finetuning-to-follow-instruction" class="nav-link" data-scroll-target="#finetuning-to-follow-instruction">7. Finetuning to Follow Instruction</a></li>
+  <li><a href="#deployment-in-hf-hub-using-gradio" id="toc-deployment-in-hf-hub-using-gradio" class="nav-link" data-scroll-target="#deployment-in-hf-hub-using-gradio">8. Deployment in HF-Hub using Gradio</a></li>
+  <li><a href="#key-technical-achievements" id="toc-key-technical-achievements" class="nav-link" data-scroll-target="#key-technical-achievements">9. Key Technical Achievements</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="chapters/ch02-preview.html"><i class="bi bi-journal-code"></i>2.1 Understanding word embeddings</a></li><li><a href="chapters/ch03-preview.html"><i class="bi bi-journal-code"></i>3.1 The problem with modeling long sequences</a></li><li><a href="chapters/ch04-preview.html"><i class="bi bi-journal-code"></i>4.1 Coding an LLM architecture</a></li><li><a href="chapters/ch06-preview.html"><i class="bi bi-journal-code"></i>6.1 Different categories of finetuning</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="chapters/ch02-preview.html"><i class="bi bi-journal-code"></i>2.1 Understanding word embeddings</a></li><li><a href="chapters/ch03-preview.html"><i class="bi bi-journal-code"></i>3.1 The problem with modeling long sequences</a></li><li><a href="chapters/ch04-preview.html"><i class="bi bi-journal-code"></i>4.1 Coding an LLM architecture</a></li><li><a href="chapters/ch06-preview.html"><i class="bi bi-journal-code"></i>6.1 Different categories of finetuning</a></li><li><a href="chapters/ch07-preview.html"><i class="bi bi-journal-code"></i>7.1 Introduction to instruction finetuning</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -3826,6 +3827,1226 @@ Test accuracy: 95.67%</code></pre>
 </ul>
 </section>
 <a class="quarto-notebook-link" id="nblink-4" href="chapters/ch06-preview.html#5b7e01c2-1c84-4f2a-bb51-2e0b74abda90">Source: 6.1 Different categories of finetuning</a></div>
+</section>
+<section id="finetuning-to-follow-instruction" class="level1">
+<h1>7. Finetuning to Follow Instruction</h1>
+<div class="quarto-embed-nb-cell">
+<div id="4e19327b-6c02-4881-ad02-9b6d3ec0b1b4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="bcdfe2cb-d084-4920-d703-503131aabec3" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>numpy version: 2.0.2
+matplotlib version: 3.10.0
+tiktoken version: 0.8.0
+torch version: 2.5.1+cu124
+tqdm version: 4.67.1
+tensorflow version: 2.18.0</code></pre>
+</div>
+</div>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/overview.webp?1" width="500px"></p>
+<section id="introduction-to-instruction-finetuning" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-instruction-finetuning">7.1 Introduction to instruction finetuning</h2>
+<ul>
+<li>In chapter 5, we saw that pretraining an LLM involves a training procedure where it learns to generate one word at a time</li>
+<li>Hence, a pretrained LLM is good at text completion, but it is not good at following instructions</li>
+<li>In this chapter, we teach the LLM to follow instructions better</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/instruction-following.webp" width="500px"></p>
+<ul>
+<li>The topics covered in this chapter are summarized in the figure below</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-1.webp?1" width="500px"></p>
+</section>
+<section id="preparing-a-dataset-for-supervised-instruction-finetuning" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-a-dataset-for-supervised-instruction-finetuning">7.2 Preparing a dataset for supervised instruction finetuning</h2>
+<ul>
+<li>We will work with an instruction dataset I prepared for this chapter</li>
+</ul>
+<div id="0G3axLw6kY1N" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="07e1e4f9-026c-48c1-8a06-f2bfb1fb354e" data-execution_count="2">
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of entries: 1100</code></pre>
+</div>
+</div>
+<ul>
+<li>Each item in the <code>data</code> list we loaded from the JSON file above is a dictionary in the following form</li>
+</ul>
+<div id="-LiuBMsHkzQV" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="a4ee5c2d-db53-4a80-e5ee-0bbcf6fe0450" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>Example entry:
+ {'instruction': 'Identify the correct spelling of the following word.', 'input': 'Ocassion', 'output': "The correct spelling is 'Occasion.'"}</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the <code>'input'</code> field can be empty:</li>
+</ul>
+<div id="uFInFxDDk2Je" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="b4f84027-bb9e-4e51-b79e-1329c8bff093" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>Another example entry:
+ {'instruction': "What is an antonym of 'complicated'?", 'input': '', 'output': "An antonym of 'complicated' is 'simple'."}</code></pre>
+</div>
+</div>
+<ul>
+<li>Instruction finetuning is often referred to as “supervised instruction finetuning” because it involves training a model on a dataset where the input-output pairs are explicitly provided</li>
+<li>There are different ways to format the entries as inputs to the LLM; the figure below illustrates two example formats that were used for training the Alpaca (https://crfm.stanford.edu/2023/03/13/alpaca.html) and Phi-3 (https://arxiv.org/abs/2404.14219) LLMs, respectively</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/prompt-style.webp?1" width="500px"></p>
+<ul>
+<li><p>In this chapter, we use Alpaca-style prompt formatting, which was the original prompt template for instruction finetuning</p></li>
+<li><p>Below, we format the input that we will pass as input to the LLM</p></li>
+<li><p>A formatted response with input field looks like as shown below</p></li>
+</ul>
+<div id="F9UQRfjzo4Js" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="7b615d35-2a5f-474d-9292-a69bc3850e16" data-execution_count="6">
+<div class="cell-output cell-output-stdout">
+<pre><code>Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+Identify the correct spelling of the following word.
+
+### Input:
+Ocassion
+
+### Response:
+The correct spelling is 'Occasion.'</code></pre>
+</div>
+</div>
+<ul>
+<li>Below is a formatted response without an input field</li>
+</ul>
+<div id="a3891fa9-f738-41cd-946c-80ef9a99c346" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2142c5a4-b594-49c5-affe-2d963a7bd46b" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+What is an antonym of 'complicated'?
+
+### Response:
+An antonym of 'complicated' is 'simple'.</code></pre>
+</div>
+</div>
+<ul>
+<li>Lastly, before we prepare the PyTorch data loaders in the next section, we divide the dataset into a training, validation, and test set</li>
+</ul>
+<div id="-zf6oht6bIUQ" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="657ec5c6-4caa-4d1a-ba2e-23acd755ab07" data-execution_count="9">
+<div class="cell-output cell-output-stdout">
+<pre><code>Training set length: 935
+Validation set length: 55
+Test set length: 110</code></pre>
+</div>
+</div>
+</section>
+<section id="organizing-data-into-training-batches" class="level2">
+<h2 class="anchored" data-anchor-id="organizing-data-into-training-batches">7.3 Organizing data into training batches</h2>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-2.webp?1" width="500px"></p>
+<ul>
+<li>We tackle this dataset batching in several steps, as summarized in the figure below</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/detailed-batching.webp?1" width="500px"></p>
+<ul>
+<li>First, we implement an <code>InstructionDataset</code> class that pre-tokenizes all inputs in the dataset, similar to the <code>SpamDataset</code> in chapter 6</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/pretokenizing.webp" width="500px"></p>
+<ul>
+<li>Similar to chapter 6, we want to collect multiple training examples in a batch to accelerate training; this requires padding all inputs to a similar length</li>
+<li>Also similar to the previous chapter, we use the <code>&lt;|endoftext|&gt;</code> token as a padding token</li>
+</ul>
+<div id="ff24fe1a-5746-461c-ad3d-b6d84a1a7c96" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="ac44227b-9ec2-4131-9df8-89caa6e879ca" data-execution_count="11">
+<div class="cell-output cell-output-stdout">
+<pre><code>[50256]</code></pre>
+</div>
+</div>
+<ul>
+<li>In chapter 6, we padded all examples in a dataset to the same length
+<ul>
+<li>Here, we take a more sophisticated approach and develop a custom “collate” function that we can pass to the data loader</li>
+<li>This custom collate function pads the training examples in each batch to have the same length (but different batches can have different lengths)</li>
+</ul></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/padding.webp" width="500px"></p>
+<div id="8fb02373-59b3-4f3a-b1d1-8181a2432645" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="93d987b9-e3ca-4857-9b28-b67d515a94d8" data-execution_count="13">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[    0,     1,     2,     3,     4],
+        [    5,     6, 50256, 50256, 50256],
+        [    7,     8,     9, 50256, 50256]])</code></pre>
+</div>
+</div>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/batching-step-4.webp?1" width="500px"></p>
+<ul>
+<li>Above, we only returned the inputs to the LLM; however, for LLM training, we also need the target values</li>
+<li>Similar to pretraining an LLM, the targets are the inputs shifted by 1 position to the right, so the LLM learns to predict the next token</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/inputs-targets.webp?1" width="400px"></p>
+<div id="6eb2bce3-28a7-4f39-9d4b-5e972d69066c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="3d104439-c328-431b-ef7c-2639d86c2135" data-execution_count="15">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[    0,     1,     2,     3,     4],
+        [    5,     6, 50256, 50256, 50256],
+        [    7,     8,     9, 50256, 50256]])
+tensor([[    1,     2,     3,     4, 50256],
+        [    6, 50256, 50256, 50256, 50256],
+        [    8,     9, 50256, 50256, 50256]])</code></pre>
+</div>
+</div>
+<ul>
+<li>Next, we introduce an <code>ignore_index</code> value to replace all padding token IDs with a new value; the purpose of this <code>ignore_index</code> is that we can ignore padding values in the loss function (more on that later)</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/batching-step-5.webp?1" width="500px"></p>
+<ul>
+<li>Concretely, this means that we replace the token IDs corresponding to <code>50256</code> with <code>-100</code> as illustrated below</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/ignore-index.webp?1" width="500px"></p>
+<ul>
+<li>(In addition, we also introduce the <code>allowed_max_length</code> in case we want to limit the length of the samples; this will be useful if you plan to work with your own datasets that are longer than the 1024 token context size supported by the GPT-2 model)</li>
+</ul>
+<div id="cdf5eec4-9ebe-4be0-9fca-9a47bee88fdc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="e8f709b9-f4c5-428a-a6ac-2a4c1b9358ba" data-execution_count="17">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[    0,     1,     2,     3,     4],
+        [    5,     6, 50256, 50256, 50256],
+        [    7,     8,     9, 50256, 50256]])
+tensor([[    1,     2,     3,     4, 50256],
+        [    6, 50256,  -100,  -100,  -100],
+        [    8,     9, 50256,  -100,  -100]])</code></pre>
+</div>
+</div>
+<ul>
+<li>Let’s see what this replacement by -100 accomplishes</li>
+<li>For illustration purposes, let’s assume we have a small classification task with 2 class labels, 0 and 1, similar to chapter 6</li>
+<li>If we have the following logits values (outputs of the last layer of the model), we calculate the following loss</li>
+</ul>
+<div id="W2jvh-OP9MFV" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="ccb3a703-59a7-4258-8841-57959a016e31" data-execution_count="18">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(1.1269)</code></pre>
+</div>
+</div>
+<ul>
+<li>Now, adding one more training example will, as expected, influence the loss</li>
+</ul>
+<div id="nvVMuil89v9N" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="6d4683d4-5bfc-4a8c-de2a-95ecb2e716b9" data-execution_count="19">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(0.7936)</code></pre>
+</div>
+</div>
+<ul>
+<li>Let’s see what happens if we replace the class label of one of the examples with -100</li>
+</ul>
+<div id="RTyB1vah9p56" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="da05302e-3fe0-439e-d1ed-82066bceb122" data-execution_count="20">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(1.1269)
+loss_1 == loss_3: tensor(True)</code></pre>
+</div>
+</div>
+<ul>
+<li><p>As we can see, the resulting loss on these 3 training examples is the same as the loss we calculated from the 2 training examples, which means that the cross-entropy loss function ignored the training example with the -100 label</p></li>
+<li><p>By default, PyTorch has the <code>cross_entropy(..., ignore_index=-100)</code> setting to ignore examples corresponding to the label -100</p></li>
+<li><p>Using this -100 <code>ignore_index</code>, we can ignore the additional end-of-text (padding) tokens in the batches that we used to pad the training examples to equal length</p></li>
+<li><p>However, we don’t want to ignore the first instance of the end-of-text (padding) token (50256) because it can help signal to the LLM when the response is complete</p></li>
+<li><p>In practice, it is also common to mask out the target token IDs that correspond to the instruction, as illustrated in the figure below (this is a recommended reader exercise after completing the chapter)</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/mask-instructions.webp?1" width="600px"></p>
+</section>
+<section id="creating-data-loaders-for-an-instruction-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="creating-data-loaders-for-an-instruction-dataset">7.4 Creating data loaders for an instruction dataset</h2>
+<ul>
+<li>In this section, we use the <code>InstructionDataset</code> class and <code>custom_collate_fn</code> function to instantiate the training, validation, and test data loaders</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-3.webp?1" width="500px"></p>
+<ul>
+<li>Another additional detail of the previous <code>custom_collate_fn</code> function is that we now directly move the data to the target device (e.g., GPU) instead of doing it in the main training loop, which improves efficiency because it can be carried out as a background process when we use the <code>custom_collate_fn</code> as part of the data loader</li>
+<li>Using the <code>partial</code> function from Python’s <code>functools</code> standard library, we create a new function with the <code>device</code> argument of the original function pre-filled</li>
+</ul>
+<div id="etpqqWh8phKc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="b4391c33-1a89-455b-faaa-5f874b6eb409" data-execution_count="21">
+<div class="cell-output cell-output-stdout">
+<pre><code>Device: cuda</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Next, we instantiate the data loaders similar to previous chapters, except that we now provide our own collate function for the batching process</p></li>
+<li><p>Let’s see what the dimensions of the resulting input and target batches look like</p></li>
+</ul>
+<div id="GGs1AI3vHpnX" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="f6a74c8b-1af3-4bc1-b48c-eda64b0200d1" data-execution_count="25">
+<div class="cell-output cell-output-stdout">
+<pre><code>Train loader:
+torch.Size([8, 61]) torch.Size([8, 61])
+torch.Size([8, 76]) torch.Size([8, 76])
+torch.Size([8, 73]) torch.Size([8, 73])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 72]) torch.Size([8, 72])
+torch.Size([8, 80]) torch.Size([8, 80])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 62]) torch.Size([8, 62])
+torch.Size([8, 75]) torch.Size([8, 75])
+torch.Size([8, 62]) torch.Size([8, 62])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 77]) torch.Size([8, 77])
+torch.Size([8, 69]) torch.Size([8, 69])
+torch.Size([8, 79]) torch.Size([8, 79])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 80]) torch.Size([8, 80])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 69]) torch.Size([8, 69])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 60]) torch.Size([8, 60])
+torch.Size([8, 59]) torch.Size([8, 59])
+torch.Size([8, 69]) torch.Size([8, 69])
+torch.Size([8, 63]) torch.Size([8, 63])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 76]) torch.Size([8, 76])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 91]) torch.Size([8, 91])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 75]) torch.Size([8, 75])
+torch.Size([8, 89]) torch.Size([8, 89])
+torch.Size([8, 59]) torch.Size([8, 59])
+torch.Size([8, 88]) torch.Size([8, 88])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 70]) torch.Size([8, 70])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 74]) torch.Size([8, 74])
+torch.Size([8, 76]) torch.Size([8, 76])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 75]) torch.Size([8, 75])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 69]) torch.Size([8, 69])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 60]) torch.Size([8, 60])
+torch.Size([8, 60]) torch.Size([8, 60])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 80]) torch.Size([8, 80])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 61]) torch.Size([8, 61])
+torch.Size([8, 58]) torch.Size([8, 58])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 63]) torch.Size([8, 63])
+torch.Size([8, 87]) torch.Size([8, 87])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 71]) torch.Size([8, 71])
+torch.Size([8, 61]) torch.Size([8, 61])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 65]) torch.Size([8, 65])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 60]) torch.Size([8, 60])
+torch.Size([8, 72]) torch.Size([8, 72])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 70]) torch.Size([8, 70])
+torch.Size([8, 57]) torch.Size([8, 57])
+torch.Size([8, 72]) torch.Size([8, 72])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 62]) torch.Size([8, 62])
+torch.Size([8, 74]) torch.Size([8, 74])
+torch.Size([8, 80]) torch.Size([8, 80])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 70]) torch.Size([8, 70])
+torch.Size([8, 91]) torch.Size([8, 91])
+torch.Size([8, 61]) torch.Size([8, 61])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 80]) torch.Size([8, 80])
+torch.Size([8, 81]) torch.Size([8, 81])
+torch.Size([8, 74]) torch.Size([8, 74])
+torch.Size([8, 82]) torch.Size([8, 82])
+torch.Size([8, 63]) torch.Size([8, 63])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 68]) torch.Size([8, 68])
+torch.Size([8, 67]) torch.Size([8, 67])
+torch.Size([8, 77]) torch.Size([8, 77])
+torch.Size([8, 91]) torch.Size([8, 91])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 61]) torch.Size([8, 61])
+torch.Size([8, 75]) torch.Size([8, 75])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 78]) torch.Size([8, 78])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 64]) torch.Size([8, 64])
+torch.Size([8, 83]) torch.Size([8, 83])
+torch.Size([8, 66]) torch.Size([8, 66])
+torch.Size([8, 74]) torch.Size([8, 74])
+torch.Size([8, 69]) torch.Size([8, 69])</code></pre>
+</div>
+</div>
+<ul>
+<li>As we can see based on the output above, all batches have a batch size of 8 but a different length, as expected</li>
+<li>Let’s also double-check that the inputs contain the <code>&lt;|endoftext|&gt;</code> padding tokens corresponding to token ID 50256 by printing the contents of the first training example in the <code>inputs</code> batch</li>
+</ul>
+<div id="21b8fd02-014f-4481-9b71-5bfee8f9dfcd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="1b8ad342-2b5b-4f12-ad1a-3cb2a6c712ff" data-execution_count="26">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([21106,   318,   281, 12064,   326,  8477,   257,  4876,    13, 19430,
+          257,  2882,   326, 20431, 32543,   262,  2581,    13,   198,   198,
+        21017, 46486,    25,   198, 30003,  6525,   262,  6827,  1262,   257,
+          985,   576,    13,   198,   198, 21017, 23412,    25,   198,   464,
+         5156,   318,   845, 13779,    13,   198,   198, 21017, 18261,    25,
+          198,   464,  5156,   318,   355, 13779,   355,   257,  4936,    13,
+        50256, 50256, 50256, 50256, 50256, 50256, 50256, 50256, 50256],
+       device='cuda:0')</code></pre>
+</div>
+</div>
+<ul>
+<li>Similarly, we visually double-check that the targets contain the -100 placeholder tokens</li>
+</ul>
+<div id="51649ab4-1a7e-4a9e-92c5-950a24fde211" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="5e8c23f8-6a05-4c13-9f92-373b75b57ea6" data-execution_count="27">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([  318,   281, 12064,   326,  8477,   257,  4876,    13, 19430,   257,
+         2882,   326, 20431, 32543,   262,  2581,    13,   198,   198, 21017,
+        46486,    25,   198, 30003,  6525,   262,  6827,  1262,   257,   985,
+          576,    13,   198,   198, 21017, 23412,    25,   198,   464,  5156,
+          318,   845, 13779,    13,   198,   198, 21017, 18261,    25,   198,
+          464,  5156,   318,   355, 13779,   355,   257,  4936,    13, 50256,
+         -100,  -100,  -100,  -100,  -100,  -100,  -100,  -100,  -100],
+       device='cuda:0')</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-a-pretrained-llm" class="level2">
+<h2 class="anchored" data-anchor-id="loading-a-pretrained-llm">7.5 Loading a pretrained LLM</h2>
+<ul>
+<li>In this section, we load a pretrained GPT model using the same code that we used in section 5.5 of chapter 5 and section 6.4 in chapter 6</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-4.webp?1" width="500px"></p>
+<ul>
+<li><p>However, instead of loading the smallest 124 million parameter model, we load the medium version with 355 million parameters since the 124 million model is too small for achieving qualitatively reasonable results via instruction finetuning</p></li>
+<li><p>Before we start finetuning the model in the next section, let’s see how it performs on one of the validation tasks</p></li>
+</ul>
+<div id="7bd32b7c-5b44-4d25-a09f-46836802ca74" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="c1276a91-e7da-495b-be0f-70a96872dbe6" data-execution_count="29">
+<div class="cell-output cell-output-stdout">
+<pre><code>Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+Convert the active sentence to passive: 'The chef cooks the meal every day.'</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the <code>generate</code> function we used in previous chapters returns the combined input and output text, which was convenient in the previous section for creating legible text</li>
+<li>To isolate the response, we can subtract the length of the instruction from the start of the <code>generated_text</code></li>
+</ul>
+<div id="ba4a55bf-a245-48d8-beda-2838a58fb5ba" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="3e231f03-c5dc-4397-8778-4995731176a3" data-execution_count="31">
+<div class="cell-output cell-output-stdout">
+<pre><code>The chef cooks the meal every day.
+
+### Instruction:
+
+Convert the active sentence to passive: 'The chef cooks the</code></pre>
+</div>
+</div>
+<ul>
+<li>As we can see, the model is not capable of following the instructions, yet; it creates a “Response” section but it simply repeats the original input sentence as well as the instruction</li>
+</ul>
+</section>
+<section id="finetuning-the-llm-on-instruction-data" class="level2">
+<h2 class="anchored" data-anchor-id="finetuning-the-llm-on-instruction-data">7.6 Finetuning the LLM on instruction data</h2>
+<ul>
+<li>In this section, we finetune the model</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-5.webp?1" width="500px"></p>
+<ul>
+<li><p>Note that we can reuse all the loss calculation and training functions that we used in previous chapters</p></li>
+<li><p>Let’s calculate the initial training and validation set loss before we start training (as in previous chapters, the goal is to minimize the loss)</p></li>
+</ul>
+<div id="d99fc6f8-63b2-43da-adbb-a7b6b92c8dd5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="a3f5e1b0-093a-4c51-e7fc-c9cac48c2ea2" data-execution_count="33">
+<div class="cell-output cell-output-stdout">
+<pre><code>Training loss: 3.8259087562561036
+Validation loss: 3.761933708190918</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the training is a bit more expensive than in previous chapters since we are using a larger model (355 million instead of 124 million parameters)</li>
+<li>The runtimes for various devices are shown for reference below (running this notebook on a compatible GPU device requires no changes to the code)</li>
+</ul>
+<div style="text-align: left;">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Device</th>
+<th>Runtime for 2 Epochs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gpt2-medium (355M)</td>
+<td>CPU (M3 MacBook Air)</td>
+<td>15.78 minutes</td>
+</tr>
+<tr class="even">
+<td>gpt2-medium (355M)</td>
+<td>GPU (M3 MacBook Air)</td>
+<td>10.77 minutes</td>
+</tr>
+<tr class="odd">
+<td>gpt2-medium (355M)</td>
+<td>GPU (L4)</td>
+<td>1.83 minutes</td>
+</tr>
+<tr class="even">
+<td>gpt2-medium (355M)</td>
+<td>GPU (A100)</td>
+<td>0.86 minutes</td>
+</tr>
+<tr class="odd">
+<td>gpt2-small (124M)</td>
+<td>CPU (M3 MacBook Air)</td>
+<td>5.74 minutes</td>
+</tr>
+<tr class="even">
+<td>gpt2-small (124M)</td>
+<td>GPU (M3 MacBook Air)</td>
+<td>3.73 minutes</td>
+</tr>
+<tr class="odd">
+<td>gpt2-small (124M)</td>
+<td>GPU (L4)</td>
+<td>0.69 minutes</td>
+</tr>
+<tr class="even">
+<td>gpt2-small (124M)</td>
+<td>GPU (A100)</td>
+<td>0.39 minutes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>I ran this notebook using the <code>"gpt2-medium (355M)"</code> model</li>
+</ul>
+<div id="78bcf83a-1fff-4540-97c1-765c4016d5e3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="ecb9a3dd-97c0-492d-8a51-fbd175bb139b" data-execution_count="34">
+<div class="cell-output cell-output-stdout">
+<pre><code>Ep 1 (Step 000000): Train loss 2.637, Val loss 2.626
+Ep 1 (Step 000005): Train loss 1.174, Val loss 1.103
+Ep 1 (Step 000010): Train loss 0.872, Val loss 0.944
+Ep 1 (Step 000015): Train loss 0.857, Val loss 0.906
+Ep 1 (Step 000020): Train loss 0.776, Val loss 0.881
+Ep 1 (Step 000025): Train loss 0.754, Val loss 0.859
+Ep 1 (Step 000030): Train loss 0.800, Val loss 0.836
+Ep 1 (Step 000035): Train loss 0.714, Val loss 0.809
+Ep 1 (Step 000040): Train loss 0.672, Val loss 0.806
+Ep 1 (Step 000045): Train loss 0.633, Val loss 0.789
+Ep 1 (Step 000050): Train loss 0.663, Val loss 0.782
+Ep 1 (Step 000055): Train loss 0.760, Val loss 0.763
+Ep 1 (Step 000060): Train loss 0.719, Val loss 0.743
+Ep 1 (Step 000065): Train loss 0.653, Val loss 0.735
+Ep 1 (Step 000070): Train loss 0.536, Val loss 0.732
+Ep 1 (Step 000075): Train loss 0.569, Val loss 0.739
+Ep 1 (Step 000080): Train loss 0.603, Val loss 0.734
+Ep 1 (Step 000085): Train loss 0.518, Val loss 0.717
+Ep 1 (Step 000090): Train loss 0.575, Val loss 0.699
+Ep 1 (Step 000095): Train loss 0.505, Val loss 0.689
+Ep 1 (Step 000100): Train loss 0.507, Val loss 0.683
+Ep 1 (Step 000105): Train loss 0.570, Val loss 0.676
+Ep 1 (Step 000110): Train loss 0.564, Val loss 0.671
+Ep 1 (Step 000115): Train loss 0.522, Val loss 0.666
+Below is an instruction that describes a task. Write a response that appropriately completes the request.  ### Instruction: Convert the active sentence to passive: 'The chef cooks the meal every day.'  ### Response: The meal is prepared every day by the chef.&lt;|endoftext|&gt;The following is an instruction that describes a task. Write a response that appropriately completes the request.  ### Instruction: Convert the active sentence to passive:
+Ep 2 (Step 000120): Train loss 0.439, Val loss 0.671
+Ep 2 (Step 000125): Train loss 0.454, Val loss 0.685
+Ep 2 (Step 000130): Train loss 0.448, Val loss 0.681
+Ep 2 (Step 000135): Train loss 0.406, Val loss 0.678
+Ep 2 (Step 000140): Train loss 0.412, Val loss 0.678
+Ep 2 (Step 000145): Train loss 0.372, Val loss 0.680
+Ep 2 (Step 000150): Train loss 0.381, Val loss 0.674
+Ep 2 (Step 000155): Train loss 0.419, Val loss 0.672
+Ep 2 (Step 000160): Train loss 0.417, Val loss 0.680
+Ep 2 (Step 000165): Train loss 0.383, Val loss 0.683
+Ep 2 (Step 000170): Train loss 0.328, Val loss 0.679
+Ep 2 (Step 000175): Train loss 0.334, Val loss 0.668
+Ep 2 (Step 000180): Train loss 0.391, Val loss 0.656
+Ep 2 (Step 000185): Train loss 0.418, Val loss 0.657
+Ep 2 (Step 000190): Train loss 0.341, Val loss 0.648
+Ep 2 (Step 000195): Train loss 0.330, Val loss 0.633
+Ep 2 (Step 000200): Train loss 0.313, Val loss 0.631
+Ep 2 (Step 000205): Train loss 0.354, Val loss 0.628
+Ep 2 (Step 000210): Train loss 0.365, Val loss 0.629
+Ep 2 (Step 000215): Train loss 0.394, Val loss 0.634
+Ep 2 (Step 000220): Train loss 0.301, Val loss 0.647
+Ep 2 (Step 000225): Train loss 0.347, Val loss 0.661
+Ep 2 (Step 000230): Train loss 0.297, Val loss 0.659
+Below is an instruction that describes a task. Write a response that appropriately completes the request.  ### Instruction: Convert the active sentence to passive: 'The chef cooks the meal every day.'  ### Response: The meal is cooked every day by the chef.&lt;|endoftext|&gt;The following is an instruction that describes a task. Write a response that appropriately completes the request.  ### Instruction: What is the capital of the United Kingdom
+Training completed in 0.93 minutes.</code></pre>
+</div>
+</div>
+<ul>
+<li>As we can see based on the outputs above, the model trains well, as we can tell based on the decreasing training loss and validation loss values</li>
+<li>Furthermore, based on the response text printed after each epoch, we can see that the model correctly follows the instruction to convert the input sentence <code>'The chef cooks the meal every day.'</code> into passive voice <code>'The meal is cooked every day by the chef.'</code> (We will properly format and evaluate the responses in a later section)</li>
+<li>Finally, let’s take a look at the training and validation loss curves</li>
+</ul>
+<div id="4acd368b-1403-4807-a218-9102e35bfdbb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:306}}" data-outputid="2f5c99e0-7ed0-4f42-d67c-e07c375e6158" data-execution_count="35">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/chapters-ch07-cell-36-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>As we can see, the loss decreases sharply at the beginning of the first epoch, which means the model starts learning quickly</li>
+<li>We can see that slight overfitting sets in at around 1 training epoch</li>
+</ul>
+</section>
+<section id="extracting-and-saving-responses" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-and-saving-responses">7.7 Extracting and saving responses</h2>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-6.webp?1" width="500px"></p>
+<ul>
+<li>In this section, we save the test set responses for scoring in the next section</li>
+<li>We also save a copy of the model for future use</li>
+<li>But first, let’s take a brief look at the responses generated by the finetuned model</li>
+</ul>
+<div id="VQ2NZMbfucAc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="066c56ff-b52a-4ee6-eae7-1bddfc74d0c1" data-execution_count="36">
+<div class="cell-output cell-output-stdout">
+<pre><code>Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+Rewrite the sentence using a simile.
+
+### Input:
+The car is very fast.
+
+Correct response:
+&gt;&gt; The car is as fast as lightning.
+
+Model response:
+&gt;&gt; The car is as fast as a bullet.
+-------------------------------------
+Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+What type of cloud is typically associated with thunderstorms?
+
+Correct response:
+&gt;&gt; The type of cloud typically associated with thunderstorms is cumulonimbus.
+
+Model response:
+&gt;&gt; The type of cloud associated with thunderstorms is a cumulus cloud.
+-------------------------------------
+Below is an instruction that describes a task. Write a response that appropriately completes the request.
+
+### Instruction:
+Name the author of 'Pride and Prejudice'.
+
+Correct response:
+&gt;&gt; Jane Austen.
+
+Model response:
+&gt;&gt; The author of 'Pride and Prejudice' is Jane Austen.
+-------------------------------------</code></pre>
+</div>
+</div>
+<ul>
+<li><p>As we can see based on the test set instructions, given responses, and the model’s responses, the model performs relatively well</p></li>
+<li><p>The answers to the first and last instructions are clearly correct</p></li>
+<li><p>The second answer is close; the model answers with “cumulus cloud” instead of “cumulonimbus” (however, note that cumulus clouds can develop into cumulonimbus clouds, which are capable of producing thunderstorms)</p></li>
+<li><p>Most importantly, we can see that model evaluation is not as straightforward as in the previous chapter, where we just had to calculate the percentage of correct spam/non-spam class labels to obtain the classification accuracy</p></li>
+<li><p>In practice, instruction-finetuned LLMs such as chatbots are evaluated via multiple approaches</p>
+<ul>
+<li>short-answer and multiple choice benchmarks such as MMLU (“Measuring Massive Multitask Language Understanding”, <a href="https://arxiv.org/abs/2009.03300">https://arxiv.org/abs/2009.03300</a>), which test the knowledge of a model</li>
+<li>human preference comparison to other LLMs, such as LMSYS chatbot arena (<a href="https://arena.lmsys.org">https://arena.lmsys.org</a>)</li>
+<li>automated conversational benchmarks, where another LLM like GPT-4 is used to evaluate the responses, such as AlpacaEval (<a href="https://tatsu-lab.github.io/alpaca_eval/">https://tatsu-lab.github.io/alpaca_eval/</a>)</li>
+</ul></li>
+<li><p>In the next section, we will use an approach similar to AlpacaEval and use another LLM to evaluate the responses of our model; however, we will use our own test set instead of using a publicly available benchmark dataset</p></li>
+<li><p>For this, we add the model response to the <code>test_data</code> dictionary and save it as a <code>"instruction-data-with-response.json"</code> file for record-keeping so that we can load and analyze it in separate Python sessions if needed</p></li>
+<li><p>Let’s double-check one of the entries to see whether the responses have been added to the <code>test_data</code> dictionary correctly</p></li>
+</ul>
+<div id="u-AvCCMTnPSE" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="7bcd9600-1446-4829-b773-5259b13d256a" data-execution_count="38">
+<div class="cell-output cell-output-stdout">
+<pre><code>{'instruction': 'Rewrite the sentence using a simile.', 'input': 'The car is very fast.', 'output': 'The car is as fast as lightning.', 'model_response': 'The car is as fast as a bullet.'}</code></pre>
+</div>
+</div>
+<ul>
+<li>Finally, we also save the model in case we want to reuse it in the future</li>
+</ul>
+<div id="8cBU0iHmVfOI" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="135849ed-9acd-43a2-f438-053d07dae9b2" data-scrolled="true" data-execution_count="39">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model saved as gpt2-medium355M-sft.pth</code></pre>
+</div>
+</div>
+</section>
+<section id="evaluating-the-finetuned-llm" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-the-finetuned-llm">7.8 Evaluating the finetuned LLM</h2>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/chapter-overview-7.webp?1" width="500px"></p>
+<ul>
+<li><p>In this section, we automate the response evaluation of the finetuned LLM using another, larger LLM</p></li>
+<li><p>In particular, we use an instruction-finetuned 8-billion-parameter Llama 3 model by Meta AI that can be run locally via ollama (<a href="https://ollama.com">https://ollama.com</a>)</p></li>
+<li><p>(Alternatively, if you prefer using a more capable LLM like GPT-4 via the OpenAI API, please see the <a href="../03_model-evaluation/llm-instruction-eval-openai.ipynb">llm-instruction-eval-openai.ipynb</a> notebook)</p></li>
+<li><p>Ollama is an application to run LLMs efficiently</p></li>
+<li><p>It is a wrapper around llama.cpp (<a href="https://github.com/ggerganov/llama.cpp">https://github.com/ggerganov/llama.cpp</a>), which implements LLMs in pure C/C++ to maximize efficiency</p></li>
+<li><p>Note that it is a tool for using LLMs to generate text (inference), not training or finetuning LLMs</p></li>
+<li><p>Before running the code below, install ollama by visiting <a href="https://ollama.com">https://ollama.com</a> and following the instructions (for instance, clicking on the “Download” button and downloading the ollama application for your operating system)</p></li>
+<li><p>For macOS and Windows users, click on the ollama application you downloaded; if it prompts you to install the command line usage, say “yes”</p></li>
+<li><p>Linux users can use the installation command provided on the ollama website</p></li>
+<li><p>In general, before we can use ollama from the command line, we have to either start the ollama application or run <code>ollama serve</code> in a separate terminal</p></li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/ollama-run.webp?1" width="700px"></p>
+<ul>
+<li>With the ollama application or <code>ollama serve</code> running in a different terminal, on the command line, execute the following command to try out the 8-billion-parameter Llama 3 model (the model, which takes up 4.7 GB of storage space, will be automatically downloaded the first time you execute this command)</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb238"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb238-1"><a href="#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 8B model</span></span>
+<span id="cb238-2"><a href="#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run llama3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The output looks like as follows</p>
+<pre><code>$ ollama run llama3
+pulling manifest
+pulling 6a0746a1ec1a... 100% ▕████████████████▏ 4.7 GB
+pulling 4fa551d4f938... 100% ▕████████████████▏&nbsp; 12 KB
+pulling 8ab4849b038c... 100% ▕████████████████▏&nbsp; 254 B
+pulling 577073ffcc6c... 100% ▕████████████████▏&nbsp; 110 B
+pulling 3f8eb4da87fa... 100% ▕████████████████▏&nbsp; 485 B
+verifying sha256 digest
+writing manifest
+removing any unused layers
+success</code></pre>
+<ul>
+<li><p>Note that <code>llama3</code> refers to the instruction finetuned 8-billion-parameter Llama 3 model</p></li>
+<li><p>Using ollama with the <code>"llama3"</code> model (a 8B parameter model) requires 16 GB of RAM; if this is not supported by your machine, you can try the smaller model, such as the 3.8B parameter phi-3 model by setting <code>model = "phi-3"</code>, which only requires 8 GB of RAM</p></li>
+<li><p>Alternatively, you can also use the larger 70-billion-parameter Llama 3 model, if your machine supports it, by replacing <code>llama3</code> with <code>llama3:70b</code></p></li>
+<li><p>After the download has been completed, you will see a command line prompt that allows you to chat with the model</p></li>
+<li><p>Try a prompt like “What do llamas eat?”, which should return an output similar to the following</p></li>
+</ul>
+<pre><code>&gt;&gt;&gt; What do llamas eat?
+Llamas are ruminant animals, which means they have a four-chambered
+stomach and eat plants that are high in fiber. In the wild, llamas
+typically feed on:
+1. Grasses: They love to graze on various types of grasses, including tall
+grasses, wheat, oats, and barley.</code></pre>
+<ul>
+<li><p>You can end this session using the input <code>/bye</code></p></li>
+<li><p>The following code checks whether the ollama session is running correctly before proceeding to use ollama to evaluate the test set responses we generated in the previous section</p></li>
+</ul>
+<div id="026e8570-071e-48a2-aa38-64d7be35f288" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:193}}" data-outputid="e30d3533-e1f5-4aa9-b24f-33273fc7b30e">
+<div class="cell-output cell-output-stdout">
+<pre><code>Ollama running: True</code></pre>
+</div>
+</div>
+<ul>
+<li>Now, an alternative way to the <code>ollama run</code> command we used earlier to interact with the model is via its REST API in Python via the following function</li>
+<li>Before you run the next cells in this notebook, make sure that ollama is still running (the previous code cells should print <code>"Ollama running: True"</code>)</li>
+<li>Next, run the following code cell to query the model</li>
+</ul>
+<div id="e3ae0e10-2b28-42ce-8ea2-d9366a58088f" class="cell" data-outputid="cc43acb3-8216-43cf-c77d-71d4089dc96c">
+<div class="cell-output cell-output-stdout">
+<pre><code>Llamas are herbivores, which means they primarily feed on plant-based foods. Their diet typically consists of:
+
+1. Grasses: Llamas love to graze on various types of grasses, including tall grasses, short grasses, and even weeds.
+2. Hay: High-quality hay, such as alfalfa or timothy hay, is a staple in a llama's diet. They enjoy the sweet taste and texture of fresh hay.
+3. Grains: Llamas may receive grains like oats, barley, or corn as part of their daily ration. However, it's essential to provide these grains in moderation, as they can be high in calories.
+4. Fruits and vegetables: Llamas enjoy a variety of fruits and veggies, such as apples, carrots, sweet potatoes, and leafy greens like kale or spinach.
+5. Minerals: Llamas require access to mineral supplements, which help maintain their overall health and well-being.
+
+In the wild, llamas might also eat:
+
+1. Leaves: They'll munch on leaves from trees and shrubs, including plants like willow, alder, and birch.
+2. Bark: In some cases, llamas may eat the bark of certain trees, like aspen or cottonwood.
+3. Mosses and lichens: These non-vascular plants can be a tasty snack for llamas.
+
+In captivity, llama owners typically provide a balanced diet that includes a mix of hay, grains, and fruits/vegetables. It's essential to consult with a veterinarian or experienced llama breeder to determine the best feeding plan for your llama.</code></pre>
+</div>
+</div>
+<ul>
+<li>Now, using the <code>query_model</code> function we defined above, we can evaluate the responses of our finetuned model; let’s try it out on the first 3 test set responses we looked at in a previous section</li>
+</ul>
+<div id="86b839d4-064d-4178-b2d7-01691b452e5e" class="cell" data-outputid="1c755ee1-bded-4450-9b84-1466724f389a">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Dataset response:
+&gt;&gt; The car is as fast as lightning.
+
+Model response:
+&gt;&gt; The car is as fast as a bullet.
+
+Score:
+&gt;&gt; I'd rate the model response "The car is as fast as a bullet." an 85 out of 100.
+
+Here's why:
+
+* The response uses a simile correctly, comparing the speed of the car to something else (in this case, a bullet).
+* The comparison is relevant and makes sense, as bullets are known for their high velocity.
+* The phrase "as fast as" is used correctly to introduce the simile.
+
+The only reason I wouldn't give it a perfect score is that some people might find the comparison slightly less vivid or evocative than others. For example, comparing something to lightning (as in the original response) can be more dramatic and attention-grabbing. However, "as fast as a bullet" is still a strong and effective simile that effectively conveys the idea of the car's speed.
+
+Overall, I think the model did a great job!
+
+-------------------------
+
+Dataset response:
+&gt;&gt; The type of cloud typically associated with thunderstorms is cumulonimbus.
+
+Model response:
+&gt;&gt; The type of cloud associated with thunderstorms is a cumulus cloud.
+
+Score:
+&gt;&gt; I'd score this model response as 40 out of 100.
+
+Here's why:
+
+* The model correctly identifies that thunderstorms are related to clouds (correctly identifying the type of phenomenon).
+* However, it incorrectly specifies the type of cloud associated with thunderstorms. Cumulus clouds are not typically associated with thunderstorms; cumulonimbus clouds are.
+* The response lacks precision and accuracy in its description.
+
+Overall, while the model attempts to address the instruction, it provides an incorrect answer, which is a significant error.
+
+-------------------------
+
+Dataset response:
+&gt;&gt; Jane Austen.
+
+Model response:
+&gt;&gt; The author of 'Pride and Prejudice' is Jane Austen.
+
+Score:
+&gt;&gt; I'd rate my own response as 95 out of 100. Here's why:
+
+* The response accurately answers the question by naming the author of 'Pride and Prejudice' as Jane Austen.
+* The response is concise and clear, making it easy to understand.
+* There are no grammatical errors or ambiguities that could lead to confusion.
+
+The only reason I wouldn't give myself a perfect score is that the response is slightly redundant - it's not necessary to rephrase the question in the answer. A more concise response would be simply "Jane Austen."
+
+-------------------------</code></pre>
+</div>
+</div>
+<hr>
+<p><strong>Note: Better evaluation prompt</strong></p>
+<ul>
+<li><a href="https://github.com/rasbt/LLMs-from-scratch/discussions/449">A reader (Ayoosh Kathuria) suggested</a> a longer, improved prompt that evaluates responses on a scale of 1–5 (instead of 1 to 100) and employs a grading rubric, resulting in more accurate and less noisy evaluations:</li>
+</ul>
+<pre><code>prompt = """
+You are a fair judge assistant tasked with providing clear, objective feedback based on specific criteria, ensuring each assessment reflects the absolute standards set for performance.
+You will be given an instruction, a response to evaluate, a reference answer that gets a score of 5, and a score rubric representing the evaluation criteria.
+Write a detailed feedback that assess the quality of the response strictly based on the given score rubric, not evaluating in general.
+Please do not generate any other opening, closing, and explanations.
+
+Here is the rubric you should use to build your answer:
+1: The response fails to address the instructions, providing irrelevant, incorrect, or excessively verbose information that detracts from the user's request.
+2: The response partially addresses the instructions but includes significant inaccuracies, irrelevant details, or excessive elaboration that detracts from the main task.
+3: The response follows the instructions with some minor inaccuracies or omissions. It is generally relevant and clear, but may include some unnecessary details or could be more concise.
+4: The response adheres to the instructions, offering clear, accurate, and relevant information in a concise manner, with only occasional, minor instances of excessive detail or slight lack of clarity.
+5: The response fully adheres to the instructions, providing a clear, accurate, and relevant answer in a concise and efficient manner. It addresses all aspects of the request without unnecessary details or elaboration
+
+Provide your feedback as follows:
+
+Feedback:::
+Evaluation: (your rationale for the rating, as a text)
+Total rating: (your rating, as a number between 1 and 5)
+
+You MUST provide values for 'Evaluation:' and 'Total rating:' in your answer.
+
+Now here is the instruction, the reference answer, and the response.
+
+Instruction: {instruction}
+Reference Answer: {reference}
+Answer: {answer}
+
+
+Provide your feedback. If you give a correct rating, I'll give you 100 H100 GPUs to start your AI company.
+Feedback:::
+Evaluation: """</code></pre>
+<ul>
+<li>For more context and information, see <a href="https://github.com/rasbt/LLMs-from-scratch/discussions/449">this</a> GitHub discussion</li>
+</ul>
+<hr>
+<ul>
+<li>As we can see, the Llama 3 model provides a reasonable evaluation and also gives partial points if a model is not entirely correct, as we can see based on the “cumulus cloud” answer</li>
+<li>Note that the previous prompt returns very verbose evaluations; we can tweak the prompt to generate integer responses in the range between 0 and 100 (where 100 is best) to calculate an average score for our model</li>
+<li>The evaluation of the 110 entries in the test set takes about 1 minute on an M3 MacBook Air laptop</li>
+</ul>
+<div id="9d7bca69-97c4-47a5-9aa0-32f116fa37eb" class="cell" data-outputid="110223c0-90ca-481d-b2d2-f6ac46d3c4f0">
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of scores: 110 of 110
+Average score: 50.32
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Our model achieves an average score of above 50, which we can use as a reference point to compare the model to other models or to try out other training settings that may improve the model</p></li>
+<li><p>Note that ollama is not fully deterministic across operating systems (as of this writing), so the numbers you are getting might slightly differ from the ones shown above</p></li>
+<li><p>For reference, the original</p>
+<ul>
+<li>Llama 3 8B base model achieves a score of 58.51</li>
+<li>Llama 3 8B instruct model achieves a score of 82.65</li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">7.9 Conclusions</h2>
+<section id="whats-next" class="level3">
+<h3 class="anchored" data-anchor-id="whats-next">7.9.1 What’s next</h3>
+<ul>
+<li>This marks the final chapter of this book</li>
+<li>We covered the major steps of the LLM development cycle: implementing an LLM architecture, pretraining an LLM, and finetuning it</li>
+</ul>
+<p><img src="https://sebastianraschka.com/images/LLMs-from-scratch-images/ch07_compressed/final-overview.webp?1" width="500px"></p>
+<ul>
+<li><p>An optional step that is sometimes followed after instruction finetuning, as described in this chapter, is preference finetuning</p></li>
+<li><p>Preference finetuning process can be particularly useful for customizing a model to better align with specific user preferences; see the <a href="../04_preference-tuning-with-dpo">../04_preference-tuning-with-dpo</a> folder if you are interested in this</p></li>
+<li><p>This GitHub repository also contains a large selection of additional bonus material you may enjoy; for more information, please see the <a href="https://github.com/rasbt/LLMs-from-scratch?tab=readme-ov-file#bonus-material">Bonus Material</a> section on this repository’s README page</p></li>
+</ul>
+</section>
+<section id="staying-up-to-date-in-a-fast-moving-field" class="level3">
+<h3 class="anchored" data-anchor-id="staying-up-to-date-in-a-fast-moving-field">7.9.2 Staying up to date in a fast-moving field</h3>
+<ul>
+<li>No code in this section</li>
+</ul>
+</section>
+<section id="final-words" class="level3">
+<h3 class="anchored" data-anchor-id="final-words">7.9.3 Final words</h3>
+<ul>
+<li>I hope you enjoyed this journey of implementing an LLM from the ground up and coding the pretraining and finetuning functions</li>
+<li>In my opinion, implementing an LLM from scratch is the best way to understand how LLMs work; I hope you gained a better understanding through this approach</li>
+<li>While this book serves educational purposes, you may be interested in using different and more powerful LLMs for real-world applications
+<ul>
+<li>For this, you may consider popular tools such as axolotl (<a href="https://github.com/OpenAccess-AI-Collective/axolotl">https://github.com/OpenAccess-AI-Collective/axolotl</a>) or LitGPT (<a href="https://github.com/Lightning-AI/litgpt">https://github.com/Lightning-AI/litgpt</a>), which I help developing</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="summary-and-takeaways-5" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-takeaways-5">Summary and takeaways</h2>
+<ul>
+<li>See the <a href="./gpt_instruction_finetuning.py">./gpt_instruction_finetuning.py</a> script, a self-contained script for instruction finetuning</li>
+<li><a href="./ollama_evaluate.py">./ollama_evaluate.py</a> is a standalone script based on section 7.8 that evaluates a JSON file containing “output” and “response” keys via Ollama and Llama 3</li>
+<li>The <a href="./load-finetuned-model.ipynb">./load-finetuned-model.ipynb</a> notebook illustrates how to load the finetuned model in a new session</li>
+<li>You can find the exercise solutions in <a href="./exercise-solutions.ipynb">./exercise-solutions.ipynb</a></li>
+</ul>
+</section>
+<section id="whats-next-1" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next-1">What’s next?</h2>
+<ul>
+<li>Congrats on completing the book; in case you are looking for additional resources, I added several bonus sections to this GitHub repository that you might find interesting</li>
+<li>The complete list of bonus materials can be viewed in the main README’s <a href="https://github.com/rasbt/LLMs-from-scratch?tab=readme-ov-file#bonus-material">Bonus Material</a> section</li>
+<li>To highlight a few of my favorites:
+<ol type="1">
+<li><a href="../04_preference-tuning-with-dpo/dpo-from-scratch.ipynb">Direct Preference Optimization (DPO) for LLM Alignment (From Scratch)</a> implements a popular preference tuning mechanism to align the model from this chapter more closely with human preferences</li>
+<li><a href="../../ch05/07_gpt_to_llama/standalone-llama32.ipynb">Llama 3.2 From Scratch (A Standalone Notebook)</a>, a from-scratch implementation of Meta AI’s popular Llama 3.2, including loading the official pretrained weights; if you are up to some additional experiments, you can replace the <code>GPTModel</code> model in each of the chapters with the <code>Llama3Model</code> class (it should work as a 1:1 replacement)</li>
+<li><a href="../../ch05/07_gpt_to_llama">Converting GPT to Llama</a> contains code with step-by-step guides that explain the differences between GPT-2 and the various Llama models</li>
+<li><a href="../../ch02/03_bonus_embedding-vs-matmul/embeddings-and-linear-layers.ipynb">Understanding the Difference Between Embedding Layers and Linear Layers</a> is a conceptual explanation illustrating that the <code>Embedding</code> layer in PyTorch, which we use at the input stage of an LLM, is mathematically equivalent to a linear layer applied to one-hot encoded data</li>
+</ol></li>
+<li>Happy further reading!</li>
+</ul>
+</section>
+<a class="quarto-notebook-link" id="nblink-5" href="chapters/ch07-preview.html#4e19327b-6c02-4881-ad02-9b6d3ec0b1b4">Source: 7.1 Introduction to instruction finetuning</a></div>
+</section>
+<section id="deployment-in-hf-hub-using-gradio" class="level1">
+<h1>8. Deployment in HF-Hub using Gradio</h1>
+<div id="6eaecd37" class="cell" data-code-copy="true" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb246"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb246-1"><a href="#cb246-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb246-2"><a href="#cb246-2"></a><span class="im">import</span> sys</span>
+<span id="cb246-3"><a href="#cb246-3"></a></span>
+<span id="cb246-4"><a href="#cb246-4"></a><span class="im">import</span> tiktoken</span>
+<span id="cb246-5"><a href="#cb246-5"></a><span class="im">import</span> torch</span>
+<span id="cb246-6"><a href="#cb246-6"></a><span class="im">import</span> gradio <span class="im">as</span> gr</span>
+<span id="cb246-7"><a href="#cb246-7"></a></span>
+<span id="cb246-8"><a href="#cb246-8"></a><span class="co"># For llms_from_scratch installation instructions, see:</span></span>
+<span id="cb246-9"><a href="#cb246-9"></a><span class="co"># https://github.com/rasbt/LLMs-from-scratch/tree/main/pkg</span></span>
+<span id="cb246-10"><a href="#cb246-10"></a><span class="im">from</span> previous_chapters <span class="im">import</span> GPTModel</span>
+<span id="cb246-11"><a href="#cb246-11"></a></span>
+<span id="cb246-12"><a href="#cb246-12"></a><span class="im">from</span> previous_chapters <span class="im">import</span> (</span>
+<span id="cb246-13"><a href="#cb246-13"></a>    generate,</span>
+<span id="cb246-14"><a href="#cb246-14"></a>    text_to_token_ids,</span>
+<span id="cb246-15"><a href="#cb246-15"></a>    token_ids_to_text,</span>
+<span id="cb246-16"><a href="#cb246-16"></a>)</span>
+<span id="cb246-17"><a href="#cb246-17"></a></span>
+<span id="cb246-18"><a href="#cb246-18"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb246-19"><a href="#cb246-19"></a></span>
+<span id="cb246-20"><a href="#cb246-20"></a></span>
+<span id="cb246-21"><a href="#cb246-21"></a><span class="kw">def</span> get_model_and_tokenizer():</span>
+<span id="cb246-22"><a href="#cb246-22"></a>    <span class="co">"""</span></span>
+<span id="cb246-23"><a href="#cb246-23"></a><span class="co">    Code to load a GPT-2 model with finetuned weights generated in chapter 7.</span></span>
+<span id="cb246-24"><a href="#cb246-24"></a><span class="co">    This requires that you run the code in chapter 7 first, which generates the necessary gpt2-medium355M-sft.pth file.</span></span>
+<span id="cb246-25"><a href="#cb246-25"></a><span class="co">    """</span></span>
+<span id="cb246-26"><a href="#cb246-26"></a></span>
+<span id="cb246-27"><a href="#cb246-27"></a>    GPT_CONFIG_355M <span class="op">=</span> {</span>
+<span id="cb246-28"><a href="#cb246-28"></a>        <span class="st">"vocab_size"</span>: <span class="dv">50257</span>,     <span class="co"># Vocabulary size</span></span>
+<span id="cb246-29"><a href="#cb246-29"></a>        <span class="st">"context_length"</span>: <span class="dv">1024</span>,  <span class="co"># Shortened context length (orig: 1024)</span></span>
+<span id="cb246-30"><a href="#cb246-30"></a>        <span class="st">"emb_dim"</span>: <span class="dv">768</span>,         <span class="co"># Embedding dimension</span></span>
+<span id="cb246-31"><a href="#cb246-31"></a>        <span class="st">"n_heads"</span>: <span class="dv">12</span>,           <span class="co"># Number of attention heads</span></span>
+<span id="cb246-32"><a href="#cb246-32"></a>        <span class="st">"n_layers"</span>: <span class="dv">12</span>,          <span class="co"># Number of layers</span></span>
+<span id="cb246-33"><a href="#cb246-33"></a>        <span class="st">"drop_rate"</span>: <span class="fl">0.0</span>,        <span class="co"># Dropout rate</span></span>
+<span id="cb246-34"><a href="#cb246-34"></a>        <span class="st">"qkv_bias"</span>: <span class="va">True</span>         <span class="co"># Query-key-value bias</span></span>
+<span id="cb246-35"><a href="#cb246-35"></a>    }</span>
+<span id="cb246-36"><a href="#cb246-36"></a></span>
+<span id="cb246-37"><a href="#cb246-37"></a>    tokenizer <span class="op">=</span> tiktoken.get_encoding(<span class="st">"gpt2"</span>)</span>
+<span id="cb246-38"><a href="#cb246-38"></a></span>
+<span id="cb246-39"><a href="#cb246-39"></a>    <span class="co"># For local development</span></span>
+<span id="cb246-40"><a href="#cb246-40"></a>    model_path <span class="op">=</span> Path(<span class="st">"gpt2-small124M-sft.pth"</span>)</span>
+<span id="cb246-41"><a href="#cb246-41"></a>    </span>
+<span id="cb246-42"><a href="#cb246-42"></a>    <span class="co"># For Hugging Face deployment</span></span>
+<span id="cb246-43"><a href="#cb246-43"></a>    hf_model_path <span class="op">=</span> Path(<span class="st">"gpt2-small124M-sft.pth"</span>)</span>
+<span id="cb246-44"><a href="#cb246-44"></a>    </span>
+<span id="cb246-45"><a href="#cb246-45"></a>    <span class="co"># Try loading from the Hugging Face model path first, then fall back to local</span></span>
+<span id="cb246-46"><a href="#cb246-46"></a>    <span class="cf">if</span> hf_model_path.exists():</span>
+<span id="cb246-47"><a href="#cb246-47"></a>        model_path <span class="op">=</span> hf_model_path</span>
+<span id="cb246-48"><a href="#cb246-48"></a>    <span class="cf">elif</span> <span class="kw">not</span> model_path.exists():</span>
+<span id="cb246-49"><a href="#cb246-49"></a>        <span class="bu">print</span>(</span>
+<span id="cb246-50"><a href="#cb246-50"></a>            <span class="ss">f"Could not find the model file. Please run the chapter 7 code "</span></span>
+<span id="cb246-51"><a href="#cb246-51"></a>            <span class="st">"to generate the gpt2-medium355M-sft.pth file or upload it to this directory."</span></span>
+<span id="cb246-52"><a href="#cb246-52"></a>        )</span>
+<span id="cb246-53"><a href="#cb246-53"></a>        sys.exit()</span>
+<span id="cb246-54"><a href="#cb246-54"></a></span>
+<span id="cb246-55"><a href="#cb246-55"></a>    checkpoint <span class="op">=</span> torch.load(model_path, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb246-56"><a href="#cb246-56"></a>    model <span class="op">=</span> GPTModel(GPT_CONFIG_355M)</span>
+<span id="cb246-57"><a href="#cb246-57"></a>    model.load_state_dict(checkpoint)</span>
+<span id="cb246-58"><a href="#cb246-58"></a>    model.to(device)</span>
+<span id="cb246-59"><a href="#cb246-59"></a>    model.<span class="bu">eval</span>()  <span class="co"># Set to evaluation mode</span></span>
+<span id="cb246-60"><a href="#cb246-60"></a></span>
+<span id="cb246-61"><a href="#cb246-61"></a>    <span class="cf">return</span> tokenizer, model, GPT_CONFIG_355M</span>
+<span id="cb246-62"><a href="#cb246-62"></a></span>
+<span id="cb246-63"><a href="#cb246-63"></a></span>
+<span id="cb246-64"><a href="#cb246-64"></a><span class="kw">def</span> extract_response(response_text, input_text):</span>
+<span id="cb246-65"><a href="#cb246-65"></a>    <span class="cf">return</span> response_text[<span class="bu">len</span>(input_text):].replace(<span class="st">"### Response:"</span>, <span class="st">""</span>).strip()</span>
+<span id="cb246-66"><a href="#cb246-66"></a></span>
+<span id="cb246-67"><a href="#cb246-67"></a></span>
+<span id="cb246-68"><a href="#cb246-68"></a><span class="co"># Load model and tokenizer</span></span>
+<span id="cb246-69"><a href="#cb246-69"></a>tokenizer, model, model_config <span class="op">=</span> get_model_and_tokenizer()</span>
+<span id="cb246-70"><a href="#cb246-70"></a></span>
+<span id="cb246-71"><a href="#cb246-71"></a></span>
+<span id="cb246-72"><a href="#cb246-72"></a><span class="kw">def</span> generate_response(message, max_new_tokens<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb246-73"><a href="#cb246-73"></a>    <span class="co">"""Generate a response using the fine-tuned GPT model"""</span></span>
+<span id="cb246-74"><a href="#cb246-74"></a>    torch.manual_seed(<span class="dv">123</span>)</span>
+<span id="cb246-75"><a href="#cb246-75"></a>    </span>
+<span id="cb246-76"><a href="#cb246-76"></a>    prompt <span class="op">=</span> <span class="ss">f"""Below is an instruction that describes a task. Write a response</span></span>
+<span id="cb246-77"><a href="#cb246-77"></a><span class="ss">    that appropriately completes the request.</span></span>
+<span id="cb246-78"><a href="#cb246-78"></a></span>
+<span id="cb246-79"><a href="#cb246-79"></a><span class="ss">    ### Instruction:</span></span>
+<span id="cb246-80"><a href="#cb246-80"></a><span class="ss">    </span><span class="sc">{</span>message<span class="sc">}</span></span>
+<span id="cb246-81"><a href="#cb246-81"></a><span class="ss">    """</span></span>
+<span id="cb246-82"><a href="#cb246-82"></a>    </span>
+<span id="cb246-83"><a href="#cb246-83"></a>    <span class="cf">with</span> torch.no_grad():  <span class="co"># Ensure no gradients are computed during inference</span></span>
+<span id="cb246-84"><a href="#cb246-84"></a>        token_ids <span class="op">=</span> generate(</span>
+<span id="cb246-85"><a href="#cb246-85"></a>            model<span class="op">=</span>model,</span>
+<span id="cb246-86"><a href="#cb246-86"></a>            idx<span class="op">=</span>text_to_token_ids(prompt, tokenizer).to(device),</span>
+<span id="cb246-87"><a href="#cb246-87"></a>            max_new_tokens<span class="op">=</span>max_new_tokens,</span>
+<span id="cb246-88"><a href="#cb246-88"></a>            context_size<span class="op">=</span>model_config[<span class="st">"context_length"</span>],</span>
+<span id="cb246-89"><a href="#cb246-89"></a>            eos_id<span class="op">=</span><span class="dv">50256</span></span>
+<span id="cb246-90"><a href="#cb246-90"></a>        )</span>
+<span id="cb246-91"><a href="#cb246-91"></a></span>
+<span id="cb246-92"><a href="#cb246-92"></a>    text <span class="op">=</span> token_ids_to_text(token_ids, tokenizer)</span>
+<span id="cb246-93"><a href="#cb246-93"></a>    response <span class="op">=</span> extract_response(text, prompt)</span>
+<span id="cb246-94"><a href="#cb246-94"></a>    </span>
+<span id="cb246-95"><a href="#cb246-95"></a>    <span class="cf">return</span> response</span>
+<span id="cb246-96"><a href="#cb246-96"></a></span>
+<span id="cb246-97"><a href="#cb246-97"></a></span>
+<span id="cb246-98"><a href="#cb246-98"></a><span class="co"># Create a custom chat interface without using ChatInterface class</span></span>
+<span id="cb246-99"><a href="#cb246-99"></a><span class="kw">def</span> respond(message, chat_history):</span>
+<span id="cb246-100"><a href="#cb246-100"></a>    bot_message <span class="op">=</span> generate_response(message)</span>
+<span id="cb246-101"><a href="#cb246-101"></a>    chat_history.append((message, bot_message))</span>
+<span id="cb246-102"><a href="#cb246-102"></a>    <span class="cf">return</span> <span class="st">""</span>, chat_history</span>
+<span id="cb246-103"><a href="#cb246-103"></a></span>
+<span id="cb246-104"><a href="#cb246-104"></a></span>
+<span id="cb246-105"><a href="#cb246-105"></a><span class="cf">with</span> gr.Blocks(theme<span class="op">=</span><span class="st">"soft"</span>) <span class="im">as</span> demo:</span>
+<span id="cb246-106"><a href="#cb246-106"></a>    gr.Markdown(<span class="st">"# Fine-tuned GPT Model Chat"</span>)</span>
+<span id="cb246-107"><a href="#cb246-107"></a>    gr.Markdown(<span class="st">"Chat with a fine-tuned GPT model from 'Build a Large Language Model From Scratch' by Sebastian Raschka"</span>)</span>
+<span id="cb246-108"><a href="#cb246-108"></a>    </span>
+<span id="cb246-109"><a href="#cb246-109"></a>    chatbot <span class="op">=</span> gr.Chatbot(height<span class="op">=</span><span class="dv">600</span>)</span>
+<span id="cb246-110"><a href="#cb246-110"></a>    msg <span class="op">=</span> gr.Textbox(placeholder<span class="op">=</span><span class="st">"Ask me something..."</span>, container<span class="op">=</span><span class="va">False</span>, scale<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb246-111"><a href="#cb246-111"></a>    clear <span class="op">=</span> gr.Button(<span class="st">"Clear"</span>)</span>
+<span id="cb246-112"><a href="#cb246-112"></a>    </span>
+<span id="cb246-113"><a href="#cb246-113"></a>    msg.submit(respond, [msg, chatbot], [msg, chatbot])</span>
+<span id="cb246-114"><a href="#cb246-114"></a>    clear.click(<span class="kw">lambda</span>: [], <span class="va">None</span>, chatbot)</span>
+<span id="cb246-115"><a href="#cb246-115"></a>    </span>
+<span id="cb246-116"><a href="#cb246-116"></a>    gr.Examples(</span>
+<span id="cb246-117"><a href="#cb246-117"></a>        examples<span class="op">=</span>[</span>
+<span id="cb246-118"><a href="#cb246-118"></a>            <span class="st">"What is the capital of France?"</span>,</span>
+<span id="cb246-119"><a href="#cb246-119"></a>            <span class="st">"What is the opposite of 'wet'?"</span>,</span>
+<span id="cb246-120"><a href="#cb246-120"></a>            <span class="st">"what is the capital of USA?"</span></span>
+<span id="cb246-121"><a href="#cb246-121"></a>        ],</span>
+<span id="cb246-122"><a href="#cb246-122"></a>        inputs<span class="op">=</span>msg</span>
+<span id="cb246-123"><a href="#cb246-123"></a>    )</span>
+<span id="cb246-124"><a href="#cb246-124"></a></span>
+<span id="cb246-125"><a href="#cb246-125"></a></span>
+<span id="cb246-126"><a href="#cb246-126"></a><span class="co"># Launch the interface</span></span>
+<span id="cb246-127"><a href="#cb246-127"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb246-128"><a href="#cb246-128"></a>    demo.launch(share<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="fine-tuned-gpt-model-demo" class="level2">
+<h2 class="anchored" data-anchor-id="fine-tuned-gpt-model-demo">Fine-tuned GPT Model Demo</h2>
+<p>This interactive demo showcases a GPT model fine-tuned using techniques from “Build a Large Language Model From Scratch” by Sebastian Raschka. Try asking questions or giving it instructions to see the model in action.</p>
+<div class="gradio-embed-container">
+  <!-- Fallback image that displays if iframe fails to load -->
+  <div id="fallback-container" style="display: none; text-align: center; margin: 20px 0;">
+    <p style="color: #d32f2f; font-weight: bold;">Interactive demo could not be loaded</p>
+    <img src="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned/resolve/main/thumbnail.png" alt="Screenshot of the Fine-tuned GPT Model interface" style="max-width: 100%; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 15px;">
+    <p>
+      <a href="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned" target="_blank" style="display: inline-block; background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;">
+        Open the demo in Hugging Face Spaces
+      </a>
+    </p>
+  </div>
+
+  <!-- Main iframe for the Gradio app -->
+  <iframe id="gradio-iframe" src="https://doggdad-instructgptfinetuned.hf.space/?__theme=light" frameborder="0" width="100%" height="800px" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);" allow="camera; microphone; clipboard-read; clipboard-write; fullscreen" loading="lazy" title="Fine-tuned GPT Model Interactive Demo" onload="document.getElementById('loading-container').style.display = 'none';" onerror="handleIframeError();"></iframe>
+  
+  <!-- Loading indicator -->
+  <div id="loading-container" style="text-align: center; padding: 40px; background-color: #f5f5f5; border-radius: 10px; margin-bottom: 20px;">
+    <div class="loading-spinner"></div>
+    <p style="margin-top: 20px; color: #333;">Loading interactive demo...</p>
+  </div>
+
+  <!-- Notes and instructions -->
+  <div class="gradio-notes">
+    <p>
+      <strong>Tips for using the model:</strong> 
+      Try asking questions, requesting creative content, or giving specific instructions.
+    </p>
+    <div class="example-prompts">
+      <button class="example-button" onclick="copyToInput('What is the capital of France?')">What is the capital of France?</button>
+      <button class="example-button" onclick="copyToInput('Write a short poem about artificial intelligence')">Write a poem about AI</button>
+      <button class="example-button" onclick="copyToInput('Explain the concept of neural networks in simple terms')">Explain neural networks</button>
+      <button class="example-button" onclick="copyToInput('What are the main differences between supervised and unsupervised learning?')">Supervised vs. unsupervised</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gradio-embed-container {
+    margin: 2rem 0;
+    padding: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    position: relative;
+  }
+  
+  .gradio-notes {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #2196F3;
+    font-size: 0.9rem;
+  }
+  
+  .example-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .example-button {
+    background-color: #e8eaf6;
+    border: 1px solid #c5cae9;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .example-button:hover {
+    background-color: #c5cae9;
+  }
+  
+  /* Loading spinner */
+  .loading-spinner {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #2196F3;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .example-prompts {
+      flex-direction: column;
+    }
+    
+    .example-button {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    
+    #gradio-iframe {
+      height: 600px;
+    }
+  }
+</style>
+
+<script>
+  // Wait for document to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set a timeout to check if iframe loaded successfully
+    setTimeout(function() {
+      checkIframeLoaded();
+    }, 10000); // 10 seconds timeout
+  });
+  
+  // Function to check if iframe loaded
+  function checkIframeLoaded() {
+    const iframe = document.getElementById('gradio-iframe');
+    const loadingContainer = document.getElementById('loading-container');
+    
+    // If loading container is still visible after timeout, show fallback
+    if (loadingContainer.style.display !== 'none') {
+      handleIframeError();
+    }
+  }
+  
+  // Handle iframe loading error
+  function handleIframeError() {
+    document.getElementById('gradio-iframe').style.display = 'none';
+    document.getElementById('loading-container').style.display = 'none';
+    document.getElementById('fallback-container').style.display = 'block';
+  }
+  
+  // Function to copy example prompts to input (this won't work directly with iframe,
+  // but is included in case you want to implement message passing to the iframe later)
+  function copyToInput(text) {
+    // This is a placeholder - it won't actually work with the iframe
+    // unless you implement message passing using postMessage
+    alert("Example selected: " + text + "\n\nPlease copy and paste this into the input field in the demo.");
+    
+    // Attempt to copy to clipboard
+    navigator.clipboard.writeText(text).then(function() {
+      console.log("Text copied to clipboard");
+    }).catch(function(err) {
+      console.error("Could not copy text: ", err);
+    });
+  }
+</script>
+<section id="try-the-demo-above-or-visit-the-full-hugging-face-space-for-the-best-experience." class="level3">
+<h3 class="anchored" data-anchor-id="try-the-demo-above-or-visit-the-full-hugging-face-space-for-the-best-experience.">Try the demo above or visit the <a href="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned">full Hugging Face Space</a> for the best experience.</h3>
+</section>
+</section>
+</section>
+<section id="key-technical-achievements" class="level1">
+<h1>9. Key Technical Achievements</h1>
+<ol type="1">
+<li><strong>Complete GPT Implementation</strong>: Full transformer architecture with multi-head attention, layer normalization, and residual connections</li>
+<li><strong>From-Scratch Components</strong>: Custom tokenizer, attention mechanisms, and training loops</li>
+<li><strong>Weight Transfer</strong>: Successfully loading OpenAI GPT-2 pretrained weights (124M-1558M parameters)</li>
+<li><strong>Two Finetuning Approaches</strong>: Classification (spam detection) and instruction-following</li>
+<li><strong>Advanced Sampling</strong>: Temperature scaling and top-k sampling for controlled generation</li>
+<li><strong>Automated Evaluation</strong>: LLM-based evaluation using local Ollama models</li>
+<li><strong>Laptop-Scale Training</strong>: All code designed to run on conventional laptops without specialized hardware</li>
+</ol>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<ul>
+<li><strong>Book</strong>: <em>Build a Large Language Model (From Scratch)</em> by Sebastian Raschka</li>
+<li><strong>Publisher</strong>: Manning Publications</li>
+<li><strong>ISBN</strong>: 9781633437166</li>
+<li><strong>GitHub</strong>: https://github.com/rasbt/LLMs-from-scratch</li>
+</ul>
 
 
 </section>
