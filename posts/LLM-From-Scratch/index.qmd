@@ -203,23 +203,22 @@ This interactive demo showcases a GPT model fine-tuned using techniques from "Bu
 <div class="gradio-embed-container">
   <!-- Fallback image that displays if iframe fails to load -->
   <div id="fallback-container" style="display: none; text-align: center; margin: 20px 0;">
-    <p style="color: #d32f2f; font-weight: bold;">Interactive demo could not be loaded</p>
-    <img 
-      src="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned/resolve/main/thumbnail.png" 
-      alt="Screenshot of the Fine-tuned GPT Model interface" 
-      style="max-width: 100%; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 15px;"
+  <p style="color: #d32f2f; font-weight: bold;">Interactive demo could not be loaded</p>
+  <img 
+    src="chapters/HF_GPT2.png" 
+    alt="Screenshot of the Fine-tuned GPT Model interface"
+    style="max-width: 100%; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 15px;"
+  >
+  <p>
+    <a 
+      href="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned" 
+      target="_blank" 
+      style="display: inline-block; background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;"
     >
-    <p>
-      <a 
-        href="https://huggingface.co/spaces/doggdad/InstructGPTFinetuned" 
-        target="_blank" 
-        style="display: inline-block; background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;"
-      >
-        Open the demo in Hugging Face Spaces
-      </a>
-    </p>
-  </div>
-
+      Open the demo in Hugging Face Spaces
+    </a>
+  </p>
+</div>
   <!-- Main iframe for the Gradio app -->
   <iframe
     id="gradio-iframe"
@@ -249,9 +248,8 @@ This interactive demo showcases a GPT model fine-tuned using techniques from "Bu
     </p>
     <div class="example-prompts">
       <button class="example-button" onclick="copyToInput('What is the capital of France?')">What is the capital of France?</button>
-      <button class="example-button" onclick="copyToInput('Write a short poem about artificial intelligence')">Write a poem about AI</button>
-      <button class="example-button" onclick="copyToInput('Explain the concept of neural networks in simple terms')">Explain neural networks</button>
-      <button class="example-button" onclick="copyToInput('What are the main differences between supervised and unsupervised learning?')">Supervised vs. unsupervised</button>
+      <button class="example-button" onclick="copyToInput('What is the opposite of wet?')">What is the opposite of wet?</button>
+      <button class="example-button" onclick="copyToInput('What is the capital of USA?')">What is the capital of USA?</button>
     </div>
   </div>
 </div>
