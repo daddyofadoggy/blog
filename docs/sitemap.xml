@@ -6,7 +6,7 @@
   </url>
   <url>
     <loc>https://your-website-url.example.com/posts/LLM-From-Scratch/index.html</loc>
-    <lastmod>2025-10-29T21:11:06.488Z</lastmod>
+    <lastmod>2025-10-30T16:59:38.502Z</lastmod>
   </url>
   <url>
     <loc>https://your-website-url.example.com/posts/welcome/index.html</loc>
@@ -43,5 +43,9 @@
   <url>
     <loc>https://your-website-url.example.com/posts/LLM-From-Scratch/chapters/ch07.html</loc>
     <lastmod>2025-10-29T19:21:12.277Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/LLM-From-Scratch/chapters/ch08.html</loc>
+    <lastmod>2025-10-30T16:41:46.358Z</lastmod>
   </url>
 </urlset>

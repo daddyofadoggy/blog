@@ -12,13 +12,74 @@ format:
     anchor-sections: true  # Makes headings linkable
 ---
 
-# 0. Introduction
+# 1. Set up
 
-[Your existing introduction content here...]
+## Create a virtual environment
 
-# 1. Prerequisites
+I highly recommend installing Python packages in a separate virtual environment to avoid modifying system-wide packages that your OS may depend on. To create a virtual environment in the current folder, follow the three steps below.
 
-[Your existing prerequisites content here...]
+<br>
+
+**1. Install uv**
+
+```bash
+pip install uv
+```
+
+<br>
+
+**2. Create the virtual environment**
+
+```bash
+uv venv --python=python3.10
+```
+
+<br>
+
+**3. Activate the virtual environment**
+
+```bash
+source .venv/bin/activate
+```
+&nbsp;
+
+Note that you need to activate the virtual environment each time you start a new terminal session. For example, if you restart your terminal or computer and want to continue working on the project the next day, simply run `source .venv/bin/activate` in the project folder to reactivate your virtual environment.
+
+Optionally, you can deactivate the environment it by executing the command `deactivate`.
+
+&nbsp;
+**4.Install packages**
+
+After activating your virtual environment, you can install Python packages using `uv`. For example:
+
+```bash
+uv pip install packaging
+```
+
+To install all required packages from a `requirements.txt` file (such as the one located at the top level of this GitHub repository) run the following command, assuming the file is in the same directory as your terminal session:
+
+```bash
+uv pip install -r requirements.txt
+```
+
+
+Alternatively, install the latest dependencies directly from the repository:
+
+```bash
+uv pip install -r https://raw.githubusercontent.com/rasbt/LLMs-from-scratch/refs/heads/main/requirements.txt
+```
+
+
+&nbsp;
+
+**Note:**
+If you have problems with the following commands above due to certain dependencies (for example, if you are using Windows), you can always fall back to using regular pip:
+
+ `pip install -r requirements.txt`
+ or
+`pip install -U -r https://raw.githubusercontent.com/rasbt/LLMs-from-scratch/refs/heads/main/requirements.txt`
+
+&nbsp;
 
 # 2. Working with text data
 
@@ -55,7 +116,11 @@ import os
 
 {{< embed chapters/ch07.ipynb >}}
 
-# 8. Deployment in HF-Hub using Gradio
+# 8. DPO for LLM Alignment
+
+{{< embed chapters/ch08.ipynb >}}
+
+# 9. Deployment in HF-Hub using Gradio
 
 ```{python}
 #| echo: true 
@@ -375,7 +440,7 @@ This interactive demo showcases a GPT model fine-tuned using techniques from "Bu
 
 
 
-# 9. Key Technical Achievements
+# 10. Key Technical Achievements
 
 1. **Complete GPT Implementation**: Full transformer architecture with multi-head attention, layer normalization, and residual connections
 2. **From-Scratch Components**: Custom tokenizer, attention mechanisms, and training loops
