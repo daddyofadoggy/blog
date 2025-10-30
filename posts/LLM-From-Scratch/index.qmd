@@ -448,8 +448,9 @@ This interactive demo showcases a GPT model fine-tuned using techniques from "Bu
 4. **Two Finetuning Approaches**: Classification (spam detection) and instruction-following
 5. **Advanced Sampling**: Temperature scaling and top-k sampling for controlled generation
 6. **Preference Tuning**:  Direct Preference Optimization (DPO) for LLM Alignment
-7. **Automated Evaluation**: LLM-based evaluation using local Ollama models
+7. **Automated Evaluation**: LLM-based evaluation using local Ollama models.
 8. **Laptop-Scale Training**: All code designed to run on conventional laptops without specialized hardware
+
 
 # References
 
