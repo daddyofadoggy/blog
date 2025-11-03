@@ -5,6 +5,7 @@ listing:
     contents: 
       - "posts/LLM-From-Scratch/index.qmd"
       - "posts/welcome/index.qmd"
+      - "posts/Today's-Learning-Nugget/index.qmd"
     type: default
     sort: "date desc"
 ---

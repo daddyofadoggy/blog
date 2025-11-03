@@ -1,0 +1,43 @@
+---
+title: "Today's Learning Nugget"
+author: "Dipankar Baisya"
+date: "2025-11-02"
+categories: [news]
+---
+
+# Logs 
+## 11/02/2025
+1. [C and C++ review](https://github.com/Infatoshi/cuda-course/tree/master/03_C_and_C%2B%2B_Review), [Cuda Toolkit](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=runfile_local)
+2. [Intro to GPU](https://github.com/Infatoshi/cuda-course/blob/master/04_Gentle_Intro_to_GPUs/README.md)
+3. [Cuda Basica](https://github.com/Infatoshi/cuda-course/blob/master/05_Writing_your_First_Kernels/01%20CUDA%20Basics/README.md)
+    - [deviceQuery](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/1_Utilities)
+    - [Thread Block Clusters](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/1_Utilities)
+    - Grid, Block, Thread
+    - [Warp and Weft](https://en.wikipedia.org/wiki/Warp_and_weft)
+
+
+
+
+# Interview Prep Materials 
+1. [Overall idea on LLM, distributed and optimization](https://gaurigupta19.github.io/llms/distributed%20ml/optimization/2025/10/02/efficient-ml.html)
+2. [Coding Tutorials](https://www.youtube.com/@TheAdityaVerma/courses)
+3. [ML Coding](https://github.com/alirezadir)
+
+# Explorations 
+1. [My reserach paper log](https://www.tldraw.com/f/ITQ51Rohg-hDOwwMdtxhL?d=v-1117.-24929.33200.20000.O5CdvKyDhlnRlZY-Sqe8j)
+
+# To-Dos
+1. [pipeline-parallelisim](https://siboehm.com/articles/22/pipeline-parallel-training)
+2. [Agentic AI Course](https://rdi.berkeley.edu/agentic-ai/f25?utm_source=chatgpt.com)
+3. [Inside vLLM](https://www.aleksagordic.com/blog/vllm)
+4. [Unsloth RL Guide](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide)
+5. [Distributed Training](https://blog.underfit.ai/ddp-profiled#)
+6. [Post Training](https://tokens-for-thoughts.notion.site/tokens-for-thoughts/Post-training-101-262b8b68a46d8033a9fae99d0d6f5005#262b8b68a46d80a18d03d44d591a972e)
+7. [LLM Architecture](https://magazine.sebastianraschka.com/p/the-big-llm-architecture-comparison)
+8. [RL Razor](https://arxiv.org/pdf/2509.04259)
+9. [Slaying OOM](https://www.youtube.com/watch?v=xzBcBJ8_rzM)
+10. [Small Scale Proxies for LLM](https://arxiv.org/pdf/2309.14322)
+11. [Torch Titan](https://arxiv.org/abs/2410.06511)
+12. [Inside Nvidia GPU](https://www.aleksagordic.com/blog/matmul)
+13. [Pytorch LLM PostTraining](https://pytorch.org/blog/a-primer-on-llm-post-training/)
+14. [Model Evaluation](https://arxiv.org/pdf/1811.12808)

@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Today's-Learning-Nugget/index.html",
       "/posts/LLM-From-Scratch/index.html",
       "/posts/welcome/index.html"
     ]

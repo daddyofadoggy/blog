@@ -25,7 +25,7 @@
     "href": "index.html",
     "title": "My Blogs",
     "section": "",
-    "text": "LLM From Scratch\n\n\n\n\n\n\n\n\nOct 29, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\n\nOct 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\nNo matching items"
+    "text": "Today’s Learning Nugget\n\n\n\n\n\n\n\n\nNov 2, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nLLM From Scratch\n\n\n\n\n\n\n\n\nOct 29, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\n\nOct 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#working-with-text-data",
@@ -453,5 +453,40 @@
     "title": "LLM From Scratch",
     "section": "",
     "text": "I highly recommend installing Python packages in a separate virtual environment to avoid modifying system-wide packages that your OS may depend on. To create a virtual environment in the current folder, follow the three steps below.\n\n1. Install uv\npip install uv\n\n2. Create the virtual environment\nuv venv --python=python3.10\n\n3. Activate the virtual environment\nsource .venv/bin/activate\n \nNote that you need to activate the virtual environment each time you start a new terminal session. For example, if you restart your terminal or computer and want to continue working on the project the next day, simply run source .venv/bin/activate in the project folder to reactivate your virtual environment.\nOptionally, you can deactivate the environment it by executing the command deactivate.\n  4.Install packages\nAfter activating your virtual environment, you can install Python packages using uv. For example:\nuv pip install packaging\nTo install all required packages from a requirements.txt file (such as the one located at the top level of this GitHub repository) run the following command, assuming the file is in the same directory as your terminal session:\nuv pip install -r requirements.txt\nAlternatively, install the latest dependencies directly from the repository:\nuv pip install -r https://raw.githubusercontent.com/rasbt/LLMs-from-scratch/refs/heads/main/requirements.txt\n \nNote: If you have problems with the following commands above due to certain dependencies (for example, if you are using Windows), you can always fall back to using regular pip: pip install -r requirements.txt or pip install -U -r https://raw.githubusercontent.com/rasbt/LLMs-from-scratch/refs/heads/main/requirements.txt"
+  },
+  {
+    "objectID": "posts/Today’s-Learning-Nugget/index.html",
+    "href": "posts/Today’s-Learning-Nugget/index.html",
+    "title": "Today’s Learning Nugget",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "posts/Today's-Learning-Nugget/index.html",
+    "href": "posts/Today's-Learning-Nugget/index.html",
+    "title": "Today’s Learning Nugget",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "posts/Today’s-Learning-Nugget/index.html#nov-2",
+    "href": "posts/Today’s-Learning-Nugget/index.html#nov-2",
+    "title": "Today’s Learning Nugget",
+    "section": "Nov 2",
+    "text": "Nov 2"
+  },
+  {
+    "objectID": "posts/Today's-Learning-Nugget/index.html#nov-2",
+    "href": "posts/Today's-Learning-Nugget/index.html#nov-2",
+    "title": "Today’s Learning Nugget",
+    "section": "Nov 2",
+    "text": "Nov 2"
+  },
+  {
+    "objectID": "posts/Today's-Learning-Nugget/index.html#section",
+    "href": "posts/Today's-Learning-Nugget/index.html#section",
+    "title": "Today’s Learning Nugget",
+    "section": "11/02/2025",
+    "text": "11/02/2025\n\nC and C++ review, Cuda Toolkit\nIntro to GPU\nCuda Basica\n\ndeviceQuery\nThread Block Clusters\nGrid, Block, Thread\nWarp and Weft"
   }
 ]
