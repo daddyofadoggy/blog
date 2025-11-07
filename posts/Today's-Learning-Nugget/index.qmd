@@ -41,3 +41,4 @@ categories: [news]
 12. [Inside Nvidia GPU](https://www.aleksagordic.com/blog/matmul)
 13. [Pytorch LLM PostTraining](https://pytorch.org/blog/a-primer-on-llm-post-training/)
 14. [Model Evaluation](https://arxiv.org/pdf/1811.12808)
+15. [CP + SP](https://x.com/StasBekman/status/1985770591438455013)
