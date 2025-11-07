@@ -4,6 +4,7 @@ author: "Dipankar Baisya"
 date: "2025-11-02"
 categories: [news]
 ---
+Here I listed my work logs, explorartions and to-do list.
 
 # Logs 
 ## 11/02/2025
