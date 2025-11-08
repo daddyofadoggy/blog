@@ -16,8 +16,10 @@ Here I listed my work logs, explorartions and to-do list.
     - Grid, Block, Thread
     - [Warp and Weft](https://en.wikipedia.org/wiki/Warp_and_weft)
 
-
-
+## 11/07/2025
+1. [Inside Nvidia GPU](https://www.aleksagordic.com/blog/matmul) 
+    - Fundamentals of NVIDIA GPU architecture: global memory, shared memory, L1/L2 cache, impact of power throttling on SOL, etc.
+    - GPU assembly languages: SASS and PTX
 
 # Interview Prep Materials 
 1. [Overall idea on LLM, distributed and optimization](https://gaurigupta19.github.io/llms/distributed%20ml/optimization/2025/10/02/efficient-ml.html)
@@ -39,7 +41,6 @@ Here I listed my work logs, explorartions and to-do list.
 9. [Slaying OOM](https://www.youtube.com/watch?v=xzBcBJ8_rzM)
 10. [Small Scale Proxies for LLM](https://arxiv.org/pdf/2309.14322)
 11. [Torch Titan](https://arxiv.org/abs/2410.06511)
-12. [Inside Nvidia GPU](https://www.aleksagordic.com/blog/matmul)
-13. [Pytorch LLM PostTraining](https://pytorch.org/blog/a-primer-on-llm-post-training/)
-14. [Model Evaluation](https://arxiv.org/pdf/1811.12808)
-15. [CP + SP](https://x.com/StasBekman/status/1985770591438455013)
+12. [Pytorch LLM PostTraining](https://pytorch.org/blog/a-primer-on-llm-post-training/)
+13. [Model Evaluation](https://arxiv.org/pdf/1811.12808)
+14. [CP + SP](https://x.com/StasBekman/status/1985770591438455013)

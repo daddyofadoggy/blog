@@ -488,5 +488,12 @@
     "title": "Today’s Learning Nugget",
     "section": "11/02/2025",
     "text": "11/02/2025\n\nC and C++ review, Cuda Toolkit\nIntro to GPU\nCuda Basica\n\ndeviceQuery\nThread Block Clusters\nGrid, Block, Thread\nWarp and Weft"
+  },
+  {
+    "objectID": "posts/Today's-Learning-Nugget/index.html#section-1",
+    "href": "posts/Today's-Learning-Nugget/index.html#section-1",
+    "title": "Today’s Learning Nugget",
+    "section": "11/07/2025",
+    "text": "11/07/2025\n\nInside Nvidia GPU\n\nFundamentals of NVIDIA GPU architecture: global memory, shared memory, L1/L2 cache, impact of power throttling on SOL, etc.\nGPU assembly languages: SASS and PTX"
   }
 ]
