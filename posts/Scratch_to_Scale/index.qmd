@@ -1,0 +1,9 @@
+---
+title: "Understanding Distributed Data Parallelism (DDP): A Beginner's Guide"
+author: "Dipankar Baisya"
+date: "2025-11-10"
+categories: [deep-learning, distributed-training, pytorch,]
+---
+
+{{< include Distributed_Data_Parallel/report_ddp.md >}}
+

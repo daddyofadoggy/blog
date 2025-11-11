@@ -3,7 +3,8 @@
     "index.qmd": [
       "posts/LLM-From-Scratch/index.qmd",
       "posts/welcome/index.qmd",
-      "posts/Today's-Learning-Nugget/index.qmd"
+      "posts/Today's-Learning-Nugget/index.qmd",
+      "posts/Scratch_to_Scale/index.qmd"
     ]
   }
 }

@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://your-website-url.example.com/index.html</loc>
-    <lastmod>2025-11-08T01:26:51.415Z</lastmod>
+    <lastmod>2025-11-11T01:39:53.183Z</lastmod>
   </url>
   <url>
     <loc>https://your-website-url.example.com/posts/LLM-From-Scratch/ch02.html</loc>
@@ -89,7 +89,31 @@
     <lastmod>2025-11-07T06:20:05.363Z</lastmod>
   </url>
   <url>
-    <loc>https://your-website-url.example.com/posts/Today&#39;s-Learning-Nugget/index.html</loc>
+    <loc>https://your-website-url.example.com/posts/Today&amp;#39;s-Learning-Nugget/index.html</loc>
     <lastmod>2025-11-08T01:26:45.026Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Screatch_to_Scale/index.html</loc>
+    <lastmod>2025-11-11T00:20:13.868Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Screatch_to_Scale/Distributed_Data_Parallel/report.html</loc>
+    <lastmod>2025-11-09T17:30:49.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Screatch_to_Scale/Distributed_Data_Parallel/report_ddp.html</loc>
+    <lastmod>2025-11-10T07:25:32.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Scratch_to_Scale/Distributed_Data_Parallel/report_ddp.html</loc>
+    <lastmod>2025-11-11T01:39:33.898Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Scratch_to_Scale/Distributed_Data_Parallel/report.html</loc>
+    <lastmod>2025-11-09T17:30:49.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://your-website-url.example.com/posts/Scratch_to_Scale/index.html</loc>
+    <lastmod>2025-11-11T01:18:54.715Z</lastmod>
   </url>
 </urlset>

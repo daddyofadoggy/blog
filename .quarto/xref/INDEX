@@ -51,5 +51,23 @@
   },
   "posts/Today's-Learning-Nugget/index.qmd": {
     "index.html": "c9f0f56d"
+  },
+  "posts/Screatch_to_Scale/Distributed_Data_Parallel/report.md": {
+    "report.html": "d6fb5947"
+  },
+  "posts/Screatch_to_Scale/Distributed_Data_Parallel/report_ddp.md": {
+    "report_ddp.html": "cdf96f15"
+  },
+  "posts/Screatch_to_Scale/index.qmd": {
+    "index.html": "8f63718e"
+  },
+  "posts/Scratch_to_Scale/Distributed_Data_Parallel/report.md": {
+    "report.html": "58d7ab4a"
+  },
+  "posts/Scratch_to_Scale/Distributed_Data_Parallel/report_ddp.md": {
+    "report_ddp.html": "f91cdf19"
+  },
+  "posts/Scratch_to_Scale/index.qmd": {
+    "index.html": "c2d6efba"
   }
 }

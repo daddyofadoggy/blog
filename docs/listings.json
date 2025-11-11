@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Scratch_to_Scale/index.html",
       "/posts/Today's-Learning-Nugget/index.html",
       "/posts/LLM-From-Scratch/index.html",
       "/posts/welcome/index.html"
