@@ -1,14 +1,14 @@
 
 ## Introduction
 
-Welcome! In this guide, we'll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you've ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.
+Welcome! In this blog, we'll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you've ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.
 
 Don't worry if you're new to distributed training - we'll break everything down step by step, starting from the core concepts and building up to a working implementation of Pytorch's `DistributedDataParallel`
 
 
 ## What is Distributed Data Parallelism?
 
-Before diving into the code, let's understand the fundamental concept.
+Before diving into the code, let's understand the fundamental concept. In distributed training, device refers to GPU and host refers to CPU.
 
 ### The Core Idea
 
@@ -19,7 +19,7 @@ Imagine you're a teacher grading 100 homework assignments. You could:
 
 In the First Phase, Distributed Data Parallel begins with the entire batch of data being divided into equal partitions across devices. Each partition is processed independently by identical model replicas running on separate GPUs, with each performing its own forward pass computation. Following the forward pass, each model calculates its own loss value based solely on its data partition, which then initiates the backward pass where gradients are computed independently on each device.
 
-After local gradient computation, DDP executes its most critical operation—the all-reduce synchronization—where gradients from all devices are averaged, ensuring each model receives the same update signal as if it had processed the entire batch. With synchronized gradients in hand, each model's optimizer applies identical parameter updates, maintaining perfect weight consistency across all replicas. This coordinated update completes one training iteration, and the process repeats with new data partitions in the next step, preserving model equivalence throughout training. To illustrate the DDP process I have attached a diagram below. I borrowed it Zach Mueller's Scratch to Scale cohort and one of the best diagrams I've ever seen on DDP
+After local gradient computation, DDP executes its most critical operation—the all-reduce synchronization—where gradients from all devices are averaged, ensuring each model receives the same update signal as if it had processed the entire batch. With synchronized gradients in hand, each model's optimizer applies identical parameter updates, maintaining perfect weight consistency across all replicas. This coordinated update completes one training iteration, and the process repeats with new data partitions in the next step, preserving model equivalence throughout training. To illustrate the DDP process I have attached a diagram below. I borrowed it from Zach's Scratch to Scale cohort and one of the best diagrams I've ever seen on DDP
 
 <div style="text-align: center;">
 
@@ -148,7 +148,7 @@ Alternatively, we can use `nbdistributed` [plugin] (https://muellerzr.github.io/
 ```
 
 ```python
-%dist_init --num-processes 2 --gpu-ids 3,4
+%dist_init --num-processes 2 --gpu-ids 1,2
 ```
 This creates:
 - **Rank 0** → Worker on GPU 1
