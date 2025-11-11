@@ -159,8 +159,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="understanding-distributed-data-parallelism-ddp-a-beginners-guide" class="level1">
-<h1>Understanding Distributed Data Parallelism (DDP): A Beginner’s Guide</h1>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Welcome! In this guide, we’ll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you’ve ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.</p>
@@ -208,21 +206,74 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 </section>
 <section id="setting-up-the-environment" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-the-environment">Setting Up the Environment</h2>
-<p>The notebook uses a custom distributed environment with 2 GPUs (GPU 1 and GPU 2). When initialized, you get:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">1</span>,<span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This creates: - <strong>Rank 0</strong> → Worker on GPU 1 - <strong>Rank 1</strong> → Worker on GPU 2</p>
-<p>Each “rank” is essentially a separate process handling one GPU.</p>
 <section id="auto-imported-variables" class="level3">
 <h3 class="anchored" data-anchor-id="auto-imported-variables">Auto-imported Variables</h3>
 <p>The environment automatically provides: - <code>rank</code> - The ID of the current process (0 or 1) - <code>world_size</code> - Total number of processes (2 in this case) - <code>gpu_id</code> - The specific GPU assigned to this process - <code>device</code> - The PyTorch device object for this GPU</p>
 </section>
 <section id="the-get-utility" class="level3">
 <h3 class="anchored" data-anchor-id="the-get-utility">The <code>get()</code> Utility</h3>
-<p>The notebook introduces a handy utility function <code>get()</code> for accessing distributed information:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"ws"</span>)      <span class="co"># → world_size (number of GPUs)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"rank"</span>)    <span class="co"># → current process rank</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"grank"</span>)   <span class="co"># → global rank</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"lrank"</span>)   <span class="co"># → local rank</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We have introduced a handy utility function <code>get()</code> for accessing distributed information:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"ws"</span>)      <span class="co"># → world_size (number of GPUs)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"rank"</span>)    <span class="co"># → current process rank</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"grank"</span>)   <span class="co"># → global rank</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"lrank"</span>)   <span class="co"># → local rank</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To understand <code>get</code>, we need to dig into <code>cache_mesh</code> Class - A Function Decorator with State.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> cache_mesh:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, func):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.func <span class="op">=</span> func        <span class="co"># Store the decorated function</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mesh <span class="op">=</span> <span class="va">None</span>       <span class="co"># Initialize mesh cache as None</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="bu">str</span>, dm: dist.device_mesh.DeviceMesh <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        mesh <span class="op">=</span> <span class="va">self</span>._mesh <span class="cf">if</span> dm <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> dm     <span class="co"># If no device mesh (dm) is provided, it uses the cached mesh (self._mesh)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.func(<span class="bu">str</span>, mesh)                 <span class="co"># It calls the original function with the string argument and the determined mesh</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> register_mesh(<span class="va">self</span>, mesh: dist.device_mesh.DeviceMesh):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mesh <span class="op">=</span> mesh</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now we are going to declare the <code>get</code> function is decorated with <span class="citation" data-cites="cache_mesh">@cache_mesh</span>, transforming it into an instance of the cache_mesh class. This allows it to use a cached device mesh when none is provided.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@cache_mesh</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get(<span class="bu">str</span>, dm: dist.device_mesh.DeviceMesh <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Applies a func to get whatever is requested.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    `ws` -&gt; dist.get_world_size(pg)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    `pg` -&gt; dist.get_process_group()</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    `rank` -&gt; dist.get_rank(pg) # global</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    `grank` -&gt; dist.get_rank(pg) # global</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    `lrank` -&gt; local_rank</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    pg <span class="op">=</span> dm.get_group() <span class="cf">if</span> dm <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> <span class="bu">str</span>:</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"ws"</span>:</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dist.get_world_size(pg)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"pg"</span>:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> pg</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"rank"</span> <span class="op">|</span> <span class="st">"grank"</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dist.get_rank(pg)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"lrank"</span>:</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dm.get_local_rank() <span class="cf">if</span> dm <span class="cf">else</span> <span class="bu">int</span>(os.environ.get(<span class="st">"LOCAL_RANK"</span>, <span class="dv">0</span>))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Invalid string: </span><span class="sc">{</span><span class="bu">str</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here is an example of how to use it in practice</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In setup code, register a mesh once</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>device_mesh <span class="op">=</span> dist.DeviceMesh(<span class="st">"cuda"</span>, [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]])  <span class="co"># Create a mesh with 4 GPUs</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>get.register_mesh(device_mesh)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Later, easily access distributed info without passing the mesh each time</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>world_size <span class="op">=</span> get(<span class="st">"ws"</span>)       <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>my_rank <span class="op">=</span> get(<span class="st">"rank"</span>)        <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>local_rank <span class="op">=</span> get(<span class="st">"lrank"</span>)    <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Or override with a specific mesh when needed</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>specific_mesh <span class="op">=</span> dist.DeviceMesh(<span class="st">"cuda"</span>, [[<span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>other_world_size <span class="op">=</span> get(<span class="st">"ws"</span>, specific_mesh)  <span class="co"># Uses specific mesh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Alternatively, we can use <code>nbdistributed</code> [plugin] (https://muellerzr.github.io/scratch-to-scale/01_intro_to_jupyter.html ) and then</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext nbdistributed</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">3</span>,<span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This creates: - <strong>Rank 0</strong> → Worker on GPU 1 - <strong>Rank 1</strong> → Worker on GPU 2</p>
+<p>Each “rank” is essentially a separate process handling one GPU.</p>
 </section>
 </section>
 <section id="building-ddp-from-scratch" class="level2">
@@ -231,19 +282,19 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <section id="step-1-the-constructor---ensuring-model-synchronization" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-the-constructor---ensuring-model-synchronization">Step 1: The Constructor - Ensuring Model Synchronization</h3>
 <p>The first challenge: we need to ensure all GPUs start with the <strong>exact same model</strong>. If they don’t, the training will diverge and produce incorrect results.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Verify all GPUs have identical model parameters</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Broadcast from rank 0</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, "</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"but this is not true. Make sure to set the seeds before creating your model"</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Verify all GPUs have identical model parameters</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Broadcast from rank 0</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, "</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"but this is not true. Make sure to set the seeds before creating your model"</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What’s happening here?</strong></p>
 <ol type="1">
 <li>For each parameter in the model:
@@ -260,26 +311,26 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 </ol>
 <p><strong>Testing the verification:</strong></p>
 <p>The notebook demonstrates this by intentionally setting different seeds:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>rank [<span class="dv">0</span>]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Rank 0 uses seed 43</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank 1 still uses default seed</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError when trying to create DDP model!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>rank [<span class="dv">0</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Rank 0 uses seed 43</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank 1 still uses default seed</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError when trying to create DDP model!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After fixing by setting the same seed on all ranks:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Same seed on all ranks</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleDistributedDataParallelism(model)  <span class="co"># Success!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Same seed on all ranks</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleDistributedDataParallelism(model)  <span class="co"># Success!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="step-2-adding-forward-pass-methods" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-adding-forward-pass-methods">Step 2: Adding Forward Pass Methods</h3>
 <p>We need to make our wrapper behave like a normal PyTorch model:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(<span class="va">self</span>):</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.train()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(<span class="va">self</span>):</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.train()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These methods simply delegate to the wrapped model, making our DDP class transparent to use.</p>
 </section>
 <section id="step-3-the-heart-of-ddp---gradient-synchronization" class="level3">
@@ -287,30 +338,30 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <p>This is where the magic happens! After computing gradients on each GPU’s subset of data, we need to average them across all GPUs.</p>
 <p><strong>The Problem Without Synchronization:</strong></p>
 <p>The notebook shows what happens if we train without syncing:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each GPU processes different data</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> dataset[get(<span class="st">"rank"</span>)]  <span class="co"># Rank 0 gets item 0, Rank 1 gets item 1</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train without syncing</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if parameters match across GPUs</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError - parameters are different!</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Max difference: 0.00390625</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each GPU processes different data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> dataset[get(<span class="st">"rank"</span>)]  <span class="co"># Rank 0 gets item 0, Rank 1 gets item 1</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train without syncing</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if parameters match across GPUs</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError - parameters are different!</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Max difference: 0.00390625</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The GPUs diverged because they updated their models differently!</p>
 <p><strong>The Solution - <code>sync_gradients()</code> Method:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Should be called after the backward pass.</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Averages gradients across all GPUs.</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Sum gradients from all GPUs</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Divide by number of GPUs to get average</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            param.grad <span class="op">/=</span> dist.get_world_size()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Should be called after the backward pass.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Averages gradients across all GPUs.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Sum gradients from all GPUs</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Divide by number of GPUs to get average</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            param.grad <span class="op">/=</span> dist.get_world_size()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>How it works:</strong></p>
 <ol type="1">
 <li><p><code>dist.all_reduce()</code> - A collective communication operation that:</p>
@@ -323,40 +374,75 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <li><p>After this, all GPUs have the <strong>same averaged gradient</strong> and will update identically</p></li>
 </ol>
 <p><strong>The Corrected Training Loop:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ddp_model.sync_gradients()  <span class="co"># Critical step!</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>optimizer.zero_grad()</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify parameters match across GPUs</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: Success - all parameters identical!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ddp_model.sync_gradients()  <span class="co"># Critical step!</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>optimizer.zero_grad()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify parameters match across GPUs</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: Success - all parameters identical!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="putting-it-all-together-performance-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="putting-it-all-together-performance-comparison">Putting It All Together: Performance Comparison</h2>
+<p>Here is how a simple DDP class looks like</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model:torch.nn.Module):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, but this is not true. "</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Make sure to set the seeds before creating your model"</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Should be called before the backward pass, iterates </span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co">        through all params, and:</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Check if it is `None` (not trainable)</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">        2. If trainable, will perform an `all_reduce` using `SUM`</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co">        (aka: take the global average of all grads)</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>                dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>                param.grad <span class="op">/=</span> dist.get_world_size()</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> train(<span class="va">self</span>):</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model.train()</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now let’s see the speedup in action!</p>
 <section id="single-gpu-baseline" class="level3">
 <h3 class="anchored" data-anchor-id="single-gpu-baseline">Single GPU Baseline</h3>
 <p>Training on a single GPU (Rank 0 only):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">16</span>  <span class="co"># Batch size of 16</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Results:</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Total training time: 1.58 seconds</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Average time per batch: 0.0751 seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">16</span>  <span class="co"># Batch size of 16</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Results:</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Total training time: 1.58 seconds</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Average time per batch: 0.0751 seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="ddp-with-2-gpus" class="level3">
 <h3 class="anchored" data-anchor-id="ddp-with-2-gpus">DDP with 2 GPUs</h3>
 <p>Now let’s distribute the training:</p>
 <ol type="1">
 <li><p><strong>Data Sharding</strong>: Split the dataset across GPUs</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ds_length_per_rank <span class="op">=</span> <span class="bu">len</span>(dataset) <span class="op">//</span> world_size</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> get(<span class="st">"rank"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> rank <span class="op">*</span> ds_length_per_rank</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> start <span class="op">+</span> ds_length_per_rank</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>train_shard <span class="op">=</span> dataset.select(<span class="bu">range</span>(start, end))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ds_length_per_rank <span class="op">=</span> <span class="bu">len</span>(dataset) <span class="op">//</span> world_size</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> get(<span class="st">"rank"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> rank <span class="op">*</span> ds_length_per_rank</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> start <span class="op">+</span> ds_length_per_rank</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>train_shard <span class="op">=</span> dataset.select(<span class="bu">range</span>(start, end))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Smaller per-device batch size</strong>: Since we’re using 2 GPUs</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">8</span>  <span class="co"># 8 per GPU = 16 total (same as single GPU)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">8</span>  <span class="co"># 8 per GPU = 16 total (same as single GPU)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Results:</strong></p>
 <pre><code>Rank 0: 1.13 seconds, 0.0540 seconds/batch
 Rank 1: 1.16 seconds, 0.0551 seconds/batch</code></pre></li>
@@ -377,74 +463,150 @@ Rank 1: 1.16 seconds, 0.0551 seconds/batch</code></pre></li>
 </section>
 <section id="the-solution-conditional-syncing" class="level3">
 <h3 class="anchored" data-anchor-id="the-solution-conditional-syncing">The Solution: Conditional Syncing</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.enable_grad_sync()  <span class="co"># Start with syncing enabled</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (initialization code)</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.do_sync:</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span>  <span class="co"># Skip syncing if disabled</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (sync code)</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enable_grad_sync(<span class="va">self</span>):</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> disable_grad_sync(<span class="va">self</span>):</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">@contextmanager</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> no_sync(<span class="va">self</span>):</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Context manager to temporarily disable gradient syncing."""</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        prev <span class="op">=</span> <span class="va">self</span>.do_sync</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.disable_grad_sync()</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._do_sync <span class="op">=</span> prev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.enable_grad_sync()  <span class="co"># Start with syncing enabled</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (initialization code)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.do_sync:</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span>  <span class="co"># Skip syncing if disabled</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (sync code)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enable_grad_sync(<span class="va">self</span>):</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> disable_grad_sync(<span class="va">self</span>):</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">@contextmanager</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> no_sync(<span class="va">self</span>):</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Context manager to temporarily disable gradient syncing."""</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        prev <span class="op">=</span> <span class="va">self</span>.do_sync</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.disable_grad_sync()</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._do_sync <span class="op">=</span> prev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="using-gradient-accumulation" class="level3">
 <h3 class="anchored" data-anchor-id="using-gradient-accumulation">Using Gradient Accumulation</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>grad_accum_steps <span class="op">=</span> <span class="dv">4</span>  <span class="co"># Accumulate over 4 micro-batches</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(dataloader):</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only sync on the last accumulation step</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> grad_accum_steps <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        ddp_model.enable_grad_sync()</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        ddp_model.disable_grad_sync()</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> ddp_model(batch)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    output.loss.backward()</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only update when syncing is enabled</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ddp_model.do_sync:</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        ddp_model.sync_gradients()</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grad_accum_steps <span class="op">=</span> <span class="dv">4</span>  <span class="co"># Accumulate over 4 micro-batches</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(dataloader):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only sync on the last accumulation step</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> grad_accum_steps <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        ddp_model.enable_grad_sync()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        ddp_model.disable_grad_sync()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> ddp_model(batch)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    output.loss.backward()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only update when syncing is enabled</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ddp_model.do_sync:</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>        ddp_model.sync_gradients()</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This way, we only communicate gradients every 4 steps instead of every step, reducing communication overhead!</p>
 </section>
 </section>
-<section id="summary-key-takeaways" class="level2">
-<h2 class="anchored" data-anchor-id="summary-key-takeaways">Summary: Key Takeaways</h2>
-<ol type="1">
-<li><p><strong>DDP splits data, not the model</strong>: Each GPU has a full copy of the model and processes different data</p></li>
-<li><p><strong>One critical sync step</strong>: After computing gradients, we average them across all GPUs using <code>all_reduce</code></p></li>
-<li><p><strong>Initialization matters</strong>: All GPUs must start with identical model parameters (use the same seed!)</p></li>
-<li><p><strong>Communication is cheap</strong>: The gradient averaging is fast relative to the forward/backward pass</p></li>
-<li><p><strong>Near-linear speedup</strong>: With 2 GPUs, you can roughly double your throughput</p></li>
-<li><p><strong>Gradient accumulation</strong>: Can be combined with DDP by selectively disabling gradient syncing</p></li>
-</ol>
+<section id="dataset-characteristics" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-characteristics">Dataset Characteristics</h2>
+<p>For dataset, we used GLUE MRPC Dataset. Here is a brief description of the dataset</p>
+<ul>
+<li><strong>Task Type:</strong> Sentence pair classification (paraphrase identification)</li>
+<li><strong>Description:</strong> The MRPC dataset contains pairs of sentences automatically extracted from online news sources with human annotations indicating whether they are semantically equivalent (paraphrases) or not</li>
+<li><strong>Size:</strong>
+<ul>
+<li>Training set: 3,668 sentence pairs</li>
+<li>Validation set: 408 sentence pairs</li>
+<li>Test set: 1,725 sentence pairs</li>
+</ul></li>
+<li><strong>Labels:</strong> Binary classification
+<ul>
+<li>0: not_equivalent</li>
+<li>1: equivalent</li>
+</ul></li>
+</ul>
+<p>Here’s an example from the dataset:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'idx'</span>: <span class="dv">0</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'label'</span>: <span class="dv">1</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'sentence1'</span>: <span class="st">'Amrozi accused his brother, whom he called "the witness", of deliberately distorting his evidence.'</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">'sentence2'</span>: <span class="st">'Referring to him as only "the witness", Amrozi accused his brother of deliberately distorting his evidence.'</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For model, we used a small 360M <code>HuggingFaceTB/SmolLM2-360M-Instruct</code> model.</p>
 </section>
-<section id="when-to-use-ddp" class="level2">
-<h2 class="anchored" data-anchor-id="when-to-use-ddp">When to Use DDP</h2>
-<p>DDP is ideal when: - Your model fits on a single GPU - You want to train with larger batch sizes - You want faster training - You have multiple GPUs available - Communication between GPUs is fast (same machine or fast interconnect)</p>
+<section id="profiling" class="level2">
+<h2 class="anchored" data-anchor-id="profiling">Profiling</h2>
+<p>We used <code>torch.profiler</code> to check traces, kernel and memory footprint . We ran the distributed module using a 4 H100 SXM5 GPU instatance in <code>LambdaLab</code>.</p>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_overview_1.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Execution Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_operator.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Operator Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_kernel.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Kernel Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_trace.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Traces</figcaption>
+</figure>
+</div>
+</div>
+<section id="key-observations" class="level3">
+<h3 class="anchored" data-anchor-id="key-observations">Key Observations</h3>
+<ul>
+<li><strong>Very low GPU utilization (15.19%)</strong> - This is extremely low for H100 GPUs, indicating significant inefficiency</li>
+<li><strong>SM Efficiency (11.08%)</strong> - This suggests your kernels aren’t fully utilizing the streaming multiprocessors</li>
+<li><strong>Occupancy (28.73%)</strong> - The low occupancy indicates your kernels aren’t keeping the GPU busy</li>
+<li><strong>CPU Execution dominates (61.1%)</strong> of the step time</li>
+<li><strong>Kernel execution (15.2%)</strong> is relatively small</li>
+<li><strong>Communication overhead (20.9%)</strong> is significant but expected in DDP</li>
+</ul>
 </section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
-<p>Now that you understand the basics of DDP: - Experiment with different numbers of GPUs - Try different batch sizes - Measure the speedup on your own models - Explore PyTorch’s built-in <code>torch.nn.parallel.DistributedDataParallel</code> (which builds on these concepts with optimizations)</p>
-<p>Happy distributed training!</p>
+<section id="bottlenecks-and-solutions" class="level3">
+<h3 class="anchored" data-anchor-id="bottlenecks-and-solutions">Bottlenecks and Solutions</h3>
+<ul>
+<li>The AllReduce operation (42.2%) dominates kernel time, which is expected in DDP but appears to be taking too much relative time
+<ul>
+<li>Solution: Gradient Accumulation</li>
+</ul></li>
+<li>Unused Tensorcore as we see it in the Profiler
+<ul>
+<li>Solution: Mixed Precision Training to enable tensorcore</li>
+</ul></li>
+<li>We can try to Increase batch size until memory limits to increase throughput</li>
+</ul>
+<p>We have experimented with Gradient Accumulation with step size 2 and AllReduce operation reduced to 25% in Kermel profiler.</p>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_kernel_grad_ac.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Kernel Summary after Gradient Accumulation</figcaption>
+</figure>
+</div>
+</div>
 
 
 </section>

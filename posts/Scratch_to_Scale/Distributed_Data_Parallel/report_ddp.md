@@ -1,4 +1,3 @@
-# Understanding Distributed Data Parallelism (DDP): A Beginner's Guide
 
 ## Introduction
 
@@ -58,20 +57,7 @@ In plain English:
 The beauty of DDP is that it only requires **one communication step** - the gradient averaging. This makes it very efficient!
 
 
-
 ## Setting Up the Environment
-
-The notebook uses a custom distributed environment with 2 GPUs (GPU 1 and GPU 2). When initialized, you get:
-
-```python
-%dist_init --num-processes 2 --gpu-ids 1,2
-```
-
-This creates:
-- **Rank 0** → Worker on GPU 1
-- **Rank 1** → Worker on GPU 2
-
-Each "rank" is essentially a separate process handling one GPU.
 
 ### Auto-imported Variables
 
@@ -83,7 +69,7 @@ The environment automatically provides:
 
 ### The `get()` Utility
 
-The notebook introduces a handy utility function `get()` for accessing distributed information:
+We have introduced a handy utility function `get()` for accessing distributed information:
 
 ```python
 get("ws")      # → world_size (number of GPUs)
@@ -91,6 +77,84 @@ get("rank")    # → current process rank
 get("grank")   # → global rank
 get("lrank")   # → local rank
 ```
+
+To understand `get`, we need to dig into `cache_mesh` Class - A Function Decorator with State.
+
+```python 
+class cache_mesh:
+    def __init__(self, func):
+        self.func = func        # Store the decorated function
+        self._mesh = None       # Initialize mesh cache as None
+
+    def __call__(self, str, dm: dist.device_mesh.DeviceMesh = None):
+        mesh = self._mesh if dm is None else dm     # If no device mesh (dm) is provided, it uses the cached mesh (self._mesh)
+        return self.func(str, mesh)                 # It calls the original function with the string argument and the determined mesh
+
+    def register_mesh(self, mesh: dist.device_mesh.DeviceMesh):
+        self._mesh = mesh
+        return self
+
+```
+Now we are going to declare the `get` function is decorated with @cache_mesh, transforming it into an instance of the cache_mesh class. This allows it to use a cached device mesh when none is provided.
+
+```python
+@cache_mesh
+def get(str, dm: dist.device_mesh.DeviceMesh = None):
+    """
+    Applies a func to get whatever is requested.
+
+    `ws` -> dist.get_world_size(pg)
+    `pg` -> dist.get_process_group()
+    `rank` -> dist.get_rank(pg) # global
+    `grank` -> dist.get_rank(pg) # global
+    `lrank` -> local_rank
+    """
+
+    pg = dm.get_group() if dm else None
+
+    match str:
+        case "ws":
+            return dist.get_world_size(pg)
+        case "pg":
+            return pg
+        case "rank" | "grank":
+            return dist.get_rank(pg)
+        case "lrank":
+            return dm.get_local_rank() if dm else int(os.environ.get("LOCAL_RANK", 0))
+        case _:
+            raise ValueError(f"Invalid string: {str}")
+
+```
+Here is an example of how to use it in practice 
+
+```python
+# In setup code, register a mesh once
+device_mesh = dist.DeviceMesh("cuda", [[0, 1, 2, 3]])  # Create a mesh with 4 GPUs
+get.register_mesh(device_mesh)
+
+# Later, easily access distributed info without passing the mesh each time
+world_size = get("ws")       # Uses cached mesh
+my_rank = get("rank")        # Uses cached mesh
+local_rank = get("lrank")    # Uses cached mesh
+
+# Or override with a specific mesh when needed
+specific_mesh = dist.DeviceMesh("cuda", [[0, 1]])
+other_world_size = get("ws", specific_mesh)  # Uses specific mesh
+```
+Alternatively, we can use `nbdistributed` [plugin] (https://muellerzr.github.io/scratch-to-scale/01_intro_to_jupyter.html ) and then 
+
+```python
+%load_ext nbdistributed
+```
+
+```python
+%dist_init --num-processes 2 --gpu-ids 3,4
+```
+This creates:
+- **Rank 0** → Worker on GPU 1
+- **Rank 1** → Worker on GPU 2
+
+Each "rank" is essentially a separate process handling one GPU.
 
 ## Building DDP from Scratch
 
@@ -229,6 +293,45 @@ optimizer.zero_grad()
 
 ## Putting It All Together: Performance Comparison
 
+Here is how a simple DDP class looks like 
+
+```python
+class SimpleDistributedDataParallelism:
+    def __init__(self, model:torch.nn.Module):
+        self.model = model
+
+        for param in model.parameters():
+            rank0_param = param.data.clone()
+            dist.broadcast(rank0_param, src=0)
+            if not torch.equal(param.data, rank0_param):
+                raise ValueError(
+                    "Expected model parameters to be identical during `__init__`, but this is not true. "
+                    "Make sure to set the seeds before creating your model"
+                )
+
+    def sync_gradients(self):
+        """
+        Should be called before the backward pass, iterates 
+        through all params, and:
+        1. Check if it is `None` (not trainable)
+        2. If trainable, will perform an `all_reduce` using `SUM`
+        (aka: take the global average of all grads)
+        """
+        for param in self.model.parameters():
+            if param.grad is not None:
+                dist.all_reduce(param.grad, op=dist.ReduceOp.SUM)
+                param.grad /= dist.get_world_size()
+    
+    def __call__(self, *args, **kwargs):
+        return self.model(*args, **kwargs)
+    
+    def train(self):
+        self.model.train()
+    
+    def eval(self):
+        self.model.eval()
+```
+
 Now let's see the speedup in action!
 
 ### Single GPU Baseline
@@ -338,35 +441,81 @@ for i, batch in enumerate(dataloader):
 
 This way, we only communicate gradients every 4 steps instead of every step, reducing communication overhead!
 
-## Summary: Key Takeaways
+## Dataset Characteristics
+For dataset, we used GLUE MRPC Dataset. Here is a brief description of the dataset
 
-1. **DDP splits data, not the model**: Each GPU has a full copy of the model and processes different data
+- **Task Type:** Sentence pair classification (paraphrase identification)
+- **Description:** The MRPC dataset contains pairs of sentences automatically extracted from online news sources with human annotations indicating whether they are semantically equivalent (paraphrases) or not
+- **Size:**
+    - Training set: 3,668 sentence pairs
+    - Validation set: 408 sentence pairs
+    - Test set: 1,725 sentence pairs
+- **Labels:** Binary classification
+    - 0: not_equivalent
+    - 1: equivalent
 
-2. **One critical sync step**: After computing gradients, we average them across all GPUs using `all_reduce`
+Here's an example from the dataset:
+```python
+{
+  'idx': 0,
+  'label': 1,
+  'sentence1': 'Amrozi accused his brother, whom he called "the witness", of deliberately distorting his evidence.',
+  'sentence2': 'Referring to him as only "the witness", Amrozi accused his brother of deliberately distorting his evidence.'
+}
+```
+For model, we used a small 360M `HuggingFaceTB/SmolLM2-360M-Instruct` model.
 
-3. **Initialization matters**: All GPUs must start with identical model parameters (use the same seed!)
 
-4. **Communication is cheap**: The gradient averaging is fast relative to the forward/backward pass
+## Profiling 
+We used `torch.profiler` to check traces, kernel and memory footprint . We ran the distributed module using a 4 H100 SXM5 GPU instatance in `LambdaLab`.  
 
-5. **Near-linear speedup**: With 2 GPUs, you can roughly double your throughput
+<div style="text-align: center;">
 
-6. **Gradient accumulation**: Can be combined with DDP by selectively disabling gradient syncing
+![Profiier Execution Summary](assets/profiler_overview_1.png)
 
-## When to Use DDP
+</div>
 
-DDP is ideal when:
-- Your model fits on a single GPU
-- You want to train with larger batch sizes
-- You want faster training
-- You have multiple GPUs available
-- Communication between GPUs is fast (same machine or fast interconnect)
+<div style="text-align: center;">
 
-## Next Steps
+![Profiier Operator Summary](assets/profiler_operator.png)
 
-Now that you understand the basics of DDP:
-- Experiment with different numbers of GPUs
-- Try different batch sizes
-- Measure the speedup on your own models
-- Explore PyTorch's built-in `torch.nn.parallel.DistributedDataParallel` (which builds on these concepts with optimizations)
+</div>
 
-Happy distributed training!
+<div style="text-align: center;">
+
+![Profiier Kernel Summary](assets/profiler_kernel.png)
+
+</div>
+
+
+<div style="text-align: center;">
+
+![Profiier Traces ](assets/profiler_trace.png)
+
+</div>
+
+### Key Observations
+
+- **Very low GPU utilization (15.19%)** - This is extremely low for H100 GPUs, indicating significant inefficiency
+- **SM Efficiency (11.08%)** - This suggests your kernels aren't fully utilizing the streaming multiprocessors
+- **Occupancy (28.73%)** - The low occupancy indicates your kernels aren't keeping the GPU busy
+- **CPU Execution dominates (61.1%)** of the step time
+- **Kernel execution (15.2%)** is relatively small
+- **Communication overhead (20.9%)** is significant but expected in DDP
+
+### Bottlenecks and Solutions
+
+- The AllReduce operation (42.2%) dominates kernel time, which is expected in DDP but appears to be taking too much relative time
+    - Solution: Gradient Accumulation
+- Unused Tensorcore as we see it in the Profiler
+    - Solution: Mixed Precision Training to enable tensorcore 
+- We can try to Increase batch size until memory limits to increase throughput
+
+We have experimented with Gradient Accumulation with step size 2 and AllReduce operation  reduced to 25% in Kermel profiler.
+
+<div style="text-align: center;">
+
+![Profiier Kernel Summary after Gradient Accumulation](assets/profiler_kernel_grad_ac.png)
+
+</div>
+

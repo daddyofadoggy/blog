@@ -1,13 +1,3 @@
-# Distributed Data Parallelism (DDP) Explained for Beginners
-
-## What is Distributed Data Parallelism?
-
-Distributed Data Parallelism (DDP) is a technique for training large machine learning models faster by using multiple GPUs or computers at the same time. Instead of training on one GPU, you train on multiple GPUs simultaneously, with each GPU working on different parts of your data.
-
-Think of it like this: if you have 1000 images to process and 4 GPUs, each GPU processes 250 images. This makes training roughly 4x faster!
-
----
-
 ## Code Walkthrough
 
 ### 1. Imports and Setup (Lines 1-14)

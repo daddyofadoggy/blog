@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -187,7 +187,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#what-is-distributed-data-parallelism" id="toc-what-is-distributed-data-parallelism" class="nav-link" data-scroll-target="#what-is-distributed-data-parallelism">What is Distributed Data Parallelism?</a>
+  <ul class="collapse">
+  <li><a href="#the-core-idea" id="toc-the-core-idea" class="nav-link" data-scroll-target="#the-core-idea">The Core Idea</a></li>
+  <li><a href="#the-math-behind-it" id="toc-the-math-behind-it" class="nav-link" data-scroll-target="#the-math-behind-it">The Math Behind It</a></li>
+  </ul></li>
+  <li><a href="#setting-up-the-environment" id="toc-setting-up-the-environment" class="nav-link" data-scroll-target="#setting-up-the-environment">Setting Up the Environment</a>
+  <ul class="collapse">
+  <li><a href="#auto-imported-variables" id="toc-auto-imported-variables" class="nav-link" data-scroll-target="#auto-imported-variables">Auto-imported Variables</a></li>
+  <li><a href="#the-get-utility" id="toc-the-get-utility" class="nav-link" data-scroll-target="#the-get-utility">The <code>get()</code> Utility</a></li>
+  </ul></li>
+  <li><a href="#building-ddp-from-scratch" id="toc-building-ddp-from-scratch" class="nav-link" data-scroll-target="#building-ddp-from-scratch">Building DDP from Scratch</a>
+  <ul class="collapse">
+  <li><a href="#step-1-the-constructor---ensuring-model-synchronization" id="toc-step-1-the-constructor---ensuring-model-synchronization" class="nav-link" data-scroll-target="#step-1-the-constructor---ensuring-model-synchronization">Step 1: The Constructor - Ensuring Model Synchronization</a></li>
+  <li><a href="#step-2-adding-forward-pass-methods" id="toc-step-2-adding-forward-pass-methods" class="nav-link" data-scroll-target="#step-2-adding-forward-pass-methods">Step 2: Adding Forward Pass Methods</a></li>
+  <li><a href="#step-3-the-heart-of-ddp---gradient-synchronization" id="toc-step-3-the-heart-of-ddp---gradient-synchronization" class="nav-link" data-scroll-target="#step-3-the-heart-of-ddp---gradient-synchronization">Step 3: The Heart of DDP - Gradient Synchronization</a></li>
+  </ul></li>
+  <li><a href="#putting-it-all-together-performance-comparison" id="toc-putting-it-all-together-performance-comparison" class="nav-link" data-scroll-target="#putting-it-all-together-performance-comparison">Putting It All Together: Performance Comparison</a>
+  <ul class="collapse">
+  <li><a href="#single-gpu-baseline" id="toc-single-gpu-baseline" class="nav-link" data-scroll-target="#single-gpu-baseline">Single GPU Baseline</a></li>
+  <li><a href="#ddp-with-2-gpus" id="toc-ddp-with-2-gpus" class="nav-link" data-scroll-target="#ddp-with-2-gpus">DDP with 2 GPUs</a></li>
+  <li><a href="#key-insight" id="toc-key-insight" class="nav-link" data-scroll-target="#key-insight">Key Insight</a></li>
+  </ul></li>
+  <li><a href="#advanced-feature-gradient-accumulation" id="toc-advanced-feature-gradient-accumulation" class="nav-link" data-scroll-target="#advanced-feature-gradient-accumulation">Advanced Feature: Gradient Accumulation</a>
+  <ul class="collapse">
+  <li><a href="#the-challenge-with-ddp" id="toc-the-challenge-with-ddp" class="nav-link" data-scroll-target="#the-challenge-with-ddp">The Challenge with DDP</a></li>
+  <li><a href="#the-solution-conditional-syncing" id="toc-the-solution-conditional-syncing" class="nav-link" data-scroll-target="#the-solution-conditional-syncing">The Solution: Conditional Syncing</a></li>
+  <li><a href="#using-gradient-accumulation" id="toc-using-gradient-accumulation" class="nav-link" data-scroll-target="#using-gradient-accumulation">Using Gradient Accumulation</a></li>
+  </ul></li>
+  <li><a href="#dataset-characteristics" id="toc-dataset-characteristics" class="nav-link" data-scroll-target="#dataset-characteristics">Dataset Characteristics</a></li>
+  <li><a href="#profiling" id="toc-profiling" class="nav-link" data-scroll-target="#profiling">Profiling</a>
+  <ul class="collapse">
+  <li><a href="#key-observations" id="toc-key-observations" class="nav-link" data-scroll-target="#key-observations">Key Observations</a></li>
+  <li><a href="#bottlenecks-and-solutions" id="toc-bottlenecks-and-solutions" class="nav-link" data-scroll-target="#bottlenecks-and-solutions">Bottlenecks and Solutions</a></li>
+  </ul></li>
+  <li><a href="#code-walkthrough" id="toc-code-walkthrough" class="nav-link" data-scroll-target="#code-walkthrough">Code Walkthrough</a>
+  <ul class="collapse">
+  <li><a href="#imports-and-setup-lines-1-14" id="toc-imports-and-setup-lines-1-14" class="nav-link" data-scroll-target="#imports-and-setup-lines-1-14">1. Imports and Setup (Lines 1-14)</a></li>
+  <li><a href="#the-simpledistributeddataparallelism-class-lines-16-42" id="toc-the-simpledistributeddataparallelism-class-lines-16-42" class="nav-link" data-scroll-target="#the-simpledistributeddataparallelism-class-lines-16-42">2. The SimpleDistributedDataParallelism Class (Lines 16-42)</a></li>
+  <li><a href="#data-preparation-lines-44-68" id="toc-data-preparation-lines-44-68" class="nav-link" data-scroll-target="#data-preparation-lines-44-68">3. Data Preparation (Lines 44-68)</a></li>
+  <li><a href="#data-sharding---the-critical-part-lines-87-98" id="toc-data-sharding---the-critical-part-lines-87-98" class="nav-link" data-scroll-target="#data-sharding---the-critical-part-lines-87-98">4. Data Sharding - The Critical Part! (Lines 87-98)</a></li>
+  <li><a href="#model-setup-lines-109-112" id="toc-model-setup-lines-109-112" class="nav-link" data-scroll-target="#model-setup-lines-109-112">5. Model Setup (Lines 109-112)</a></li>
+  <li><a href="#profiler-setup-lines-114-136" id="toc-profiler-setup-lines-114-136" class="nav-link" data-scroll-target="#profiler-setup-lines-114-136">6. Profiler Setup (Lines 114-136)</a></li>
+  <li><a href="#the-training-loop-lines-138-161" id="toc-the-training-loop-lines-138-161" class="nav-link" data-scroll-target="#the-training-loop-lines-138-161">7. The Training Loop (Lines 138-161)</a></li>
+  <li><a href="#cleanup-lines-160-163" id="toc-cleanup-lines-160-163" class="nav-link" data-scroll-target="#cleanup-lines-160-163">8. Cleanup (Lines 160-163)</a></li>
+  </ul></li>
+  <li><a href="#the-big-picture-how-ddp-works" id="toc-the-big-picture-how-ddp-works" class="nav-link" data-scroll-target="#the-big-picture-how-ddp-works">The Big Picture: How DDP Works</a>
+  <ul class="collapse">
+  <li><a href="#the-ddp-workflow" id="toc-the-ddp-workflow" class="nav-link" data-scroll-target="#the-ddp-workflow">The DDP Workflow</a></li>
+  <li><a href="#why-ddp-is-powerful" id="toc-why-ddp-is-powerful" class="nav-link" data-scroll-target="#why-ddp-is-powerful">Why DDP is Powerful</a></li>
+  <li><a href="#key-concepts-recap" id="toc-key-concepts-recap" class="nav-link" data-scroll-target="#key-concepts-recap">Key Concepts Recap</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -195,8 +255,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="understanding-distributed-data-parallelism-ddp-a-beginners-guide" class="level1">
-<h1>Understanding Distributed Data Parallelism (DDP): A Beginner’s Guide</h1>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Welcome! In this guide, we’ll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you’ve ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.</p>
@@ -244,21 +302,74 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 </section>
 <section id="setting-up-the-environment" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-the-environment">Setting Up the Environment</h2>
-<p>The notebook uses a custom distributed environment with 2 GPUs (GPU 1 and GPU 2). When initialized, you get:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">1</span>,<span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This creates: - <strong>Rank 0</strong> → Worker on GPU 1 - <strong>Rank 1</strong> → Worker on GPU 2</p>
-<p>Each “rank” is essentially a separate process handling one GPU.</p>
 <section id="auto-imported-variables" class="level3">
 <h3 class="anchored" data-anchor-id="auto-imported-variables">Auto-imported Variables</h3>
 <p>The environment automatically provides: - <code>rank</code> - The ID of the current process (0 or 1) - <code>world_size</code> - Total number of processes (2 in this case) - <code>gpu_id</code> - The specific GPU assigned to this process - <code>device</code> - The PyTorch device object for this GPU</p>
 </section>
 <section id="the-get-utility" class="level3">
 <h3 class="anchored" data-anchor-id="the-get-utility">The <code>get()</code> Utility</h3>
-<p>The notebook introduces a handy utility function <code>get()</code> for accessing distributed information:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"ws"</span>)      <span class="co"># → world_size (number of GPUs)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"rank"</span>)    <span class="co"># → current process rank</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"grank"</span>)   <span class="co"># → global rank</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"lrank"</span>)   <span class="co"># → local rank</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We have introduced a handy utility function <code>get()</code> for accessing distributed information:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"ws"</span>)      <span class="co"># → world_size (number of GPUs)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"rank"</span>)    <span class="co"># → current process rank</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"grank"</span>)   <span class="co"># → global rank</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>get(<span class="st">"lrank"</span>)   <span class="co"># → local rank</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To understand <code>get</code>, we need to dig into <code>cache_mesh</code> Class - A Function Decorator with State.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> cache_mesh:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, func):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.func <span class="op">=</span> func        <span class="co"># Store the decorated function</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mesh <span class="op">=</span> <span class="va">None</span>       <span class="co"># Initialize mesh cache as None</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="bu">str</span>, dm: dist.device_mesh.DeviceMesh <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        mesh <span class="op">=</span> <span class="va">self</span>._mesh <span class="cf">if</span> dm <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> dm     <span class="co"># If no device mesh (dm) is provided, it uses the cached mesh (self._mesh)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.func(<span class="bu">str</span>, mesh)                 <span class="co"># It calls the original function with the string argument and the determined mesh</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> register_mesh(<span class="va">self</span>, mesh: dist.device_mesh.DeviceMesh):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mesh <span class="op">=</span> mesh</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now we are going to declare the <code>get</code> function is decorated with <span class="citation" data-cites="cache_mesh">@cache_mesh</span>, transforming it into an instance of the cache_mesh class. This allows it to use a cached device mesh when none is provided.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@cache_mesh</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get(<span class="bu">str</span>, dm: dist.device_mesh.DeviceMesh <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Applies a func to get whatever is requested.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    `ws` -&gt; dist.get_world_size(pg)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    `pg` -&gt; dist.get_process_group()</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    `rank` -&gt; dist.get_rank(pg) # global</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    `grank` -&gt; dist.get_rank(pg) # global</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    `lrank` -&gt; local_rank</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    pg <span class="op">=</span> dm.get_group() <span class="cf">if</span> dm <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> <span class="bu">str</span>:</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"ws"</span>:</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dist.get_world_size(pg)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"pg"</span>:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> pg</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"rank"</span> <span class="op">|</span> <span class="st">"grank"</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dist.get_rank(pg)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"lrank"</span>:</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> dm.get_local_rank() <span class="cf">if</span> dm <span class="cf">else</span> <span class="bu">int</span>(os.environ.get(<span class="st">"LOCAL_RANK"</span>, <span class="dv">0</span>))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Invalid string: </span><span class="sc">{</span><span class="bu">str</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here is an example of how to use it in practice</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In setup code, register a mesh once</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>device_mesh <span class="op">=</span> dist.DeviceMesh(<span class="st">"cuda"</span>, [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]])  <span class="co"># Create a mesh with 4 GPUs</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>get.register_mesh(device_mesh)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Later, easily access distributed info without passing the mesh each time</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>world_size <span class="op">=</span> get(<span class="st">"ws"</span>)       <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>my_rank <span class="op">=</span> get(<span class="st">"rank"</span>)        <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>local_rank <span class="op">=</span> get(<span class="st">"lrank"</span>)    <span class="co"># Uses cached mesh</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Or override with a specific mesh when needed</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>specific_mesh <span class="op">=</span> dist.DeviceMesh(<span class="st">"cuda"</span>, [[<span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>other_world_size <span class="op">=</span> get(<span class="st">"ws"</span>, specific_mesh)  <span class="co"># Uses specific mesh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Alternatively, we can use <code>nbdistributed</code> [plugin] (https://muellerzr.github.io/scratch-to-scale/01_intro_to_jupyter.html ) and then</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext nbdistributed</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">3</span>,<span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This creates: - <strong>Rank 0</strong> → Worker on GPU 1 - <strong>Rank 1</strong> → Worker on GPU 2</p>
+<p>Each “rank” is essentially a separate process handling one GPU.</p>
 </section>
 </section>
 <section id="building-ddp-from-scratch" class="level2">
@@ -267,19 +378,19 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <section id="step-1-the-constructor---ensuring-model-synchronization" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-the-constructor---ensuring-model-synchronization">Step 1: The Constructor - Ensuring Model Synchronization</h3>
 <p>The first challenge: we need to ensure all GPUs start with the <strong>exact same model</strong>. If they don’t, the training will diverge and produce incorrect results.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Verify all GPUs have identical model parameters</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Broadcast from rank 0</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, "</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"but this is not true. Make sure to set the seeds before creating your model"</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Verify all GPUs have identical model parameters</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Broadcast from rank 0</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, "</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"but this is not true. Make sure to set the seeds before creating your model"</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What’s happening here?</strong></p>
 <ol type="1">
 <li>For each parameter in the model:
@@ -296,26 +407,26 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 </ol>
 <p><strong>Testing the verification:</strong></p>
 <p>The notebook demonstrates this by intentionally setting different seeds:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>rank [<span class="dv">0</span>]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Rank 0 uses seed 43</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank 1 still uses default seed</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError when trying to create DDP model!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>rank [<span class="dv">0</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Rank 0 uses seed 43</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank 1 still uses default seed</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError when trying to create DDP model!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After fixing by setting the same seed on all ranks:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Same seed on all ranks</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleDistributedDataParallelism(model)  <span class="co"># Success!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">43</span>)  <span class="co"># Same seed on all ranks</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleDistributedDataParallelism(model)  <span class="co"># Success!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="step-2-adding-forward-pass-methods" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-adding-forward-pass-methods">Step 2: Adding Forward Pass Methods</h3>
 <p>We need to make our wrapper behave like a normal PyTorch model:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(<span class="va">self</span>):</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.train()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(<span class="va">self</span>):</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.train()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These methods simply delegate to the wrapped model, making our DDP class transparent to use.</p>
 </section>
 <section id="step-3-the-heart-of-ddp---gradient-synchronization" class="level3">
@@ -323,30 +434,30 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <p>This is where the magic happens! After computing gradients on each GPU’s subset of data, we need to average them across all GPUs.</p>
 <p><strong>The Problem Without Synchronization:</strong></p>
 <p>The notebook shows what happens if we train without syncing:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each GPU processes different data</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> dataset[get(<span class="st">"rank"</span>)]  <span class="co"># Rank 0 gets item 0, Rank 1 gets item 1</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train without syncing</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if parameters match across GPUs</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError - parameters are different!</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Max difference: 0.00390625</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each GPU processes different data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> dataset[get(<span class="st">"rank"</span>)]  <span class="co"># Rank 0 gets item 0, Rank 1 gets item 1</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train without syncing</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if parameters match across GPUs</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: ValueError - parameters are different!</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Max difference: 0.00390625</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The GPUs diverged because they updated their models differently!</p>
 <p><strong>The Solution - <code>sync_gradients()</code> Method:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Should be called after the backward pass.</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Averages gradients across all GPUs.</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Sum gradients from all GPUs</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Divide by number of GPUs to get average</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            param.grad <span class="op">/=</span> dist.get_world_size()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Should be called after the backward pass.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Averages gradients across all GPUs.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Sum gradients from all GPUs</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Divide by number of GPUs to get average</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            param.grad <span class="op">/=</span> dist.get_world_size()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>How it works:</strong></p>
 <ol type="1">
 <li><p><code>dist.all_reduce()</code> - A collective communication operation that:</p>
@@ -359,40 +470,75 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <li><p>After this, all GPUs have the <strong>same averaged gradient</strong> and will update identically</p></li>
 </ol>
 <p><strong>The Corrected Training Loop:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ddp_model.sync_gradients()  <span class="co"># Critical step!</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>optimizer.zero_grad()</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify parameters match across GPUs</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: Success - all parameters identical!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(<span class="op">**</span>item)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>output.loss.backward()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ddp_model.sync_gradients()  <span class="co"># Critical step!</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>optimizer.step()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>optimizer.zero_grad()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify parameters match across GPUs</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Result: Success - all parameters identical!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="putting-it-all-together-performance-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="putting-it-all-together-performance-comparison">Putting It All Together: Performance Comparison</h2>
+<p>Here is how a simple DDP class looks like</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model:torch.nn.Module):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            rank0_param <span class="op">=</span> param.data.clone()</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>            dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Expected model parameters to be identical during `__init__`, but this is not true. "</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Make sure to set the seeds before creating your model"</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Should be called before the backward pass, iterates </span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co">        through all params, and:</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Check if it is `None` (not trainable)</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">        2. If trainable, will perform an `all_reduce` using `SUM`</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co">        (aka: take the global average of all grads)</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>                dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>                param.grad <span class="op">/=</span> dist.get_world_size()</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> train(<span class="va">self</span>):</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model.train()</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now let’s see the speedup in action!</p>
 <section id="single-gpu-baseline" class="level3">
 <h3 class="anchored" data-anchor-id="single-gpu-baseline">Single GPU Baseline</h3>
 <p>Training on a single GPU (Rank 0 only):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">16</span>  <span class="co"># Batch size of 16</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Results:</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Total training time: 1.58 seconds</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Average time per batch: 0.0751 seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">16</span>  <span class="co"># Batch size of 16</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Results:</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Total training time: 1.58 seconds</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Average time per batch: 0.0751 seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="ddp-with-2-gpus" class="level3">
 <h3 class="anchored" data-anchor-id="ddp-with-2-gpus">DDP with 2 GPUs</h3>
 <p>Now let’s distribute the training:</p>
 <ol type="1">
 <li><p><strong>Data Sharding</strong>: Split the dataset across GPUs</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ds_length_per_rank <span class="op">=</span> <span class="bu">len</span>(dataset) <span class="op">//</span> world_size</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> get(<span class="st">"rank"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> rank <span class="op">*</span> ds_length_per_rank</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> start <span class="op">+</span> ds_length_per_rank</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>train_shard <span class="op">=</span> dataset.select(<span class="bu">range</span>(start, end))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ds_length_per_rank <span class="op">=</span> <span class="bu">len</span>(dataset) <span class="op">//</span> world_size</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> get(<span class="st">"rank"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> rank <span class="op">*</span> ds_length_per_rank</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> start <span class="op">+</span> ds_length_per_rank</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>train_shard <span class="op">=</span> dataset.select(<span class="bu">range</span>(start, end))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Smaller per-device batch size</strong>: Since we’re using 2 GPUs</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">8</span>  <span class="co"># 8 per GPU = 16 total (same as single GPU)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>per_device_batch_size <span class="op">=</span> <span class="dv">8</span>  <span class="co"># 8 per GPU = 16 total (same as single GPU)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Results:</strong></p>
 <pre><code>Rank 0: 1.13 seconds, 0.0540 seconds/batch
 Rank 1: 1.16 seconds, 0.0551 seconds/batch</code></pre></li>
@@ -413,77 +559,551 @@ Rank 1: 1.16 seconds, 0.0551 seconds/batch</code></pre></li>
 </section>
 <section id="the-solution-conditional-syncing" class="level3">
 <h3 class="anchored" data-anchor-id="the-solution-conditional-syncing">The Solution: Conditional Syncing</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.enable_grad_sync()  <span class="co"># Start with syncing enabled</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (initialization code)</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.do_sync:</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span>  <span class="co"># Skip syncing if disabled</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (sync code)</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enable_grad_sync(<span class="va">self</span>):</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> disable_grad_sync(<span class="va">self</span>):</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">@contextmanager</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> no_sync(<span class="va">self</span>):</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Context manager to temporarily disable gradient syncing."""</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        prev <span class="op">=</span> <span class="va">self</span>.do_sync</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.disable_grad_sync()</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._do_sync <span class="op">=</span> prev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleDistributedDataParallelism:</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model: torch.nn.Module):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.enable_grad_sync()  <span class="co"># Start with syncing enabled</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (initialization code)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.do_sync:</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span>  <span class="co"># Skip syncing if disabled</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ... (sync code)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enable_grad_sync(<span class="va">self</span>):</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> disable_grad_sync(<span class="va">self</span>):</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._do_sync <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">@contextmanager</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> no_sync(<span class="va">self</span>):</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Context manager to temporarily disable gradient syncing."""</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        prev <span class="op">=</span> <span class="va">self</span>.do_sync</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.disable_grad_sync()</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._do_sync <span class="op">=</span> prev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="using-gradient-accumulation" class="level3">
 <h3 class="anchored" data-anchor-id="using-gradient-accumulation">Using Gradient Accumulation</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>grad_accum_steps <span class="op">=</span> <span class="dv">4</span>  <span class="co"># Accumulate over 4 micro-batches</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(dataloader):</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only sync on the last accumulation step</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> grad_accum_steps <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        ddp_model.enable_grad_sync()</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        ddp_model.disable_grad_sync()</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> ddp_model(batch)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    output.loss.backward()</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only update when syncing is enabled</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ddp_model.do_sync:</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        ddp_model.sync_gradients()</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grad_accum_steps <span class="op">=</span> <span class="dv">4</span>  <span class="co"># Accumulate over 4 micro-batches</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(dataloader):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only sync on the last accumulation step</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> grad_accum_steps <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        ddp_model.enable_grad_sync()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        ddp_model.disable_grad_sync()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> ddp_model(batch)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    output.loss.backward()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Only update when syncing is enabled</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ddp_model.do_sync:</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>        ddp_model.sync_gradients()</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This way, we only communicate gradients every 4 steps instead of every step, reducing communication overhead!</p>
 </section>
 </section>
-<section id="summary-key-takeaways" class="level2">
-<h2 class="anchored" data-anchor-id="summary-key-takeaways">Summary: Key Takeaways</h2>
+<section id="dataset-characteristics" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-characteristics">Dataset Characteristics</h2>
+<p>For dataset, we used GLUE MRPC Dataset. Here is a brief description of the dataset</p>
+<ul>
+<li><strong>Task Type:</strong> Sentence pair classification (paraphrase identification)</li>
+<li><strong>Description:</strong> The MRPC dataset contains pairs of sentences automatically extracted from online news sources with human annotations indicating whether they are semantically equivalent (paraphrases) or not</li>
+<li><strong>Size:</strong>
+<ul>
+<li>Training set: 3,668 sentence pairs</li>
+<li>Validation set: 408 sentence pairs</li>
+<li>Test set: 1,725 sentence pairs</li>
+</ul></li>
+<li><strong>Labels:</strong> Binary classification
+<ul>
+<li>0: not_equivalent</li>
+<li>1: equivalent</li>
+</ul></li>
+</ul>
+<p>Here’s an example from the dataset:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'idx'</span>: <span class="dv">0</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'label'</span>: <span class="dv">1</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'sentence1'</span>: <span class="st">'Amrozi accused his brother, whom he called "the witness", of deliberately distorting his evidence.'</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">'sentence2'</span>: <span class="st">'Referring to him as only "the witness", Amrozi accused his brother of deliberately distorting his evidence.'</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For model, we used a small 360M <code>HuggingFaceTB/SmolLM2-360M-Instruct</code> model.</p>
+</section>
+<section id="profiling" class="level2">
+<h2 class="anchored" data-anchor-id="profiling">Profiling</h2>
+<p>We used <code>torch.profiler</code> to check traces, kernel and memory footprint . We ran the distributed module using a 4 H100 SXM5 GPU instatance in <code>LambdaLab</code>.</p>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_overview_1.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Execution Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_operator.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Operator Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_kernel.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Kernel Summary</figcaption>
+</figure>
+</div>
+</div>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_trace.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Traces</figcaption>
+</figure>
+</div>
+</div>
+<section id="key-observations" class="level3">
+<h3 class="anchored" data-anchor-id="key-observations">Key Observations</h3>
+<ul>
+<li><strong>Very low GPU utilization (15.19%)</strong> - This is extremely low for H100 GPUs, indicating significant inefficiency</li>
+<li><strong>SM Efficiency (11.08%)</strong> - This suggests your kernels aren’t fully utilizing the streaming multiprocessors</li>
+<li><strong>Occupancy (28.73%)</strong> - The low occupancy indicates your kernels aren’t keeping the GPU busy</li>
+<li><strong>CPU Execution dominates (61.1%)</strong> of the step time</li>
+<li><strong>Kernel execution (15.2%)</strong> is relatively small</li>
+<li><strong>Communication overhead (20.9%)</strong> is significant but expected in DDP</li>
+</ul>
+</section>
+<section id="bottlenecks-and-solutions" class="level3">
+<h3 class="anchored" data-anchor-id="bottlenecks-and-solutions">Bottlenecks and Solutions</h3>
+<ul>
+<li>The AllReduce operation (42.2%) dominates kernel time, which is expected in DDP but appears to be taking too much relative time
+<ul>
+<li>Solution: Gradient Accumulation</li>
+</ul></li>
+<li>Unused Tensorcore as we see it in the Profiler
+<ul>
+<li>Solution: Mixed Precision Training to enable tensorcore</li>
+</ul></li>
+<li>We can try to Increase batch size until memory limits to increase throughput</li>
+</ul>
+<p>We have experimented with Gradient Accumulation with step size 2 and AllReduce operation reduced to 25% in Kermel profiler.</p>
+<div style="text-align: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/profiler_kernel_grad_ac.png" class="img-fluid figure-img"></p>
+<figcaption>Profiier Kernel Summary after Gradient Accumulation</figcaption>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="code-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="code-walkthrough">Code Walkthrough</h2>
+<section id="imports-and-setup-lines-1-14" class="level3">
+<h3 class="anchored" data-anchor-id="imports-and-setup-lines-1-14">1. Imports and Setup (Lines 1-14)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.distributed <span class="im">as</span> dist</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> accelerate <span class="im">import</span> PartialState</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - <code>torch</code>: The main PyTorch library for deep learning - <code>torch.distributed (dist)</code>: PyTorch’s library for distributed training across multiple devices - <code>PartialState</code>: A helper from the Accelerate library that manages which GPU each process should use</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>state <span class="op">=</span> PartialState()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> state.device</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - <code>PartialState()</code> automatically figures out which GPU this process should use - <code>device</code> stores the assigned GPU - <code>set_seed(42)</code> ensures reproducibility - all processes start with the same random state</p>
+<hr>
+</section>
+<section id="the-simpledistributeddataparallelism-class-lines-16-42" class="level3">
+<h3 class="anchored" data-anchor-id="the-simpledistributeddataparallelism-class-lines-16-42">2. The SimpleDistributedDataParallelism Class (Lines 16-42)</h3>
+<p>This is the heart of the code! It shows how DDP works under the hood.</p>
+<section id="initialization-init-lines-17-27" class="level4">
+<h4 class="anchored" data-anchor-id="initialization-init-lines-17-27">Initialization (<strong>init</strong>, Lines 17-27)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model:torch.nn.Module):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> model.parameters():</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        rank0_param <span class="op">=</span> param.data.clone()</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        dist.broadcast(rank0_param, src<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> torch.equal(param.data, rank0_param):</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong></p>
 <ol type="1">
-<li><p><strong>DDP splits data, not the model</strong>: Each GPU has a full copy of the model and processes different data</p></li>
-<li><p><strong>One critical sync step</strong>: After computing gradients, we average them across all GPUs using <code>all_reduce</code></p></li>
-<li><p><strong>Initialization matters</strong>: All GPUs must start with identical model parameters (use the same seed!)</p></li>
-<li><p><strong>Communication is cheap</strong>: The gradient averaging is fast relative to the forward/backward pass</p></li>
-<li><p><strong>Near-linear speedup</strong>: With 2 GPUs, you can roughly double your throughput</p></li>
-<li><p><strong>Gradient accumulation</strong>: Can be combined with DDP by selectively disabling gradient syncing</p></li>
+<li><strong>Takes a model as input</strong> and stores it</li>
+<li><strong>Broadcasts parameters from GPU 0 to all other GPUs</strong>:
+<ul>
+<li>In distributed training, each GPU (called a “rank”) has its own copy of the model</li>
+<li>“Broadcasting” means copying data from one GPU to all others</li>
+<li>This ensures all GPUs start with identical model weights</li>
+</ul></li>
+<li><strong>Verification check</strong>: If any GPU has different parameters, raise an error</li>
+</ol>
+<p><strong>Why this matters:</strong> All GPUs must start with the exact same model, or they’ll learn different things!</p>
+</section>
+<section id="gradient-synchronization-lines-29-33" class="level4">
+<h4 class="anchored" data-anchor-id="gradient-synchronization-lines-29-33">Gradient Synchronization (Lines 29-33)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_gradients(<span class="va">self</span>):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="va">self</span>.model.parameters():</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> param.grad <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(param.grad, op<span class="op">=</span>dist.ReduceOp.SUM)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>            param.grad <span class="op">/=</span> dist.get_world_size()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong></p>
+<p>This is THE KEY operation in DDP! Let me explain with an example:</p>
+<p>Imagine you have 2 GPUs: - GPU 0 processes batch A and calculates gradient = [1, 2, 3] - GPU 1 processes batch B and calculates gradient = [4, 5, 6]</p>
+<p>After <code>all_reduce</code> with SUM operation: - Both GPUs now have gradient = [5, 7, 9] (sum of both)</p>
+<p>After dividing by world_size (2): - Both GPUs have gradient = [2.5, 3.5, 4.5] (average)</p>
+<p><strong>Why averaging?</strong> This is equivalent to processing both batches on a single GPU! The gradient is the average across all data processed by all GPUs.</p>
+</section>
+<section id="helper-methods-lines-35-42" class="level4">
+<h4 class="anchored" data-anchor-id="helper-methods-lines-35-42">Helper Methods (Lines 35-42)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.model(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(<span class="va">self</span>):</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.train()</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">eval</span>(<span class="va">self</span>):</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> These methods allow our wrapper to behave like a regular PyTorch model.</p>
+<hr>
+</section>
+</section>
+<section id="data-preparation-lines-44-68" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation-lines-44-68">3. Data Preparation (Lines 44-68)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> get_dataset()[<span class="st">"train"</span>]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>train_ds <span class="op">=</span> dataset.shuffle(seed<span class="op">=</span><span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - Load the training dataset - Shuffle it with a fixed seed so all GPUs shuffle the same way</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> collate_func(batch):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tokenizer.pad(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        batch,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        padding<span class="op">=</span><span class="st">"longest"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        pad_to_multiple_of<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        return_tensors<span class="op">=</span><span class="st">"pt"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - This function prepares batches of text data - It pads sequences to the same length (needed for batch processing) - Pads to multiples of 8 (optimization for GPU efficiency)</p>
+<hr>
+</section>
+<section id="data-sharding---the-critical-part-lines-87-98" class="level3">
+<h3 class="anchored" data-anchor-id="data-sharding---the-critical-part-lines-87-98">4. Data Sharding - The Critical Part! (Lines 87-98)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shard data for first parallel dimension</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ds_length <span class="op">=</span> <span class="bu">len</span>(train_ds)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ds_length_per_rank <span class="op">=</span> ds_length <span class="op">//</span> get(<span class="st">"ws"</span>)  <span class="co"># ws = world_size</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> get(<span class="st">"rank"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> rank <span class="op">*</span> ds_length_per_rank</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> start <span class="op">+</span> ds_length_per_rank <span class="cf">if</span> rank <span class="op">!=</span> get(<span class="st">"ws"</span>) <span class="op">-</span> <span class="dv">1</span> <span class="cf">else</span> ds_length</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>train_shard <span class="op">=</span> train_ds.select(<span class="bu">list</span>(<span class="bu">range</span>(start, end)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong></p>
+<p>This splits the dataset into separate chunks for each GPU!</p>
+<p><strong>Example with 1000 samples and 4 GPUs:</strong> - Total samples: 1000 - Samples per GPU: 1000 / 4 = 250 - GPU 0 (rank 0): samples 0-249 - GPU 1 (rank 1): samples 250-499 - GPU 2 (rank 2): samples 500-749 - GPU 3 (rank 3): samples 750-999</p>
+<p><strong>Why this matters:</strong> Each GPU only loads and processes its own portion of data, so they work on different examples simultaneously!</p>
+<hr>
+</section>
+<section id="model-setup-lines-109-112" class="level3">
+<h3 class="anchored" data-anchor-id="model-setup-lines-109-112">5. Model Setup (Lines 109-112)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> get_smol_model()</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>model.to(device)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.model.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleDistributedDataParallelism(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> 1. Create the model 2. Move it to the assigned GPU 3. Create an optimizer (SGD with learning rate 0.001) 4. Wrap the model with our DDP wrapper</p>
+<hr>
+</section>
+<section id="profiler-setup-lines-114-136" class="level3">
+<h3 class="anchored" data-anchor-id="profiler-setup-lines-114-136">6. Profiler Setup (Lines 114-136)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> state.is_main_process:</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    profiler_context <span class="op">=</span> profile(...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - Only the main process (GPU 0) runs the profiler - The profiler tracks performance metrics like memory usage and computation time - Results are saved to “ddp_trace” folder for analysis with TensorBoard</p>
+<p><strong>Why only main process?</strong> To avoid multiple GPUs writing the same profiling data and causing conflicts.</p>
+<section id="understanding-the-profiler-schedule" class="level4">
+<h4 class="anchored" data-anchor-id="understanding-the-profiler-schedule">Understanding the Profiler Schedule</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>profiler_schedule <span class="op">=</span> schedule(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    skip_first<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    wait<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    warmup<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    active<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    repeat<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong></p>
+<p>The profiler schedule controls WHEN the profiler collects data. It doesn’t run on every iteration because profiling adds overhead and generates large trace files. The schedule has four phases that cycle through iterations:</p>
+<ol type="1">
+<li><strong>skip_first=5</strong>: Skip the first 5 iterations completely (no profiling)
+<ul>
+<li>Why? The first few iterations are often slower due to initialization and GPU warm-up</li>
+<li>Skipping them gives more accurate performance measurements</li>
+</ul></li>
+<li><strong>wait=1</strong>: Wait for 1 iteration without profiling
+<ul>
+<li>This is a “rest” phase between profiling cycles</li>
+<li>Allows the system to stabilize before starting to profile again</li>
+</ul></li>
+<li><strong>warmup=2</strong>: Run for 2 iterations collecting basic profiling data
+<ul>
+<li>This is a “warm-up” phase where the profiler starts but doesn’t record everything yet</li>
+<li>Helps the profiler itself initialize properly</li>
+</ul></li>
+<li><strong>active=5</strong>: Actively profile for 5 iterations with full data collection
+<ul>
+<li>This is when the profiler records detailed performance data</li>
+<li>Captures CPU usage, GPU usage, memory allocations, and operation timing</li>
+</ul></li>
+<li><strong>repeat=1</strong>: Repeat the cycle (wait → warmup → active) 1 time
+<ul>
+<li>After the first cycle completes, it runs one more cycle</li>
+<li>Total cycles = initial + repeat = 2 cycles</li>
+</ul></li>
+</ol>
+<p><strong>Timeline example for 20 iterations:</strong></p>
+<pre><code>Iterations 0-4:   SKIP (skip_first=5)
+Iteration 5:      WAIT (wait=1)
+Iterations 6-7:   WARMUP (warmup=2)
+Iterations 8-12:  ACTIVE - recording data! (active=5)
+Iteration 13:     WAIT (wait=1)
+Iterations 14-15: WARMUP (warmup=2)
+Iterations 16-20: ACTIVE - recording data! (active=5)</code></pre>
+</section>
+<section id="understanding-the-profile-configuration" class="level4">
+<h4 class="anchored" data-anchor-id="understanding-the-profile-configuration">Understanding the Profile Configuration</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>profiler_context <span class="op">=</span> profile(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    activities<span class="op">=</span>[ProfilerActivity.CPU, ProfilerActivity.CUDA],</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    schedule<span class="op">=</span>profiler_schedule,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    on_trace_ready<span class="op">=</span>torch.profiler.tensorboard_trace_handler(<span class="st">"ddp_trace"</span>),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    record_shapes<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    profile_memory<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    with_stack<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    with_flops<span class="op">=</span><span class="va">True</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What each parameter means:</strong></p>
+<ul>
+<li><strong>activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]</strong>
+<ul>
+<li>Track both CPU and GPU (CUDA) operations</li>
+<li>Shows where time is spent on both devices</li>
+</ul></li>
+<li><strong>schedule=profiler_schedule</strong>
+<ul>
+<li>Use the schedule defined above to control when profiling happens</li>
+</ul></li>
+<li><strong>on_trace_ready=torch.profiler.tensorboard_trace_handler(“ddp_trace”)</strong>
+<ul>
+<li>When profiling data is ready, save it to the “ddp_trace” folder</li>
+<li>Can be visualized with TensorBoard using: <code>tensorboard --logdir=ddp_trace</code></li>
+</ul></li>
+<li><strong>record_shapes=True</strong>
+<ul>
+<li>Record the shapes of tensors (e.g., [batch_size, sequence_length, hidden_size])</li>
+<li>Helps identify operations working on large tensors that might be slow</li>
+</ul></li>
+<li><strong>profile_memory=True</strong>
+<ul>
+<li>Track memory allocations and deallocations</li>
+<li>Shows which operations use the most GPU memory</li>
+<li>Helps identify memory bottlenecks or leaks</li>
+</ul></li>
+<li><strong>with_stack=True</strong>
+<ul>
+<li>Record the Python call stack for each operation</li>
+<li>Shows which line of code triggered each operation</li>
+<li>Makes it easier to find performance bottlenecks in your code</li>
+</ul></li>
+<li><strong>with_flops=True</strong>
+<ul>
+<li>Estimate floating-point operations (FLOPs) for each operation</li>
+<li>Helps understand computational intensity</li>
+<li>Higher FLOPs = more computation work</li>
+</ul></li>
+</ul>
+<p><strong>Why this matters:</strong> Profiling helps you understand where your training time is spent. You can identify if you’re bottlenecked by data loading, forward pass, backward pass, or gradient synchronization!</p>
+</section>
+<section id="visualizing-profiler-data-with-tensorboard-remote-setup" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-profiler-data-with-tensorboard-remote-setup">Visualizing Profiler Data with TensorBoard (Remote Setup)</h4>
+<p>Since your code is running on <strong>Lambda Labs</strong> (remote GPU server) and you’re accessing it from your <strong>MacBook via VSCode</strong>, here’s how to visualize the profiler traces:</p>
+<p><strong>Step 1: Run the DDP Training Script on Lambda Labs</strong></p>
+<p>First, execute your training script on the Lambda Labs instance. This will generate the profiler trace files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On Lambda Labs (via VSCode terminal)</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> ddp.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>After the script completes, you should see a <code>ddp_trace</code> folder created with trace files inside.</p>
+<p><strong>Step 2: Install TensorBoard (if not already installed)</strong></p>
+<p>On your Lambda Labs instance:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install tensorboard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Step 3: Launch TensorBoard on Lambda Labs</strong></p>
+<p>Start TensorBoard on the remote server:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tensorboard</span> <span class="at">--logdir</span><span class="op">=</span>ddp_trace <span class="at">--port</span><span class="op">=</span>6006</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This will output something like:</p>
+<pre><code>TensorBoard 2.x.x at http://localhost:6006/</code></pre>
+<p><strong>Important:</strong> Keep this terminal running! Don’t close it.</p>
+<p><strong>Step 4: Port Forwarding via VSCode (Easy Method)</strong></p>
+<p>VSCode makes port forwarding super easy!</p>
+<p><strong>Option A: Automatic Port Forwarding (Recommended)</strong></p>
+<ol type="1">
+<li>VSCode should automatically detect that port 6006 is being used</li>
+<li>Look for a notification in the bottom-right corner saying “Port 6006 is available”</li>
+<li>Click “Open in Browser” or “Forward Port”</li>
+</ol>
+<p><strong>Option B: Manual Port Forwarding</strong></p>
+<ol type="1">
+<li>In VSCode, press <code>Cmd+Shift+P</code> (on Mac) to open the Command Palette</li>
+<li>Type “Forward a Port” and select it</li>
+<li>Enter port number: <code>6006</code></li>
+<li>Press Enter</li>
+</ol>
+<p>You should see the forwarded port appear in the “PORTS” panel at the bottom of VSCode.</p>
+<p><strong>Step 5: Open TensorBoard in Your MacBook Browser</strong></p>
+<p>Once the port is forwarded, open your web browser on your MacBook and go to:</p>
+<pre><code>http://localhost:6006</code></pre>
+<p>You should see the TensorBoard interface!</p>
+<p><strong>Step 6: Navigate to the Profiler Tab</strong></p>
+<p>In TensorBoard: 1. Click on the <strong>“PYTORCH_PROFILER”</strong> or <strong>“PROFILE”</strong> tab at the top 2. You’ll see a dropdown to select which trace file to view 3. Select the trace file you want to analyze</p>
+<p><strong>What You’ll See in TensorBoard:</strong></p>
+<p>The profiler visualization shows several views:</p>
+<ol type="1">
+<li><strong>Overview Page:</strong>
+<ul>
+<li>Performance summary</li>
+<li>GPU utilization over time</li>
+<li>Step time breakdown (how long each training iteration took)</li>
+</ul></li>
+<li><strong>Operator View:</strong>
+<ul>
+<li>Shows which PyTorch operations took the most time</li>
+<li>See operations like <code>matmul</code>, <code>conv2d</code>, <code>all_reduce</code>, etc.</li>
+<li>Sorted by execution time</li>
+</ul></li>
+<li><strong>Kernel View:</strong>
+<ul>
+<li>Low-level GPU kernel performance</li>
+<li>Shows actual CUDA kernels that ran on the GPU</li>
+</ul></li>
+<li><strong>Trace View:</strong>
+<ul>
+<li>Timeline visualization</li>
+<li>Shows when each operation executed</li>
+<li>You can zoom in to see individual operations</li>
+<li><strong>Look for the <code>sync_grads</code> section</strong> - this shows the time spent on gradient synchronization!</li>
+</ul></li>
+<li><strong>Memory View:</strong>
+<ul>
+<li>Memory allocation over time</li>
+<li>Helps identify memory leaks or spikes</li>
+</ul></li>
+</ol>
+<p><strong>Tips for Analysis:</strong></p>
+<ul>
+<li><strong>Look for the “sync_grads” operations</strong> in the trace view - this is your DDP gradient synchronization time</li>
+<li><strong>Compare “forward”, “backward”, and “sync_grads” times</strong> - ideally, sync time should be small compared to computation</li>
+<li><strong>Check GPU utilization</strong> - you want this close to 100% during training</li>
+<li><strong>Identify bottlenecks</strong> - if data loading takes longer than forward/backward, you need faster data loading</li>
+</ul>
+<p><strong>Alternative: Using SSH Tunnel (Manual Method)</strong></p>
+<p>If VSCode port forwarding doesn’t work, you can use SSH tunneling:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On your MacBook terminal (not VSCode)</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-L</span> 6006:localhost:6006 username@lambda-labs-ip-address</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then access <code>http://localhost:6006</code> in your browser.</p>
+<p><strong>Troubleshooting:</strong></p>
+<ul>
+<li><strong>Port already in use?</strong> Change the port: <code>tensorboard --logdir=ddp_trace --port=6007</code></li>
+<li><strong>Can’t see traces?</strong> Make sure the <code>ddp_trace</code> folder exists and contains <code>.pt.trace.json</code> files</li>
+<li><strong>Port forwarding not working?</strong> Try restarting VSCode or manually set up SSH tunnel</li>
+<li><strong>No data in TensorBoard?</strong> The profiler only collects data during “active” iterations (8-12 and 16-20 in this code)</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="the-training-loop-lines-138-161" class="level3">
+<h3 class="anchored" data-anchor-id="the-training-loop-lines-138-161">7. The Training Loop (Lines 138-161)</h3>
+<p>This is where everything comes together!</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i, batch) <span class="kw">in</span> <span class="bu">enumerate</span>(train_dataloader):</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">&gt;</span> <span class="dv">20</span>:</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> Loop through batches, stopping after 20 iterations (for demonstration).</p>
+<section id="step-1-move-data-to-gpu-lines-143-144" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-move-data-to-gpu-lines-143-144">Step 1: Move Data to GPU (Lines 143-144)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> record_function(<span class="st">"data_movement"</span>):</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    batch <span class="op">=</span> {k: v.to(device) <span class="cf">for</span> k, v <span class="kw">in</span> batch.items()}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> Transfer the batch from CPU memory to GPU memory.</p>
+</section>
+<section id="step-2-forward-pass-lines-146-147" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-forward-pass-lines-146-147">Step 2: Forward Pass (Lines 146-147)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> record_function(<span class="st">"forward"</span>):</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> model(<span class="op">**</span>batch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - Run the model on the input data - Each GPU processes its own batch independently - Calculate predictions and loss</p>
+</section>
+<section id="step-3-backward-pass-lines-148-149" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-backward-pass-lines-148-149">Step 3: Backward Pass (Lines 148-149)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> record_function(<span class="st">"backward"</span>):</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    output.loss.backward()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - Calculate gradients using backpropagation - Each GPU calculates gradients based on its own batch - At this point, gradients are still different on each GPU!</p>
+</section>
+<section id="step-4-synchronize-gradients-lines-151-152" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-synchronize-gradients-lines-151-152">Step 4: Synchronize Gradients (Lines 151-152)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> record_function(<span class="st">"sync_grads"</span>):</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    model.sync_gradients()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - <strong>THIS IS THE MAGIC!</strong> - All GPUs communicate and average their gradients - After this step, all GPUs have identical gradients - This makes it as if we processed all batches on a single GPU</p>
+</section>
+<section id="step-5-update-model-lines-154-158" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-update-model-lines-154-158">Step 5: Update Model (Lines 154-158)</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> record_function(<span class="st">"opt_step"</span>):</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> 1. Update model parameters using the averaged gradients 2. Reset gradients to zero for the next iteration 3. Since all GPUs have the same gradients, they all update identically 4. Models stay synchronized!</p>
+<hr>
+</section>
+</section>
+<section id="cleanup-lines-160-163" class="level3">
+<h3 class="anchored" data-anchor-id="cleanup-lines-160-163">8. Cleanup (Lines 160-163)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> profiler_context:</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    profiler_context.<span class="fu">__exit__</span>(<span class="va">None</span>, <span class="va">None</span>, <span class="va">None</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>dist.destroy_process_group()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What’s happening:</strong> - Close the profiler - Destroy the process group (disconnect GPUs from each other)</p>
+<hr>
+</section>
+</section>
+<section id="the-big-picture-how-ddp-works" class="level2">
+<h2 class="anchored" data-anchor-id="the-big-picture-how-ddp-works">The Big Picture: How DDP Works</h2>
+<section id="the-ddp-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="the-ddp-workflow">The DDP Workflow</h3>
+<ol type="1">
+<li><strong>Initialization:</strong> All GPUs start with identical model copies</li>
+<li><strong>Data Sharding:</strong> Each GPU gets a different subset of the training data</li>
+<li><strong>Independent Forward/Backward:</strong> Each GPU processes its own data independently</li>
+<li><strong>Gradient Synchronization:</strong> GPUs communicate and average their gradients</li>
+<li><strong>Synchronized Update:</strong> All GPUs update their models identically</li>
+<li><strong>Repeat:</strong> Back to step 3 for the next batch</li>
 </ol>
 </section>
-<section id="when-to-use-ddp" class="level2">
-<h2 class="anchored" data-anchor-id="when-to-use-ddp">When to Use DDP</h2>
-<p>DDP is ideal when: - Your model fits on a single GPU - You want to train with larger batch sizes - You want faster training - You have multiple GPUs available - Communication between GPUs is fast (same machine or fast interconnect)</p>
+<section id="why-ddp-is-powerful" class="level3">
+<h3 class="anchored" data-anchor-id="why-ddp-is-powerful">Why DDP is Powerful</h3>
+<p><strong>Speed:</strong> With N GPUs, you process N times more data per iteration!</p>
+<p><strong>Example:</strong> - Single GPU: Process 8 samples per iteration - 4 GPUs with DDP: Process 32 samples per iteration (8 per GPU) - This is like having a batch size of 32, but the memory usage per GPU is only for batch size 8!</p>
+<p><strong>Equivalence to Single GPU:</strong> DDP is mathematically equivalent to training on a single GPU with a larger batch size, because: - You process more samples total (N times more) - Gradients are averaged across all samples - Model updates are based on the averaged gradient</p>
 </section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
-<p>Now that you understand the basics of DDP: - Experiment with different numbers of GPUs - Try different batch sizes - Measure the speedup on your own models - Explore PyTorch’s built-in <code>torch.nn.parallel.DistributedDataParallel</code> (which builds on these concepts with optimizations)</p>
-<p>Happy distributed training!</p>
+<section id="key-concepts-recap" class="level3">
+<h3 class="anchored" data-anchor-id="key-concepts-recap">Key Concepts Recap</h3>
+<ul>
+<li><strong>Rank:</strong> The ID of each GPU (0, 1, 2, …)</li>
+<li><strong>World Size:</strong> Total number of GPUs</li>
+<li><strong>Broadcast:</strong> Copy data from one GPU to all others</li>
+<li><strong>All-Reduce:</strong> Combine data from all GPUs (sum, average, etc.)</li>
+<li><strong>Data Sharding:</strong> Split dataset so each GPU gets different samples</li>
+<li><strong>Gradient Synchronization:</strong> Average gradients across all GPUs</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This code demonstrates a simplified version of PyTorch’s Distributed Data Parallelism. The key insight is:</p>
+<blockquote class="blockquote">
+<p>Each GPU works on different data independently, but they synchronize their gradients after backpropagation, ensuring all GPUs learn the same model together.</p>
+</blockquote>
+<p>By splitting the work across multiple GPUs, you can train models much faster without changing the final result!</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

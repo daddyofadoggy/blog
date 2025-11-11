@@ -159,14 +159,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="distributed-data-parallelism-ddp-explained-for-beginners" class="level1">
-<h1>Distributed Data Parallelism (DDP) Explained for Beginners</h1>
-<section id="what-is-distributed-data-parallelism" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-distributed-data-parallelism">What is Distributed Data Parallelism?</h2>
-<p>Distributed Data Parallelism (DDP) is a technique for training large machine learning models faster by using multiple GPUs or computers at the same time. Instead of training on one GPU, you train on multiple GPUs simultaneously, with each GPU working on different parts of your data.</p>
-<p>Think of it like this: if you have 1000 images to process and 4 GPUs, each GPU processes 250 images. This makes training roughly 4x faster!</p>
-<hr>
-</section>
 <section id="code-walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="code-walkthrough">Code Walkthrough</h2>
 <section id="imports-and-setup-lines-1-14" class="level3">
@@ -566,7 +558,6 @@ Iterations 16-20: ACTIVE - recording data! (active=5)</code></pre>
 <p>By splitting the work across multiple GPUs, you can train models much faster without changing the final result!</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
