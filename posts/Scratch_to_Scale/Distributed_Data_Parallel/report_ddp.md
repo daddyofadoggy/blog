@@ -12,7 +12,7 @@ Before diving into the code, let's understand the fundamental concept. In distri
 
 ### The Core Idea
 
-Imagine you're a teacher grading 100 homework assignments. You could:
+Imagine you're a teacher grading 100 homework assignments. You could
 
 - **Option A**: Grade all 100 assignments yourself (slow!)
 - **Option B**: Split the assignments among 4 teaching assistants, each grades 25 assignments (4x faster!)

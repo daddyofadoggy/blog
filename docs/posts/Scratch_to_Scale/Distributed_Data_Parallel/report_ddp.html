@@ -161,21 +161,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Welcome! In this guide, we’ll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you’ve ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.</p>
+<p>Welcome! In this blog, we’ll explore Distributed Data Parallelism (DDP), a powerful technique for training deep learning models faster by using multiple GPUs. If you’ve ever trained a large model and wished it could go faster, DDP is one of the best tools to achieve that speedup.</p>
 <p>Don’t worry if you’re new to distributed training - we’ll break everything down step by step, starting from the core concepts and building up to a working implementation of Pytorch’s <code>DistributedDataParallel</code></p>
 </section>
 <section id="what-is-distributed-data-parallelism" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-distributed-data-parallelism">What is Distributed Data Parallelism?</h2>
-<p>Before diving into the code, let’s understand the fundamental concept.</p>
+<p>Before diving into the code, let’s understand the fundamental concept. In distributed training, device refers to GPU and host refers to CPU.</p>
 <section id="the-core-idea" class="level3">
 <h3 class="anchored" data-anchor-id="the-core-idea">The Core Idea</h3>
-<p>Imagine you’re a teacher grading 100 homework assignments. You could:</p>
+<p>Imagine you’re a teacher grading 100 homework assignments. You could</p>
 <ul>
 <li><strong>Option A</strong>: Grade all 100 assignments yourself (slow!)</li>
 <li><strong>Option B</strong>: Split the assignments among 4 teaching assistants, each grades 25 assignments (4x faster!)</li>
 </ul>
 <p>In the First Phase, Distributed Data Parallel begins with the entire batch of data being divided into equal partitions across devices. Each partition is processed independently by identical model replicas running on separate GPUs, with each performing its own forward pass computation. Following the forward pass, each model calculates its own loss value based solely on its data partition, which then initiates the backward pass where gradients are computed independently on each device.</p>
-<p>After local gradient computation, DDP executes its most critical operation—the all-reduce synchronization—where gradients from all devices are averaged, ensuring each model receives the same update signal as if it had processed the entire batch. With synchronized gradients in hand, each model’s optimizer applies identical parameter updates, maintaining perfect weight consistency across all replicas. This coordinated update completes one training iteration, and the process repeats with new data partitions in the next step, preserving model equivalence throughout training. To illustrate the DDP process I have attached a diagram below. I borrowed it Zach Mueller’s Scratch to Scale cohort and one of the best diagrams I’ve ever seen on DDP</p>
+<p>After local gradient computation, DDP executes its most critical operation—the all-reduce synchronization—where gradients from all devices are averaged, ensuring each model receives the same update signal as if it had processed the entire batch. With synchronized gradients in hand, each model’s optimizer applies identical parameter updates, maintaining perfect weight consistency across all replicas. This coordinated update completes one training iteration, and the process repeats with new data partitions in the next step, preserving model equivalence throughout training. To illustrate the DDP process I have attached a diagram below. I borrowed it from Zach’s Scratch to Scale cohort and one of the best diagrams I’ve ever seen on DDP</p>
 <div style="text-align: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -271,7 +271,7 @@ g = (1/n) Σ g_i   → Gradients from all GPUs are averaged
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>other_world_size <span class="op">=</span> get(<span class="st">"ws"</span>, specific_mesh)  <span class="co"># Uses specific mesh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Alternatively, we can use <code>nbdistributed</code> [plugin] (https://muellerzr.github.io/scratch-to-scale/01_intro_to_jupyter.html ) and then</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext nbdistributed</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">3</span>,<span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>dist_init <span class="op">--</span>num<span class="op">-</span>processes <span class="dv">2</span> <span class="op">--</span>gpu<span class="op">-</span>ids <span class="dv">1</span>,<span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This creates: - <strong>Rank 0</strong> → Worker on GPU 1 - <strong>Rank 1</strong> → Worker on GPU 2</p>
 <p>Each “rank” is essentially a separate process handling one GPU.</p>
 </section>
