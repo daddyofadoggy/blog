@@ -5,7 +5,8 @@
       "posts/welcome/index.qmd",
       "posts/Today's-Learning-Nugget/index.qmd",
       "posts/Scratch_to_Scale/index.qmd",
-      "posts/Day_one_DGX/index.qmd"
+      "posts/Day_one_DGX/index.qmd",
+      "posts/ZeRO/index.qmd"
     ]
   }
 }

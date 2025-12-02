@@ -72,5 +72,11 @@
   },
   "posts/Day_one_DGX/index.qmd": {
     "index.html": "4c4ef866"
+  },
+  "posts/ZeRO/Zero_blog.md": {
+    "Zero_blog.html": "412ebfc8"
+  },
+  "posts/ZeRO/index.qmd": {
+    "index.html": "f4b1482f"
   }
 }

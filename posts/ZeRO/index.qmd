@@ -1,0 +1,12 @@
+---
+title: "Understanding ZeRO: Memory-Efficient Training from Theory to Practice"
+description: "A hands-on exploration of Zero Redundancy Optimizer through implementation and experiments"
+author: "Dipankar Baisya"
+date: "2025-12-01"
+categories: [deep-learning, distributed-training, pytorch]
+toc: true
+toc-depth: 3
+toc-location: right
+---
+
+{{< include ./Zero_blog.md >}}
