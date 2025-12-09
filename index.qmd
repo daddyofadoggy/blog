@@ -9,6 +9,7 @@ listing:
       - "posts/Scratch_to_Scale/index.qmd"
       - "posts/Day_one_DGX/index.qmd"
       - "posts/ZeRO/index.qmd"
+      - "posts/RiskNavigator/index.qmd"
     type: default
     sort: "date desc"
 ---

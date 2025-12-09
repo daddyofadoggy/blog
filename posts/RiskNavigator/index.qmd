@@ -1,0 +1,12 @@
+---
+title: "Building RiskNavigator AI: A Multi-Agent System for Financial Risk Assessment"
+author: "Dipankar R. Baisya"
+date: "2025-12-09"
+categories: [AI, Multi-Agent Systems, LLM, Agentic AI, Financial AI, Google ADK]
+description: "A step-by-step guide to building a production-grade multi-agent AI system for financial analysis using Google Agent Development Kit and Gemini 2.5 Pro"
+toc: true
+toc-depth: 3
+toc-location: right
+---
+
+{{< include ./risknavigator_blog.md >}}
