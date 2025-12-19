@@ -7,7 +7,8 @@
       "posts/Scratch_to_Scale/index.qmd",
       "posts/Day_one_DGX/index.qmd",
       "posts/ZeRO/index.qmd",
-      "posts/RiskNavigator/index.qmd"
+      "posts/RiskNavigator/index.qmd",
+      "posts/ddp_fsdp/index.qmd"
     ]
   }
 }

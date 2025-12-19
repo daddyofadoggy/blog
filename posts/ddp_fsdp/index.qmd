@@ -1,0 +1,16 @@
+---
+title: "Distributed Training with PyTorch: An Experimental Study of DDP,FSDP and FSDP2"
+description: "An experimental analysis of distributed training strategies with PyTorch, comparing DDP, FSDP-Full (ZeRO-3), and FSDP-Grad (ZeRO-2) on H100 GPUs"
+author: "Dipankar Baisya"
+date: "2025-12-18"
+categories: [deep-learning, distributed-training, ddp, fsdp, ZeRO, pytorch]
+format:
+  html:
+    code-fold: false
+    code-tools: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+{{< include ./blog_dt.md >}}

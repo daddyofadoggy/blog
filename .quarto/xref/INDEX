@@ -84,5 +84,17 @@
   },
   "posts/RiskNavigator/risknavigator_blog.md": {
     "risknavigator_blog.html": "120936f5"
+  },
+  "posts/RiskNavigator/post.md": {
+    "post.html": "40d584fc"
+  },
+  "posts/RiskNavigator/post_format.md": {
+    "post_format.html": "bb31472e"
+  },
+  "posts/ddp_fsdp/index.qmd": {
+    "index.html": "ebe7e14b"
+  },
+  "posts/ddp_fsdp/blog_dt.md": {
+    "blog_dt.html": "e3723f3b"
   }
 }

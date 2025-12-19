@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/ddp_fsdp/index.html",
       "/posts/RiskNavigator/index.html",
       "/posts/ZeRO/index.html",
       "/posts/Day_one_DGX/index.html",
