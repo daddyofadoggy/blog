@@ -1,0 +1,16 @@
+---
+title: "Training Large Language Models with FSDP2: A Complete Guide"
+description: "A comprehensive walkthrough of implementing PyTorch's Fully Sharded Data Parallel (FSDP2) for efficient distributed training of large language models, with real benchmarks on NVIDIA H100 GPUs"
+author: "Dipankar Baisya"
+date: "2025-12-18"
+categories: [deep-learning, distributed-training, fsdp2, ZeRO, pytorch]
+format:
+  html:
+    code-fold: false
+    code-tools: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+{{< include ./blog.md >}}

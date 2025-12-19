@@ -11,6 +11,7 @@ listing:
       - "posts/ZeRO/index.qmd"
       - "posts/RiskNavigator/index.qmd"
       - "posts/ddp_fsdp/index.qmd"
+      - "posts/fsdp2/index.qmd"
     type: default
     sort: "date desc"
 ---

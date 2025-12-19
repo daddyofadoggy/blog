@@ -96,5 +96,11 @@
   },
   "posts/ddp_fsdp/blog_dt.md": {
     "blog_dt.html": "e3723f3b"
+  },
+  "posts/fsdp2/blog.md": {
+    "blog.html": "786f3612"
+  },
+  "posts/fsdp2/index.qmd": {
+    "index.html": "6c2a5e0c"
   }
 }

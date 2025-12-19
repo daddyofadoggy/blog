@@ -8,7 +8,8 @@
       "posts/Day_one_DGX/index.qmd",
       "posts/ZeRO/index.qmd",
       "posts/RiskNavigator/index.qmd",
-      "posts/ddp_fsdp/index.qmd"
+      "posts/ddp_fsdp/index.qmd",
+      "posts/fsdp2/index.qmd"
     ]
   }
 }
