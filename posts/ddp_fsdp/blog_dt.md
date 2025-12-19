@@ -1082,6 +1082,153 @@ Track these metrics to ensure optimal performance:
 
 ---
 
+# FSDP1 vs FSDP2: What Changed?
+
+PyTorch introduced FSDP2 in version 2.4 with a completely redesigned API. Here's what changed:
+
+## FSDP1 (Legacy API)
+
+```python
+from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+from torch.distributed.fsdp import ShardingStrategy
+
+# Wrap entire model
+model = FSDP(
+    model,
+    sharding_strategy=ShardingStrategy.FULL_SHARD,  # ZeRO-3
+    auto_wrap_policy=transformer_auto_wrap_policy(
+        transformer_layer_cls={GPT2Block}
+    ),
+)
+
+# Create optimizer after wrapping
+optimizer = torch.optim.AdamW(model.parameters())
+```
+
+**FSDP1 Sharding Strategies**:
+
+| ShardingStrategy | Description | Use Case |
+|-----------------|-------------|----------|
+| `FULL_SHARD` | Shard params, grads, optimizer (ZeRO-3) | Maximum memory savings |
+| `SHARD_GRAD_OP` | Shard grads and optimizer only (ZeRO-2) | Better performance, more memory |
+| `HYBRID_SHARD` | ZeRO-3 with 2D device mesh (intra/inter-node) | Multi-node training |
+| `_HYBRID_SHARD_ZERO2` | ZeRO-2 with 2D device mesh | Multi-node, max performance |
+| `NO_SHARD` | No sharding (DDP equivalent) | Baseline comparison |
+
+**Problems with FSDP1**:
+
+- Class-based API is less Pythonic
+- `auto_wrap_policy` is complex and error-prone
+- Harder to compose with other features
+- Less transparent about what's happening
+- Sharding strategy is an enum (less flexible)
+
+## FSDP2 (New API)
+
+```python
+from torch.distributed.fsdp import fully_shard
+
+# Shard individual layers
+for layer in model.layers:
+    fully_shard(layer, reshard_after_forward=True)  # ZeRO-3
+
+# Shard root module
+fully_shard(model, reshard_after_forward=True)
+
+# Create optimizer AFTER sharding (critical!)
+optimizer = torch.optim.AdamW(model.parameters())
+```
+
+**Benefits of FSDP2**:
+
+- ✅ **Simpler**: Function-based API, explicit wrapping
+- ✅ **More control**: Manually choose what to shard
+- ✅ **Better composition**: Works with torch.compile(), quantization
+- ✅ **DTensor-based**: Uses PyTorch's distributed tensor abstraction
+- ✅ **Better error messages**: Clearer what went wrong
+
+## FSDP1 to FSDP2 Migration Mapping
+
+| FSDP1 Strategy | FSDP2 Equivalent | Code |
+|----------------|------------------|------|
+| `FULL_SHARD` | `reshard_after_forward=True` | ZeRO-3 (params resharded) |
+| `SHARD_GRAD_OP` | `reshard_after_forward=False` | ZeRO-2 (params kept) |
+| `HYBRID_SHARD` | `reshard_after_forward=True` + 2D DeviceMesh | Hybrid ZeRO-3 |
+| `_HYBRID_SHARD_ZERO2` | `reshard_after_forward=False` + 2D DeviceMesh | Hybrid ZeRO-2 |
+
+**2D Device Mesh Example** (for hybrid sharding):
+```python
+from torch.distributed.device_mesh import init_device_mesh
+
+# Create 2D mesh: 2 nodes × 4 GPUs per node
+mesh_2d = init_device_mesh("cuda", (2, 4))  # (inter-node, intra-node)
+
+# Hybrid ZeRO-3
+for layer in model.layers:
+    fully_shard(layer, mesh=mesh_2d, reshard_after_forward=True)
+
+# Hybrid ZeRO-2
+for layer in model.layers:
+    fully_shard(layer, mesh=mesh_2d, reshard_after_forward=False)
+```
+
+**When to use Hybrid Sharding**:
+
+- ✅ Multi-node training (>8 GPUs across nodes)
+- ✅ Want to reduce inter-node communication
+- ✅ Replicate within nodes, shard across nodes (or vice versa)
+
+## Key Migration Steps
+
+1. **Replace wrapper class with function**:
+   ```python
+   # FSDP1
+   model = FSDP(model, ...)
+
+   # FSDP2
+   fully_shard(model, ...)
+   ```
+
+2. **Explicit layer wrapping**:
+   ```python
+   # FSDP2
+   for module in get_module_children_bottom_up(model)[:-1]:
+       if isinstance(module, TransformerLayer):
+           fully_shard(module)
+   ```
+
+3. **Replace ShardingStrategy enum with parameter**:
+   ```python
+   # FSDP1
+   sharding_strategy=ShardingStrategy.FULL_SHARD
+
+   # FSDP2
+   reshard_after_forward=True  # ZeRO-3
+   ```
+
+4. **Add DeviceMesh for hybrid sharding** (optional):
+   ```python
+   # FSDP1
+   sharding_strategy=ShardingStrategy.HYBRID_SHARD
+
+   # FSDP2
+   mesh = init_device_mesh("cuda", (num_nodes, gpus_per_node))
+   fully_shard(model, mesh=mesh, reshard_after_forward=True)
+   ```
+
+5. **Optimizer after sharding** (unchanged, but more critical):
+   ```python
+   fully_shard(model)
+   optimizer = torch.optim.AdamW(model.parameters())  # Must be after!
+   ```
+
+::: {.callout-note}
+## Learn More About FSDP2
+For a comprehensive guide on implementing FSDP2, including detailed experimental setup, performance benchmarks on 4× H100 GPUs, and optimization strategies, see the full blog post: [Training Large Language Models with FSDP2: A Complete Guide](https://daddyofadoggy.github.io/blog/posts/fsdp2/)
+:::
+
+---
+
 # Conclusion
 
 This comprehensive experimental analysis of distributed training strategies demonstrates that **FSDP with gradient sharding (ZeRO-2)** achieves exceptional performance on modern GPU hardware. With **97.71% compute efficiency** and **98.06% communication-computation overlap**, FSDP_Grad delivers near-baseline performance while enabling memory savings and faster training through data parallelism.
