@@ -1,14 +1,16 @@
 ---
 title: "Today's Learning Nugget"
 author: "Dipankar Baisya"
-date: "2025-11-02"
+date: "2025-12-23"
 categories: [news]
 ---
 Here I listed my work logs, explorartions and to-do list.
 
 # Logs 
 ## 12/23/2025
-1. [AirBnB ML System Design on EBR Search] https://airbnb.tech/uncategorized/embedding-based-retrieval-for-airbnb-search/
+1. [AirBnB ML System Design on EBR Search](https://airbnb.tech/uncategorized/embedding-based-retrieval-for-airbnb-search/)
+
+
 ## 11/02/2025
 1. [C and C++ review](https://github.com/Infatoshi/cuda-course/tree/master/03_C_and_C%2B%2B_Review), [Cuda Toolkit](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=runfile_local)
 2. [Intro to GPU](https://github.com/Infatoshi/cuda-course/blob/master/04_Gentle_Intro_to_GPUs/README.md)

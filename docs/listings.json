@@ -2,13 +2,13 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Today's-Learning-Nugget/index.html",
       "/posts/ddp_fsdp/index.html",
       "/posts/fsdp2/index.html",
       "/posts/RiskNavigator/index.html",
       "/posts/ZeRO/index.html",
       "/posts/Day_one_DGX/index.html",
       "/posts/Scratch_to_Scale/index.html",
-      "/posts/Today's-Learning-Nugget/index.html",
       "/posts/LLM-From-Scratch/index.html",
       "/posts/welcome/index.html"
     ]

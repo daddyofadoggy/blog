@@ -25,7 +25,7 @@
     "href": "index.html",
     "title": "My Blogs",
     "section": "",
-    "text": "Distributed Training with PyTorch: An Experimental Study of DDP, FSDP and FSDP2\n\n\nAn experimental analysis of distributed training strategies with PyTorch, comparing DDP, FSDP-Full (ZeRO-3), and FSDP-Grad (ZeRO-2) on H100 GPUs\n\n\n\n\n\nDec 18, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nTraining Large Language Models with FSDP2: A Complete Guide\n\n\nA comprehensive walkthrough of implementing PyTorch’s Fully Sharded Data Parallel (FSDP2) for efficient distributed training of large language models, with real benchmarks on NVIDIA H100 GPUs\n\n\n\n\n\nDec 18, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding RiskNavigator AI: A Multi-Agent System for Financial Risk Assessment\n\n\nA step-by-step guide to building a production-grade multi-agent AI system for financial analysis using Google Agent Development Kit and Gemini 2.5 Pro\n\n\n\n\n\nDec 9, 2025\n\n\nDipankar R. Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding ZeRO: Memory-Efficient Training from Theory to Practice\n\n\nA hands-on exploration of Zero Redundancy Optimizer through implementation and experiments\n\n\n\n\n\nDec 1, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nDay One with DGX Spark: From Setup to Running Local LLMs\n\n\n\n\n\n\n\n\nNov 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding Distributed Data Parallelism (DDP): A Beginner’s Guide\n\n\n\n\n\n\n\n\nNov 10, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nToday’s Learning Nugget\n\n\n\n\n\n\n\n\nNov 2, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nLLM From Scratch\n\n\n\n\n\n\n\n\nOct 29, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\n\nOct 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\nNo matching items"
+    "text": "Today’s Learning Nugget\n\n\n\n\n\n\n\n\nDec 23, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nDistributed Training with PyTorch: An Experimental Study of DDP, FSDP and FSDP2\n\n\nAn experimental analysis of distributed training strategies with PyTorch, comparing DDP, FSDP-Full (ZeRO-3), and FSDP-Grad (ZeRO-2) on H100 GPUs\n\n\n\n\n\nDec 18, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nTraining Large Language Models with FSDP2: A Complete Guide\n\n\nA comprehensive walkthrough of implementing PyTorch’s Fully Sharded Data Parallel (FSDP2) for efficient distributed training of large language models, with real benchmarks on NVIDIA H100 GPUs\n\n\n\n\n\nDec 18, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding RiskNavigator AI: A Multi-Agent System for Financial Risk Assessment\n\n\nA step-by-step guide to building a production-grade multi-agent AI system for financial analysis using Google Agent Development Kit and Gemini 2.5 Pro\n\n\n\n\n\nDec 9, 2025\n\n\nDipankar R. Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding ZeRO: Memory-Efficient Training from Theory to Practice\n\n\nA hands-on exploration of Zero Redundancy Optimizer through implementation and experiments\n\n\n\n\n\nDec 1, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nDay One with DGX Spark: From Setup to Running Local LLMs\n\n\n\n\n\n\n\n\nNov 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding Distributed Data Parallelism (DDP): A Beginner’s Guide\n\n\n\n\n\n\n\n\nNov 10, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nLLM From Scratch\n\n\n\n\n\n\n\n\nOct 29, 2025\n\n\nDipankar Baisya\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\n\nOct 25, 2025\n\n\nDipankar Baisya\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#working-with-text-data",
@@ -486,15 +486,15 @@
     "objectID": "posts/Today's-Learning-Nugget/index.html#section",
     "href": "posts/Today's-Learning-Nugget/index.html#section",
     "title": "Today’s Learning Nugget",
-    "section": "11/02/2025",
-    "text": "11/02/2025\n\nC and C++ review, Cuda Toolkit\nIntro to GPU\nCuda Basica\n\ndeviceQuery\nThread Block Clusters\nGrid, Block, Thread\nWarp and Weft"
+    "section": "12/23/2025",
+    "text": "12/23/2025\n\nAirBnB ML System Design on EBR Search"
   },
   {
     "objectID": "posts/Today's-Learning-Nugget/index.html#section-1",
     "href": "posts/Today's-Learning-Nugget/index.html#section-1",
     "title": "Today’s Learning Nugget",
-    "section": "11/07/2025",
-    "text": "11/07/2025\n\nInside Nvidia GPU\n\nFundamentals of NVIDIA GPU architecture: global memory, shared memory, L1/L2 cache, impact of power throttling on SOL, etc.\nGPU assembly languages: SASS and PTX"
+    "section": "11/02/2025",
+    "text": "11/02/2025\n\nC and C++ review, Cuda Toolkit\nIntro to GPU\nCuda Basica\n\ndeviceQuery\nThread Block Clusters\nGrid, Block, Thread\nWarp and Weft"
   },
   {
     "objectID": "posts/Screatch_to_Scale/index.html",
@@ -2770,5 +2770,12 @@
     "title": "Introduction",
     "section": "Key Migration Steps",
     "text": "Key Migration Steps\n\nReplace wrapper class with function:\n# FSDP1\nmodel = FSDP(model, ...)\n\n# FSDP2\nfully_shard(model, ...)\nExplicit layer wrapping:\n# FSDP2\nfor module in get_module_children_bottom_up(model)[:-1]:\n    if isinstance(module, TransformerLayer):\n        fully_shard(module)\nReplace ShardingStrategy enum with parameter:\n# FSDP1\nsharding_strategy=ShardingStrategy.FULL_SHARD\n\n# FSDP2\nreshard_after_forward=True  # ZeRO-3\nAdd DeviceMesh for hybrid sharding (optional):\n# FSDP1\nsharding_strategy=ShardingStrategy.HYBRID_SHARD\n\n# FSDP2\nmesh = init_device_mesh(\"cuda\", (num_nodes, gpus_per_node))\nfully_shard(model, mesh=mesh, reshard_after_forward=True)\nOptimizer after sharding (unchanged, but more critical):\nfully_shard(model)\noptimizer = torch.optim.AdamW(model.parameters())  # Must be after!\n\n\n\n\n\n\n\nNoteLearn More About FSDP2\n\n\n\nFor a comprehensive guide on implementing FSDP2, including detailed experimental setup, performance benchmarks on 4× H100 GPUs, and optimization strategies, see the full blog post: Training Large Language Models with FSDP2: A Complete Guide"
+  },
+  {
+    "objectID": "posts/Today's-Learning-Nugget/index.html#section-2",
+    "href": "posts/Today's-Learning-Nugget/index.html#section-2",
+    "title": "Today’s Learning Nugget",
+    "section": "11/07/2025",
+    "text": "11/07/2025\n\nInside Nvidia GPU\n\nFundamentals of NVIDIA GPU architecture: global memory, shared memory, L1/L2 cache, impact of power throttling on SOL, etc.\nGPU assembly languages: SASS and PTX"
   }
 ]
