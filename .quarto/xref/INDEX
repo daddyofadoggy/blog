@@ -102,5 +102,11 @@
   },
   "posts/fsdp2/index.qmd": {
     "index.html": "6c2a5e0c"
+  },
+  "posts/fp8/index.qmd": {
+    "index.html": "38aa740b"
+  },
+  "posts/fp8/fp8_blog.md": {
+    "fp8_blog.html": "3113728e"
   }
 }

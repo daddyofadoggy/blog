@@ -1,0 +1,16 @@
+---
+title: "Pre-Training Large Language Models with FP8: A Comprehensive Benchmark on NVIDIA B200 GPUs"
+description: "A comprehensive guide to FP8 (8-bit floating point) training for large language models, exploring performance benefits and implementation strategies on NVIDIA B200 GPUs"
+author: "Dipankar Baisya"
+date: "2025-12-30"
+categories: [deep-learning, fp8, low-precision, pytorch, optimization]
+format:
+  html:
+    code-fold: false
+    code-tools: true
+    toc: true
+    toc-depth: 2
+    number-sections: true
+---
+
+{{< include ./fp8_blog.md >}}

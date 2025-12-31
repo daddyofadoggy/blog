@@ -12,6 +12,7 @@ listing:
       - "posts/RiskNavigator/index.qmd"
       - "posts/ddp_fsdp/index.qmd"
       - "posts/fsdp2/index.qmd"
+      - "posts/fp8/index.qmd"
     type: default
     sort: "date desc"
 ---
