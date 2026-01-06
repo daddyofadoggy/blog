@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dipankar Baisya">
+<meta name="dcterms.date" content="2026-01-05">
+<meta name="description" content="A comprehensive performance analysis of distributed training strategies using TorchTitan on NVIDIA GB200 GPUs, revealing the critical inflection point where tensor parallelism transitions from overhead to essential requirement as we scale from 8B to 32B parameters">
+
+<title>Scaling LLM Pre-Training with TorchTitan: From Simple FSDP to 4D Parallelism at Scale – My Blogs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Blogs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Scaling LLM Pre-Training with TorchTitan: From Simple FSDP to 4D Parallelism at Scale</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          A comprehensive performance analysis of distributed training strategies using TorchTitan on NVIDIA GB200 GPUs, revealing the critical inflection point where tensor parallelism transitions from overhead to essential requirement as we scale from 8B to 32B parameters
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">distributed-training</div>
+                <div class="quarto-category">torchtitan</div>
+                <div class="quarto-category">parallelism</div>
+                <div class="quarto-category">llm</div>
+                <div class="quarto-category">fsdp</div>
+                <div class="quarto-category">tensor-parallel</div>
+                <div class="quarto-category">pipeline-parallel</div>
+                <div class="quarto-category">pytorch</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Dipankar Baisya </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 5, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#understanding-parallelism-strategies" id="toc-understanding-parallelism-strategies" class="nav-link" data-scroll-target="#understanding-parallelism-strategies"><span class="header-section-number">2</span> Understanding Parallelism Strategies</a>
+  <ul class="collapse">
+  <li><a href="#fully-sharded-data-parallel-fsdp" id="toc-fully-sharded-data-parallel-fsdp" class="nav-link" data-scroll-target="#fully-sharded-data-parallel-fsdp"><span class="header-section-number">2.1</span> Fully Sharded Data Parallel (FSDP)</a></li>
+  <li><a href="#tensor-parallelism-tp" id="toc-tensor-parallelism-tp" class="nav-link" data-scroll-target="#tensor-parallelism-tp"><span class="header-section-number">2.2</span> Tensor Parallelism (TP)</a></li>
+  <li><a href="#pipeline-parallelism-pp" id="toc-pipeline-parallelism-pp" class="nav-link" data-scroll-target="#pipeline-parallelism-pp"><span class="header-section-number">2.3</span> Pipeline Parallelism (PP)</a></li>
+  <li><a href="#d-parallelism-tpcpfsdp" id="toc-d-parallelism-tpcpfsdp" class="nav-link" data-scroll-target="#d-parallelism-tpcpfsdp"><span class="header-section-number">2.4</span> 3D Parallelism: TP+CP+FSDP</a></li>
+  <li><a href="#d-parallelism-tpppfsdp" id="toc-d-parallelism-tpppfsdp" class="nav-link" data-scroll-target="#d-parallelism-tpppfsdp"><span class="header-section-number">2.5</span> 3D Parallelism: TP+PP+FSDP</a></li>
+  <li><a href="#scaling-with-torchtitan" id="toc-scaling-with-torchtitan" class="nav-link" data-scroll-target="#scaling-with-torchtitan"><span class="header-section-number">2.6</span> Scaling with TorchTitan</a></li>
+  </ul></li>
+  <li><a href="#experimental-setup" id="toc-experimental-setup" class="nav-link" data-scroll-target="#experimental-setup"><span class="header-section-number">3</span> Experimental Setup</a></li>
+  <li><a href="#part-i-llama-3.1-8b-analysis" id="toc-part-i-llama-3.1-8b-analysis" class="nav-link" data-scroll-target="#part-i-llama-3.1-8b-analysis"><span class="header-section-number">4</span> Part I: Llama 3.1 8B Analysis</a>
+  <ul class="collapse">
+  <li><a href="#performance-results" id="toc-performance-results" class="nav-link" data-scroll-target="#performance-results"><span class="header-section-number">4.1</span> Performance Results</a></li>
+  <li><a href="#key-findings-for-8b-models" id="toc-key-findings-for-8b-models" class="nav-link" data-scroll-target="#key-findings-for-8b-models"><span class="header-section-number">4.2</span> Key Findings for 8B Models</a></li>
+  </ul></li>
+  <li><a href="#part-ii-qwen3-32b-analysis" id="toc-part-ii-qwen3-32b-analysis" class="nav-link" data-scroll-target="#part-ii-qwen3-32b-analysis"><span class="header-section-number">5</span> Part II: Qwen3-32B Analysis</a>
+  <ul class="collapse">
+  <li><a href="#performance-results-1" id="toc-performance-results-1" class="nav-link" data-scroll-target="#performance-results-1"><span class="header-section-number">5.1</span> Performance Results</a></li>
+  <li><a href="#key-findings-for-32b-models" id="toc-key-findings-for-32b-models" class="nav-link" data-scroll-target="#key-findings-for-32b-models"><span class="header-section-number">5.2</span> Key Findings for 32B Models</a></li>
+  </ul></li>
+  <li><a href="#comparative-analysis-8b-vs-32b-model-behavior" id="toc-comparative-analysis-8b-vs-32b-model-behavior" class="nav-link" data-scroll-target="#comparative-analysis-8b-vs-32b-model-behavior"><span class="header-section-number">6</span> Comparative Analysis: 8B vs 32B Model Behavior</a>
+  <ul class="collapse">
+  <li><a href="#critical-differences" id="toc-critical-differences" class="nav-link" data-scroll-target="#critical-differences"><span class="header-section-number">6.1</span> Critical Differences</a></li>
+  <li><a href="#the-inflection-point" id="toc-the-inflection-point" class="nav-link" data-scroll-target="#the-inflection-point"><span class="header-section-number">6.2</span> The Inflection Point</a></li>
+  </ul></li>
+  <li><a href="#optimal-configurations" id="toc-optimal-configurations" class="nav-link" data-scroll-target="#optimal-configurations"><span class="header-section-number">7</span> Optimal Configurations</a>
+  <ul class="collapse">
+  <li><a href="#for-llama-3.1-8b-or-similar-8b-models" id="toc-for-llama-3.1-8b-or-similar-8b-models" class="nav-link" data-scroll-target="#for-llama-3.1-8b-or-similar-8b-models"><span class="header-section-number">7.1</span> For Llama 3.1 8B (or similar 8B models)</a></li>
+  <li><a href="#for-qwen3-32b-or-similar-32b-models" id="toc-for-qwen3-32b-or-similar-32b-models" class="nav-link" data-scroll-target="#for-qwen3-32b-or-similar-32b-models"><span class="header-section-number">7.2</span> For Qwen3-32B (or similar 32B models)</a></li>
+  </ul></li>
+  <li><a href="#golden-rules-for-production-training" id="toc-golden-rules-for-production-training" class="nav-link" data-scroll-target="#golden-rules-for-production-training"><span class="header-section-number">8</span> Golden Rules for Production Training</a>
+  <ul class="collapse">
+  <li><a href="#for-8b-models" id="toc-for-8b-models" class="nav-link" data-scroll-target="#for-8b-models"><span class="header-section-number">8.1</span> For 8B Models:</a></li>
+  <li><a href="#for-32b-models" id="toc-for-32b-models" class="nav-link" data-scroll-target="#for-32b-models"><span class="header-section-number">8.2</span> For 32B+ Models:</a></li>
+  <li><a href="#universal-rules" id="toc-universal-rules" class="nav-link" data-scroll-target="#universal-rules"><span class="header-section-number">8.3</span> Universal Rules:</a></li>
+  </ul></li>
+  <li><a href="#industry-context-and-validation" id="toc-industry-context-and-validation" class="nav-link" data-scroll-target="#industry-context-and-validation"><span class="header-section-number">9</span> Industry Context and Validation</a></li>
+  <li><a href="#future-research-directions" id="toc-future-research-directions" class="nav-link" data-scroll-target="#future-research-directions"><span class="header-section-number">10</span> Future Research Directions</a>
+  <ul class="collapse">
+  <li><a href="#high-priority-experiments" id="toc-high-priority-experiments" class="nav-link" data-scroll-target="#high-priority-experiments"><span class="header-section-number">10.1</span> High-Priority Experiments:</a></li>
+  </ul></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">11</span> Conclusions</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">12</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Training large language models efficiently requires sophisticated parallelization strategies that evolve with model scale. While simple data parallelism works well for smaller models, modern architectures with billions or tens of billions of parameters demand more complex approaches. This blog post presents a comprehensive exploration of various parallelism configurations using TorchTitan on NVIDIA GB200 GPUs, examining how optimal strategies shift dramatically as we scale from 8 billion to 32 billion parameters.</p>
+<p>We analyze training performance for two models: Llama 3.1 8B and Qwen3-32B, comparing tensor parallelism, pipeline parallelism, context parallelism, and various 3D parallelism strategies. Our findings reveal a critical inflection point where tensor parallelism transitions from performance-degrading overhead at 8B parameters to an essential requirement at 32B parameters—a discovery with significant implications for production LLM training.</p>
+<hr>
+</section>
+<section id="understanding-parallelism-strategies" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="understanding-parallelism-strategies"><span class="header-section-number">2</span> Understanding Parallelism Strategies</h2>
+<section id="fully-sharded-data-parallel-fsdp" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="fully-sharded-data-parallel-fsdp"><span class="header-section-number">2.1</span> Fully Sharded Data Parallel (FSDP)</h3>
+<p>The original Fully Sharded Data Parallel (FSDP) is an effective implementation of ZeRO that offers large model training capability in PyTorch. However, the original implementation (FSDP1) in PyTorch suffers from various limitations due to its FlatParameter implementation.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code>data_parallel_replicate_degree = 1
+data_parallel_shard_degree = 8
+tensor_parallel_degree = 1
+pipeline_parallel_degree = 1
+context_parallel_degree = 1</code></pre>
+<p>Given these limitations, TorchTitan integrates a new version of Fully Sharded Data Parallel (FSDP2), which uses the per-parameter Distributed Tensor sharding representation and thus provides better composability with model parallelism techniques and other features that require the manipulation of individual parameters. TorchTitan integrates and leverages FSDP2 as it’s default 1D parallelism, benefiting from the improved memory management (often 7 percent lower per GPU memory requirement vs FSDP1) and the slight performance gains (average of 1.5 percent gain vs FSDP1). TorchTitan makes it simple to run with FSDP2 by embedding appropriate defaults, including auto-sharding with your world size automatically.</p>
+<p>For scaling to even larger world sizes, TorchTitan also integrates Hybrid Sharded Data Parallel (HSDP) which extends FSDP2 by creating 2D DeviceMesh with replica groups</p>
+</section>
+<section id="tensor-parallelism-tp" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="tensor-parallelism-tp"><span class="header-section-number">2.2</span> Tensor Parallelism (TP)</h3>
+<p>Tensor parallelism splits individual weight matrices across multiple GPUs, enabling each GPU to hold only a fraction of the model’s parameters. When combined with Fully Sharded Data Parallel (FSDP), this creates a powerful memory-reduction strategy.</p>
+<p>TP is implemented in TorchTitan using the PyTorch’s RowwiseParallel and ColwiseParallel APIs, where the model parameters are partitioned to DTensors and perform sharded computation with it. By leveraging DTensor, the TP implementation does not need to touch the model code, which allows faster enablement on different models</p>
+<p><strong>Configuration:</strong></p>
+<pre><code>data_parallel_replicate_degree = 1
+data_parallel_shard_degree = 2
+tensor_parallel_degree = 4
+pipeline_parallel_degree = 1
+context_parallel_degree = 1</code></pre>
+<p>This configuration uses a total of 8 GPUs (1 × 2 × 4 × 1 × 1). The parallelism is applied in two stages: first, each layer is split 4 ways via tensor parallelism, then those TP-split pieces are sharded 2 ways via FSDP.</p>
+<p><strong>GPU Layout:</strong></p>
+<p>The 8 GPUs are organized into 4 tensor parallel groups, with each group handling a slice of the weight matrices:</p>
+<ul>
+<li>TP Group 0 (handles TP slice 1/4 of each layer): FSDP sharded across [GPU0, GPU1]</li>
+<li>TP Group 1 (handles TP slice 2/4 of each layer): FSDP sharded across [GPU2, GPU3]</li>
+<li>TP Group 2 (handles TP slice 3/4 of each layer): FSDP sharded across [GPU4, GPU5]</li>
+<li>TP Group 3 (handles TP slice 4/4 of each layer): FSDP sharded across [GPU6, GPU7]</li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<p>For a typical attention QKV projection matrix with shape [4096, 12288], tensor parallelism with TP=4 splits the matrix into 4 pieces along the output dimension. Each TP group holds a [4096, 3072] slice. Within each TP group, FSDP further shards these parameters across 2 GPUs, so each individual GPU holds approximately [2048, 3072] worth of parameters.</p>
+<p>During the forward pass, each TP group performs an all-gather operation between its two GPUs to reconstruct the full [4096, 3072] slice, computes the matrix multiplication, and produces its portion of the output. For attention operations, the 4 output slices are concatenated, while for MLP output projections, an all-reduce operation across all TP groups combines the results.</p>
+<p><strong>Memory Efficiency:</strong></p>
+<p>For a model like Qwen3-32B with 32 billion parameters, this configuration achieves significant memory reduction. Without parallelism, a single GPU would need to hold all 32B parameters. With TP=4 alone, each GPU holds 8B parameters. The combination of TP=4 and FSDP=2 reduces this to just 4B parameters per GPU, plus optimizer states (approximately 8B for AdamW) and activations, resulting in a total memory footprint of around 20-30GB per GPU.</p>
+<p><strong>Communication Patterns:</strong></p>
+<p>FSDP communication occurs within TP groups through all-gather operations for forward passes and reduce-scatter operations for gradient synchronization during backward passes. These operations involve GPU pairs (0-1), (2-3), (4-5), and (6-7). TP communication involves all-reduce operations across all 8 GPUs to sum outputs for certain layers like MLP projections, while other layers like QKV projections simply concatenate results without additional communication.</p>
+<p><strong>Visual Architecture:</strong></p>
+<pre><code>Layer Weight Matrix [4096, 12288]
+│
+├─ TP=4 splits columns into 4 pieces of [4096, 3072]
+│  │
+│  ├─ TP Group 0: [4096, 3072]
+│  │   └─ FSDP=2 splits rows
+│  │       ├─ GPU0: ~[2048, 3072]
+│  │       └─ GPU1: ~[2048, 3072]
+│  │
+│  ├─ TP Group 1: [4096, 3072]
+│  │   └─ FSDP=2 splits rows
+│  │       ├─ GPU2: ~[2048, 3072]
+│  │       └─ GPU3: ~[2048, 3072]
+│  │
+│  ├─ TP Group 2: [4096, 3072]
+│  │   └─ FSDP=2 splits rows
+│  │       ├─ GPU4: ~[2048, 3072]
+│  │       └─ GPU5: ~[2048, 3072]
+│  │
+│  └─ TP Group 3: [4096, 3072]
+│      └─ FSDP=2 splits rows
+│          ├─ GPU6: ~[2048, 3072]
+│          └─ GPU7: ~[2048, 3072]</code></pre>
+<hr>
+</section>
+<section id="pipeline-parallelism-pp" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="pipeline-parallelism-pp"><span class="header-section-number">2.3</span> Pipeline Parallelism (PP)</h3>
+<p>Pipeline parallelism takes a different approach by splitting the model vertically across layers rather than splitting individual weight matrices. This is particularly effective for very deep models and enables training with extremely long sequences.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code>data_parallel_replicate_degree = 1
+data_parallel_shard_degree = 2
+tensor_parallel_degree = 1
+pipeline_parallel_degree = 4
+context_parallel_degree = 1</code></pre>
+<p>This configuration also uses 8 GPUs (1 × 2 × 1 × 4 × 1). The parallelism is composed in a specific order: pipeline parallel (outermost), tensor parallel, data parallel shard (FSDP), and data parallel replicate (innermost).</p>
+<p><strong>GPU Layout:</strong></p>
+<p>The model layers are divided into 4 pipeline stages, with each stage processed by a pair of GPUs using FSDP:</p>
+<ul>
+<li>Pipeline Stage 0 (layers 0 to N/4): FSDP Group [GPU0, GPU1]</li>
+<li>Pipeline Stage 1 (layers N/4 to N/2): FSDP Group [GPU2, GPU3]</li>
+<li>Pipeline Stage 2 (layers N/2 to 3N/4): FSDP Group [GPU4, GPU5]</li>
+<li>Pipeline Stage 3 (layers 3N/4 to N): FSDP Group [GPU6, GPU7]</li>
+</ul>
+<p><strong>Concrete Example:</strong></p>
+<p>For Qwen3-32B with 80 transformer layers, the distribution would be: - Pipeline Stage 0 (Layers 0-19): GPU0 holds 50% of parameters, GPU1 holds other 50% - Pipeline Stage 1 (Layers 20-39): GPU2 holds 50% of parameters, GPU3 holds other 50% - Pipeline Stage 2 (Layers 40-59): GPU4 holds 50% of parameters, GPU5 holds other 50% - Pipeline Stage 3 (Layers 60-79): GPU6 holds 50% of parameters, GPU7 holds other 50%</p>
+<hr>
+</section>
+<section id="d-parallelism-tpcpfsdp" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="d-parallelism-tpcpfsdp"><span class="header-section-number">2.4</span> 3D Parallelism: TP+CP+FSDP</h3>
+<p>This configuration combines tensor parallelism, context parallelism, and FSDP to handle both large models and long sequences.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code>data_parallel_replicate_degree = 1
+data_parallel_shard_degree = 2
+tensor_parallel_degree = 2
+pipeline_parallel_degree = 1
+context_parallel_degree = 2</code></pre>
+<p>Using 8 GPUs (1 × 2 × 2 × 1 × 2), the parallelism dimensions compose in a specific hierarchy from inner to outer: context parallel (innermost, splits sequence), tensor parallel (splits layers/weights), pipeline parallel (splits model vertically), data parallel shard (shards parameters), and data parallel replicate (outermost, replicates entire setup).</p>
+<p><strong>Context Parallelism (CP=2):</strong></p>
+<p>Context parallelism splits the sequence length across GPUs. For a sequence of 8192 tokens with CP=2, each GPU pair processes half the sequence. GPU_A handles tokens 0-4095 while GPU_B handles tokens 4096-8191. Every GPU pair (0-1), (2-3), (4-5), (6-7) forms a CP group.</p>
+<p><strong>Tensor Parallelism (TP=2):</strong></p>
+<p>With TP=2, weight matrices are split column-wise. A weight matrix of shape [4096, 4096] is divided so that TP rank 0 handles columns 0-2047 and TP rank 1 handles columns 2048-4095. This configuration creates 4 TP groups: TP Group 0 contains CP group (GPU0, GPU1), TP Group 1 contains CP group (GPU2, GPU3), TP Group 2 contains CP group (GPU4, GPU5), and TP Group 3 contains CP group (GPU6, GPU7).</p>
+<p><strong>FSDP (shard_degree=2):</strong></p>
+<p>FSDP shards parameters across the TP groups, creating two FSDP groups. FSDP Group 0 contains [TP Group 0, TP Group 1] which corresponds to [GPU0-1, GPU2-3], while FSDP Group 1 contains [TP Group 2, TP Group 3] which corresponds to [GPU4-5, GPU6-7].</p>
+<p><strong>Visual Architecture:</strong></p>
+<pre><code>8 GPUs organized as:
+
+FSDP Group 0 [GPU0, GPU1, GPU2, GPU3]:
+  │
+  ├─ TP Group 0 (weight columns 0-6143):
+  │   └─ CP Group [GPU0, GPU1]
+  │       ├─ GPU0: seq tokens 0-4095
+  │       └─ GPU1: seq tokens 4096-8191
+  │
+  └─ TP Group 1 (weight columns 6144-12287):
+      └─ CP Group [GPU2, GPU3]
+          ├─ GPU2: seq tokens 0-4095
+          └─ GPU3: seq tokens 4096-8191
+
+FSDP Group 1 [GPU4, GPU5, GPU6, GPU7]:
+  │
+  ├─ TP Group 2 (weight columns 0-6143):
+  │   └─ CP Group [GPU4, GPU5]
+  │       ├─ GPU4: seq tokens 0-4095
+  │       └─ GPU5: seq tokens 4096-8191
+  │
+  └─ TP Group 3 (weight columns 6144-12287):
+      └─ CP Group [GPU6, GPU7]
+          ├─ GPU6: seq tokens 0-4095
+          └─ GPU7: seq tokens 4096-8191</code></pre>
+<p>This configuration works well for long sequences (8K+ tokens), large hidden dimensions, memory-constrained scenarios, and models like Llama 3.1 8B. The 8× total memory reduction enables efficient training of models that would otherwise exceed single-GPU memory capacity.</p>
+<hr>
+</section>
+<section id="d-parallelism-tpppfsdp" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="d-parallelism-tpppfsdp"><span class="header-section-number">2.5</span> 3D Parallelism: TP+PP+FSDP</h3>
+<p>This variant combines tensor parallelism, pipeline parallelism, and FSDP, making it suitable for very deep and wide models.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code>data_parallel_replicate_degree = 1
+data_parallel_shard_degree = 2
+tensor_parallel_degree = 2
+pipeline_parallel_degree = 2
+context_parallel_degree = 1</code></pre>
+<p>Using 8 GPUs (1 × 2 × 2 × 2 × 1), the nesting order is pipeline parallel (outermost, splits model vertically by layers), tensor parallel (splits weight matrices within each stage), and data parallel shard (innermost, shards the TP-split parameters).</p>
+<p><strong>GPU Layout:</strong></p>
+<p>The model is divided into two pipeline stages:</p>
+<p><strong>Pipeline Stage 0 (First 50% of layers):</strong> - FSDP Group containing 2 TP groups: - TP Group 0: [GPU0, GPU1] with FSDP sharding - TP Group 1: [GPU2, GPU3] with FSDP sharding</p>
+<p><strong>Pipeline Stage 1 (Second 50% of layers):</strong> - FSDP Group containing 2 TP groups: - TP Group 0: [GPU4, GPU5] with FSDP sharding - TP Group 1: [GPU6, GPU7] with FSDP sharding</p>
+<p><strong>Visual Architecture:</strong></p>
+<pre><code>Pipeline Stage 0 (Layers 0-15) [GPU 0-3]:
+  │
+  ├─ TP Group 0 (weight columns 0-6143):
+  │   └─ FSDP: [GPU0, GPU1]
+  │       ├─ GPU0: ~50% of TP slice params
+  │       └─ GPU1: ~50% of TP slice params
+  │
+  └─ TP Group 1 (weight columns 6144-12287):
+      └─ FSDP: [GPU2, GPU3]
+          ├─ GPU2: ~50% of TP slice params
+          └─ GPU3: ~50% of TP slice params
+
+          ↓ Activations flow down ↓
+
+Pipeline Stage 1 (Layers 16-31) [GPU 4-7]:
+  │
+  ├─ TP Group 0 (weight columns 0-6143):
+  │   └─ FSDP: [GPU4, GPU5]
+  │       ├─ GPU4: ~50% of TP slice params
+  │       └─ GPU5: ~50% of TP slice params
+  │
+  └─ TP Group 1 (weight columns 6144-12287):
+      └─ FSDP: [GPU6, GPU7]
+          ├─ GPU6: ~50% of TP slice params
+          └─ GPU7: ~50% of TP slice params</code></pre>
+<p>This configuration excels for deep models with many layers to split via pipeline parallelism, wide layers with large hidden dimensions that benefit from tensor parallelism, memory-constrained scenarios requiring 8× total reduction, and multi-node setups where aligning pipeline stages with nodes optimizes communication.</p>
+<hr>
+</section>
+<section id="scaling-with-torchtitan" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="scaling-with-torchtitan"><span class="header-section-number">2.6</span> Scaling with TorchTitan</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assets/scale_4d.png" class="img-fluid figure-img"></p>
+<figcaption>Scaling with 4D Parallelism in TorchTitan</figcaption>
+</figure>
+</div>
+<p><em>Figure 1: Scaling with 4D Parallelism in TorchTitan - demonstrating performance characteristics across different parallelism configurations and model scales.(Source: TorchTitan Paper)</em></p>
+<p>TorchTitan provides a sophisticated framework for scaling distributed training from small clusters to thousands of GPUs by composing multiple parallelism dimensions. The scaling strategy evolves systematically as we increase the number of GPUs and model complexity.</p>
+<p><strong>Scaling with FSDP (1D Parallelism):</strong> FSDP serves as the foundational parallelism technique applicable to any model architecture. It remains sufficient as the primary parallelism dimension when communication is faster than computation, typically scaling effectively up to 512 GPUs. However, as the world size increases beyond this threshold, collective communication latency grows linearly, creating efficiency bottlenecks that necessitate additional parallelism dimensions.</p>
+<p><strong>2D Parallelism: TP with FSDP:</strong> Tensor Parallelism addresses FSDP’s scaling limitations by distributing computational work across GPUs, effectively reducing collective latency. This combination enables strong scaling with fixed problem and batch sizes, allowing smaller effective batch sizes while reducing peak memory usage for large models or long sequences. TP also improves FLOP utilization by optimizing matrix multiplication shapes. However, TP introduces blocking collective operations and is typically constrained to intra-node scaling using high-bandwidth interconnects like NVLink, with practical degrees usually capped at 8. Scaling beyond 4,192 GPUs requires incorporating pipeline parallelism.</p>
+<p><strong>3D Parallelism: PP with TP and FSDP:</strong> Pipeline Parallelism reduces communication bandwidth requirements by transmitting only activations and gradients between pipeline stages in a peer-to-peer manner, rather than broadcasting entire parameter states. PP proves particularly effective for mitigating FSDP communication latency at larger scales or in bandwidth-limited clusters. The efficiency of pipeline parallelism depends critically on pipeline schedules and microbatch sizes, which determine the magnitude of pipeline “bubbles”—idle periods where GPUs wait for data from previous stages.</p>
+<p><strong>4D Parallelism: Adding Context Parallelism:</strong> Context Parallelism enables ultra-long context training by splitting the sequence dimension across GPUs, preventing out-of-memory errors that would otherwise occur with very long sequences. CP primarily serves long-context training scenarios, allowing models to capture correlations across more tokens and thus enhancing overall model quality. For scaling sequence length, CP can be used independently with data parallelism or combined with 3D parallelism (TP+PP+FSDP). In these complex configurations, TP typically occupies the innermost DeviceMesh dimension, with CP applied in the next outer dimension to optimize communication patterns.</p>
+<hr>
+</section>
+</section>
+<section id="experimental-setup" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="experimental-setup"><span class="header-section-number">3</span> Experimental Setup</h2>
+<p><strong>Hardware:</strong> 8× NVIDIA GB200 GPUs (192GB HBM3e each)</p>
+<p><strong>Models:</strong></p>
+<ul>
+<li>Meta Llama 3.1 8B (8 billion parameters)</li>
+<li>Qwen3-32B (32 billion parameters)</li>
+</ul>
+<p><strong>Framework:</strong> TorchTitan</p>
+<p>All experiments were conducted with various batch sizes and sequence lengths to understand the performance characteristics of each parallelism strategy across different model scales. Torch compilation was enabled or disabled systematically to measure its impact on both 8B and 32B models.</p>
+<hr>
+</section>
+<section id="part-i-llama-3.1-8b-analysis" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="part-i-llama-3.1-8b-analysis"><span class="header-section-number">4</span> Part I: Llama 3.1 8B Analysis</h2>
+<section id="performance-results" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="performance-results"><span class="header-section-number">4.1</span> Performance Results</h3>
+<p>The following table presents comprehensive performance metrics across different parallelism configurations for the 8B model, including memory usage, throughput (tokens per second), computational efficiency (TFLOPS), and model FLOPs utilization (MFU).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parallelism Technique</th>
+<th>Batch</th>
+<th>Seq Len</th>
+<th>Compile</th>
+<th>Memory (%)</th>
+<th>tok/s</th>
+<th>TFLOPS</th>
+<th>MFU (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>FSDP (dp_shard=8)</strong></td>
+<td>16</td>
+<td>2048</td>
+<td>✅</td>
+<td>50%</td>
+<td><strong>20,849</strong></td>
+<td><strong>1,006</strong></td>
+<td><strong>44.66%</strong></td>
+</tr>
+<tr class="even">
+<td>FSDP (dp_shard=8)</td>
+<td>16</td>
+<td>2048</td>
+<td>❌</td>
+<td>71%</td>
+<td>18,831</td>
+<td>908</td>
+<td>40.4%</td>
+</tr>
+<tr class="odd">
+<td><strong>HSDP (dp_shard=4, dp_rep=2)</strong></td>
+<td>8</td>
+<td>2048</td>
+<td>✅</td>
+<td>38%</td>
+<td>19,456</td>
+<td>938</td>
+<td>41.73%</td>
+</tr>
+<tr class="even">
+<td>HSDP (dp_shard=4, dp_rep=2)</td>
+<td>16</td>
+<td>2048</td>
+<td>✅</td>
+<td>58%</td>
+<td>20,529</td>
+<td>990</td>
+<td>44.02%</td>
+</tr>
+<tr class="odd">
+<td>HSDP (dp_shard=4, dp_rep=2)</td>
+<td>16</td>
+<td>2048</td>
+<td>❌</td>
+<td>84%</td>
+<td>18,655</td>
+<td>900</td>
+<td>40%</td>
+</tr>
+<tr class="even">
+<td><strong>HSDP (dp_shard=4, dp_rep=2)</strong></td>
+<td>32</td>
+<td>2048</td>
+<td>✅</td>
+<td>95%</td>
+<td><strong>20,963</strong></td>
+<td><strong>1,011</strong></td>
+<td><strong>45%</strong> ⭐</td>
+</tr>
+<tr class="odd">
+<td><strong>PP+FSDP (dp_shard=2, pp=4)</strong></td>
+<td>8</td>
+<td>8192</td>
+<td>❌</td>
+<td>89%</td>
+<td>10,734</td>
+<td>621</td>
+<td>27.63%</td>
+</tr>
+<tr class="even">
+<td>PP+FSDP (dp_shard=2, pp=4)</td>
+<td>8</td>
+<td>8192</td>
+<td>✅</td>
+<td>27%</td>
+<td>11,849</td>
+<td>686</td>
+<td>30.5%</td>
+</tr>
+<tr class="odd">
+<td>PP+FSDP (dp_shard=2, pp=4)</td>
+<td>16</td>
+<td>8192</td>
+<td>✅</td>
+<td>27%</td>
+<td>13,563</td>
+<td>785</td>
+<td>34.37%</td>
+</tr>
+<tr class="even">
+<td>PP+FSDP (dp_shard=2, pp=4)</td>
+<td>16</td>
+<td>16384</td>
+<td>✅</td>
+<td>36%</td>
+<td>12,755</td>
+<td>902</td>
+<td>40.1%</td>
+</tr>
+<tr class="odd">
+<td><strong>PP+FSDP (dp_shard=2, pp=4)</strong></td>
+<td>32</td>
+<td>16384</td>
+<td>✅</td>
+<td>37%</td>
+<td>13,520</td>
+<td>957</td>
+<td><strong>42.54%</strong></td>
+</tr>
+<tr class="even">
+<td>TP+FSDP (dp_shard=4, tp=2)</td>
+<td>32</td>
+<td>2048</td>
+<td>✅</td>
+<td>67%</td>
+<td>18,258</td>
+<td>880</td>
+<td>39.15%</td>
+</tr>
+<tr class="odd">
+<td><strong>FSDP+TP+CP (dp_shard=2, tp=2, cp=2)</strong></td>
+<td>32</td>
+<td>2048</td>
+<td>✅</td>
+<td>50%</td>
+<td>15,735</td>
+<td>759</td>
+<td>33.75%</td>
+</tr>
+<tr class="even">
+<td>FSDP+TP+CP (dp_shard=2, tp=2, cp=2)</td>
+<td>32</td>
+<td>4096</td>
+<td>✅</td>
+<td>97%</td>
+<td>15,557</td>
+<td>800</td>
+<td>35.54%</td>
+</tr>
+<tr class="odd">
+<td>FSDP+TP+CP (dp_shard=2, tp=2, cp=2)</td>
+<td>64</td>
+<td>2048</td>
+<td>✅</td>
+<td>97%</td>
+<td>15,892</td>
+<td>766</td>
+<td>34.09%</td>
+</tr>
+<tr class="even">
+<td><strong>3D (dp_shard=2, tp=2, pp=2)</strong></td>
+<td>32</td>
+<td>4096</td>
+<td>✅</td>
+<td>19%</td>
+<td>12,500</td>
+<td>645</td>
+<td>28.7%</td>
+</tr>
+<tr class="odd">
+<td>3D (dp_shard=2, tp=2, pp=2)</td>
+<td>32</td>
+<td>8192</td>
+<td>✅</td>
+<td>21%</td>
+<td>13,153</td>
+<td>761</td>
+<td>33.85%</td>
+</tr>
+<tr class="even">
+<td>3D (dp_shard=2, tp=2, pp=2)</td>
+<td>64</td>
+<td>16384</td>
+<td>✅</td>
+<td>28%</td>
+<td>12,331</td>
+<td>871</td>
+<td>38.75%</td>
+</tr>
+<tr class="odd">
+<td>3D (dp_shard=2, tp=2, pp=2)</td>
+<td>128</td>
+<td>16384</td>
+<td>✅</td>
+<td>30%</td>
+<td>12,388</td>
+<td>875</td>
+<td>38.9%</td>
+</tr>
+<tr class="even">
+<td>3D (dp_shard=2, tp=2, pp=2)</td>
+<td>256</td>
+<td>16384</td>
+<td>✅</td>
+<td>34%</td>
+<td>12,805</td>
+<td>909</td>
+<td>40.4%</td>
+</tr>
+<tr class="odd">
+<td><strong>3D (dp_shard=2, tp=2, pp=2)</strong></td>
+<td>512</td>
+<td>16384</td>
+<td>✅</td>
+<td>43%</td>
+<td>12,854</td>
+<td>910</td>
+<td><strong>40.45%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 1: Performance comparison of parallelism strategies on Llama 3.1 8B using 8× GB200 GPUs. Bold entries highlight the best configurations for each strategy.</em></p>
+<hr>
+</section>
+<section id="key-findings-for-8b-models" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="key-findings-for-8b-models"><span class="header-section-number">4.2</span> Key Findings for 8B Models</h3>
+<section id="simple-parallelism-wins" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="simple-parallelism-wins"><span class="header-section-number">4.2.1</span> Simple Parallelism Wins</h4>
+<p>The performance data reveals a surprising insight: simpler parallelism strategies consistently outperform more complex 3D and 4D approaches for the 8B parameter model. Pure FSDP and HSDP achieve 10-25% better performance than elaborate multi-dimensional parallelism schemes.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Strategy</th>
+<th>Best MFU</th>
+<th>tok/s</th>
+<th>Memory</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>HSDP</strong></td>
+<td>45%</td>
+<td>20,963</td>
+<td>95%</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>FSDP</strong></td>
+<td>44.66%</td>
+<td>20,849</td>
+<td>50%</td>
+<td>Very Low</td>
+</tr>
+<tr class="odd">
+<td><strong>PP+FSDP</strong></td>
+<td>42.54%</td>
+<td>13,520</td>
+<td>37%</td>
+<td>Medium</td>
+</tr>
+<tr class="even">
+<td><strong>3D (TP+PP+FSDP)</strong></td>
+<td>40.45%</td>
+<td>12,854</td>
+<td>43%</td>
+<td>High</td>
+</tr>
+<tr class="odd">
+<td><strong>TP+FSDP</strong></td>
+<td>39.15%</td>
+<td>18,258</td>
+<td>67%</td>
+<td>Medium</td>
+</tr>
+<tr class="even">
+<td><strong>TP+CP+FSDP</strong></td>
+<td>35.54%</td>
+<td>15,557</td>
+<td>97%</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 2: Performance ranking showing the superiority of simpler approaches for 8B models.</em></p>
+<p>The dominance of simple parallelism strategies stems from several factors. These approaches introduce less communication overhead, typically requiring only 1-2 collective operations compared to 3-4 for complex schemes. The compiler can better optimize simpler patterns, leading to more efficient kernel fusion and memory management. Additionally, the GB200’s generous 192GB memory capacity makes aggressive parameter splitting unnecessary for an 8B model. The model size itself doesn’t inherently require tensor or pipeline parallelism, making the additional complexity of these techniques more costly than beneficial.</p>
+</section>
+<section id="compilation-is-mandatory" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="compilation-is-mandatory"><span class="header-section-number">4.2.2</span> Compilation is Mandatory</h4>
+<p>Torch compilation provides dramatic benefits, delivering approximately 10% higher throughput while simultaneously reducing memory usage by 30-70%. This improvement is consistent across all parallelism strategies.</p>
+<p><code>torch.compile</code> was released in PyTorch 2 (Ansel et al., 2024) with TorchDynamo as the frontend to extract PyTorch operations into an FX graph, and TorchInductor as the backend to compile the FX graph into fused Triton code to improve the performance.</p>
+<p>In TorchTitan, regional compilation is used, which applies <code>torch.compile</code> to each individual <code>TransformerBlock</code> in the Transformer model. This has two main benefits: (1) we get a full graph (without graph breaks) for each region, compatible with FSDP2 and TP (and more generally <code>torch.Tensor</code> subclasses such as DTensor) and other PyTorch distributed training techniques; (2) since the Llama model stacks identical <code>TransformerBlock</code> layers one after another, <code>torch.compile</code> can identify the same structure is being repeatedly compiled and only compile once, thus greatly reducing compilation time.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 18%">
+<col style="width: 16%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>Compile</th>
+<th>Memory</th>
+<th>tok/s</th>
+<th>MFU</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FSDP(8), bs=16</td>
+<td>❌</td>
+<td>71%</td>
+<td>18,831</td>
+<td>40.4%</td>
+<td>baseline</td>
+</tr>
+<tr class="even">
+<td>FSDP(8), bs=16</td>
+<td>✅</td>
+<td>50%</td>
+<td>20,849</td>
+<td>44.66%</td>
+<td><strong>+10.7% tok/s, -30% mem</strong></td>
+</tr>
+<tr class="odd">
+<td>HSDP(4,2), bs=16</td>
+<td>❌</td>
+<td>84%</td>
+<td>18,655</td>
+<td>40%</td>
+<td>baseline</td>
+</tr>
+<tr class="even">
+<td>HSDP(4,2), bs=16</td>
+<td>✅</td>
+<td>58%</td>
+<td>20,529</td>
+<td>44.02%</td>
+<td><strong>+10% tok/s, -31% mem</strong></td>
+</tr>
+<tr class="odd">
+<td>PP+FSDP, bs=8, seq=8K</td>
+<td>❌</td>
+<td>89%</td>
+<td>10,734</td>
+<td>27.63%</td>
+<td>baseline</td>
+</tr>
+<tr class="even">
+<td>PP+FSDP, bs=8, seq=8K</td>
+<td>✅</td>
+<td>27%</td>
+<td>11,849</td>
+<td>30.5%</td>
+<td><strong>+10.4% tok/s, -70% mem!</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 3: Impact of torch compilation showing improvements in throughput and memory efficiency for 8B models.</em></p>
+<p>The compilation benefits arise from multiple optimizations. Kernel fusion combines operations like all-gather, matrix multiplication, and reduce-scatter into single kernels, reducing overhead. Aggressive memory planning enables extensive buffer reuse, explaining the substantial 30-70% memory reduction. Communication overlap hides network latency behind computation, maintaining GPU utilization. Pipeline parallelism configurations benefit most dramatically, achieving a remarkable 70% memory improvement.</p>
+</section>
+<section id="hsdp-achieves-highest-mfu-with-caveats" class="level4" data-number="4.2.3">
+<h4 data-number="4.2.3" class="anchored" data-anchor-id="hsdp-achieves-highest-mfu-with-caveats"><span class="header-section-number">4.2.3</span> HSDP Achieves Highest MFU (With Caveats)</h4>
+<p>The highest model FLOPs utilization comes from HSDP (Hybrid Sharded Data Parallel) with dp_shard=4, dp_rep=2, batch size 32, and compilation enabled. This configuration achieves 45% MFU with 20,963 tokens/s, though it consumes 95% of available memory. HSDP’s superiority stems from its hybrid approach, reducing the all-gather scope to 4 GPUs instead of 8 and better simulating multi-node setups. However, the 95% memory usage represents a significant trade-off compared to pure FSDP’s comfortable 50% utilization.</p>
+</section>
+<section id="pure-fsdp-safest-high-performance-choice" class="level4" data-number="4.2.4">
+<h4 data-number="4.2.4" class="anchored" data-anchor-id="pure-fsdp-safest-high-performance-choice"><span class="header-section-number">4.2.4</span> Pure FSDP: Safest High-Performance Choice</h4>
+<p>Pure FSDP with dp_shard=8, batch size 16, and compilation enabled achieves 44.66% MFU and 20,849 tokens/s while using only 50% of available memory. This represents 99.5% of HSDP’s throughput with substantially better headroom. The 50% memory utilization versus 95% provides enormous headroom for experimentation, longer sequences, or unexpected memory spikes. Configuration is simpler with fewer hyperparameters to tune, and training is more stable with dramatically lower out-of-memory risk.</p>
+</section>
+<section id="tensor-parallelism-hurts-8b-models" class="level4" data-number="4.2.5">
+<h4 data-number="4.2.5" class="anchored" data-anchor-id="tensor-parallelism-hurts-8b-models"><span class="header-section-number">4.2.5</span> Tensor Parallelism Hurts 8B Models</h4>
+<p>Tensor parallelism introduces 15-25% overhead for the 8B model with no corresponding benefit. Pure FSDP achieves 20,849 tokens/s and 44.66% MFU, while TP+FSDP drops to 18,258 tokens/s and 39.15% MFU—a 12% performance loss. When combined with context parallelism (TP+CP+FSDP), performance degrades further to 15,735 tokens/s and 33.75% MFU, representing a 24% loss. The performance degradation stems from all-reduce communication overhead, which adds approximately 13ms per iteration across the model’s 32 layers. Since the 8B model fits comfortably in a single GPU’s 192GB memory, tensor parallelism’s parameter splitting provides no memory benefit.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="part-ii-qwen3-32b-analysis" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="part-ii-qwen3-32b-analysis"><span class="header-section-number">5</span> Part II: Qwen3-32B Analysis</h2>
+<section id="performance-results-1" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="performance-results-1"><span class="header-section-number">5.1</span> Performance Results</h3>
+<p>The following table presents performance metrics for the 32B model, revealing dramatically different optimal strategies compared to the 8B model.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parallelism</th>
+<th>Batch</th>
+<th>Seq</th>
+<th>Compile</th>
+<th>Memory</th>
+<th>tok/s</th>
+<th>TFLOPS</th>
+<th>MFU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FSDP(dp=8)</td>
+<td>8</td>
+<td>4096</td>
+<td>❌</td>
+<td>85%</td>
+<td>3,648</td>
+<td>794</td>
+<td>35.29%</td>
+</tr>
+<tr class="even">
+<td>HSDP(dp_rep=2, dp_shard=4)</td>
+<td>16</td>
+<td>2048</td>
+<td>❌</td>
+<td>98%</td>
+<td>1,871</td>
+<td>383</td>
+<td>17.03%</td>
+</tr>
+<tr class="odd">
+<td>TP+HSDP(dp_rep=2, dp_shard=4, tp=2)</td>
+<td>16</td>
+<td>2048</td>
+<td>❌</td>
+<td>97%</td>
+<td>3,224</td>
+<td>660</td>
+<td>29.35%</td>
+</tr>
+<tr class="even">
+<td>TP+HSDP(dp_rep=2, dp_shard=4, tp=2)</td>
+<td>16</td>
+<td>2048</td>
+<td>✅</td>
+<td>89%</td>
+<td>4,129</td>
+<td>845</td>
+<td>37.58%</td>
+</tr>
+<tr class="odd">
+<td>TP+FSDP(dp_shard=4, tp=2)</td>
+<td>16</td>
+<td>2048</td>
+<td>❌</td>
+<td>65%</td>
+<td>3,250</td>
+<td>665.52</td>
+<td>29.58%</td>
+</tr>
+<tr class="even">
+<td>TP+FSDP(dp_shard=4, tp=2)</td>
+<td>32</td>
+<td>2048</td>
+<td>❌</td>
+<td>95%</td>
+<td>3,274</td>
+<td>670.47</td>
+<td>29.80%</td>
+</tr>
+<tr class="odd">
+<td>TP+FSDP(dp_shard=4, tp=2)</td>
+<td>16</td>
+<td>4096</td>
+<td>✅</td>
+<td>74%</td>
+<td>4,205</td>
+<td>861.09</td>
+<td>38.27%</td>
+</tr>
+<tr class="even">
+<td><strong>TP+FSDP(dp_shard=4, tp=2)</strong></td>
+<td><strong>32</strong></td>
+<td><strong>2048</strong></td>
+<td><strong>✅</strong></td>
+<td><strong>74%</strong></td>
+<td><strong>4,249</strong></td>
+<td><strong>870</strong></td>
+<td><strong>38.67%</strong> ⭐</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 4: Performance comparison of parallelism strategies on Qwen3-32B using 8× GB200 GPUs. The optimal configuration achieves 38.67% MFU with tensor parallelism enabled.</em></p>
+<hr>
+</section>
+<section id="key-findings-for-32b-models" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="key-findings-for-32b-models"><span class="header-section-number">5.2</span> Key Findings for 32B Models</h3>
+<section id="tensor-parallelism-is-now-essential" class="level4" data-number="5.2.1">
+<h4 data-number="5.2.1" class="anchored" data-anchor-id="tensor-parallelism-is-now-essential"><span class="header-section-number">5.2.1</span> Tensor Parallelism is Now Essential</h4>
+<p>The most critical discovery is that tensor parallelism provides a 72% throughput improvement for 32B models, representing a complete reversal from its 24% penalty observed with 8B models.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>TP</th>
+<th>tok/s</th>
+<th>MFU</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HSDP</td>
+<td>❌</td>
+<td>1,871</td>
+<td>17.03%</td>
+<td>Baseline (FAILS)</td>
+</tr>
+<tr class="even">
+<td>TP+HSDP</td>
+<td>✅</td>
+<td>3,224</td>
+<td>29.35%</td>
+<td><strong>+72% improvement</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 5: Dramatic impact of tensor parallelism on 32B model performance, showing TP as mandatory for larger models.</em></p>
+<p>The 32B model with optimizer states requires approximately 384GB total memory. Without tensor parallelism, activations cause 98% memory usage, creating a severe bottleneck that prevents efficient training. With TP=2, the activation memory is split in half, reducing usage to 74-89% and enabling proper pipelining. This memory relief translates directly to throughput gains that far exceed the communication overhead costs.</p>
+<p>The memory breakdown illustrates this clearly. HSDP without TP uses 96GB for the model plus 100GB for activations, totaling 196GB (98% usage). TP+FSDP reduces this to 48GB for the model plus 60GB for activations, totaling 108GB (74% usage). This 24 percentage point reduction in memory pressure eliminates the primary bottleneck and enables the model to train efficiently.</p>
+</section>
+<section id="compilation-impact-scales-with-model-size" class="level4" data-number="5.2.2">
+<h4 data-number="5.2.2" class="anchored" data-anchor-id="compilation-impact-scales-with-model-size"><span class="header-section-number">5.2.2</span> Compilation Impact Scales with Model Size</h4>
+<p>Compilation provides a 28% throughput improvement for 32B models, compared to only 10% for 8B models. This 2.8× larger benefit stems from the increased optimization opportunities in larger models.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>Compile</th>
+<th>tok/s</th>
+<th>MFU</th>
+<th>Gain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TP+HSDP</td>
+<td>❌</td>
+<td>3,224</td>
+<td>29.35%</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>TP+HSDP</td>
+<td>✅</td>
+<td>4,129</td>
+<td>37.58%</td>
+<td><strong>+28%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 6: Compilation impact on 32B models showing significantly larger benefits than 8B models.</em></p>
+<p>Larger models benefit more from compilation because they have twice as many layers (64 vs 32), creating twice as many fusion opportunities. The more complex TP+FSDP communication patterns provide more optimization potential. Better memory planning reduces usage from 97% to 89%, and the 64 layers create 256 synchronization points that the compiler can optimize through operation fusion.</p>
+</section>
+<section id="tpfsdp-beats-tphsdp" class="level4" data-number="5.2.3">
+<h4 data-number="5.2.3" class="anchored" data-anchor-id="tpfsdp-beats-tphsdp"><span class="header-section-number">5.2.3</span> TP+FSDP Beats TP+HSDP</h4>
+<p>A surprising result emerges: the simpler TP+FSDP configuration outperforms the more complex TP+HSDP approach.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>Memory</th>
+<th>tok/s</th>
+<th>MFU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TP+HSDP(dp_rep=2, dp_shard=4, tp=2)</td>
+<td>89%</td>
+<td>4,129</td>
+<td>37.58%</td>
+</tr>
+<tr class="even">
+<td>TP+FSDP(dp_shard=4, tp=2)</td>
+<td>74%</td>
+<td>4,205</td>
+<td>38.27%</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 7: Comparison showing simpler TP+FSDP outperforming complex TP+HSDP configuration.</em></p>
+<p>TP+FSDP offers three key advantages: 15% lower memory usage (74% vs 89%), 1.8% faster throughput due to cleaner communication patterns, and significantly simpler configuration with 2D parallelism (TP × FSDP) instead of 3D (TP × FSDP × Replicate). This aligns with the pattern observed in 8B models where simplicity often yields better performance.</p>
+</section>
+<section id="batch-size-scaling-fails-for-32b" class="level4" data-number="5.2.4">
+<h4 data-number="5.2.4" class="anchored" data-anchor-id="batch-size-scaling-fails-for-32b"><span class="header-section-number">5.2.4</span> Batch Size Scaling Fails for 32B</h4>
+<p>Unlike 8B models where increasing batch size provided meaningful improvements, 32B models show negligible gains when scaling from batch size 16 to 32.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Batch</th>
+<th>Memory</th>
+<th>tok/s</th>
+<th>MFU</th>
+<th>Gain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16</td>
+<td>65%</td>
+<td>3,250</td>
+<td>29.58%</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td>95%</td>
+<td>3,274</td>
+<td>29.80%</td>
+<td><strong>+0.7%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 8: Batch size scaling showing diminishing returns for 32B models.</em></p>
+<p>This failure occurs because the model already saturates the GB200’s 5TB/s memory bandwidth at batch size 16. Activation checkpointing overhead increases with batch size, offsetting any potential gains. The practical recommendation is to use batch size 16 for safety and memory headroom, as batch size 32 wastes memory for minimal benefit.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="comparative-analysis-8b-vs-32b-model-behavior" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="comparative-analysis-8b-vs-32b-model-behavior"><span class="header-section-number">6</span> Comparative Analysis: 8B vs 32B Model Behavior</h2>
+<section id="critical-differences" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="critical-differences"><span class="header-section-number">6.1</span> Critical Differences</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Llama 8B</th>
+<th>Qwen3-32B</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Best Config</td>
+<td>Pure FSDP</td>
+<td>TP+FSDP</td>
+<td>TP mandatory</td>
+</tr>
+<tr class="even">
+<td>TP Impact</td>
+<td>-24% penalty</td>
+<td>+72% gain</td>
+<td><strong>Complete reversal</strong></td>
+</tr>
+<tr class="odd">
+<td>Compile Impact</td>
+<td>+10%</td>
+<td>+28%</td>
+<td>2.8× more critical</td>
+</tr>
+<tr class="even">
+<td>Best MFU</td>
+<td>45%</td>
+<td>38.67%</td>
+<td>Lower (expected)</td>
+</tr>
+<tr class="odd">
+<td>Batch Scaling</td>
+<td>+7.8% MFU</td>
+<td>+0.7% MFU</td>
+<td>Diminished</td>
+</tr>
+<tr class="even">
+<td>Main Bottleneck</td>
+<td>Communication</td>
+<td>Memory pressure</td>
+<td>Different</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 9: Comprehensive comparison showing how optimal strategies shift dramatically between 8B and 32B models.</em></p>
+</section>
+<section id="the-inflection-point" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="the-inflection-point"><span class="header-section-number">6.2</span> The Inflection Point</h3>
+<p>The systematic discovery that tensor parallelism transitions from harmful to essential represents a critical inflection point in distributed training strategy. For 8B models, the communication overhead of tensor parallelism exceeds any memory benefits, resulting in a 24% performance penalty. The model fits comfortably within single-GPU memory, making the complexity unjustified.</p>
+<p>For 32B models, this relationship inverts completely. Memory pressure becomes the dominant constraint, with activations consuming prohibitive amounts of GPU memory. Tensor parallelism’s ability to split activations across GPUs provides memory savings that far exceed the communication overhead, resulting in a 72% performance gain. Without TP, the 32B model operates at only 17% MFU—effectively unusable for production training.</p>
+<p>This transition occurs somewhere between 8B and 32B parameters, likely around 16-20B for the GB200 hardware configuration. The exact threshold depends on model architecture, sequence length, batch size, and available GPU memory, but the principle holds: there exists a critical model size beyond which tensor parallelism shifts from optional overhead to essential requirement.</p>
+<hr>
+</section>
+</section>
+<section id="optimal-configurations" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="optimal-configurations"><span class="header-section-number">7</span> Optimal Configurations</h2>
+<section id="for-llama-3.1-8b-or-similar-8b-models" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="for-llama-3.1-8b-or-similar-8b-models"><span class="header-section-number">7.1</span> For Llama 3.1 8B (or similar 8B models)</h3>
+<p><strong>Development Setup:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[parallelism]</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dt">data_parallel_shard_degree</span> <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="dt">tensor_parallel_degree</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">pipeline_parallel_degree</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[training]</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="dt">local_batch_size</span> <span class="op">=</span> <span class="dv">16</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="dt">seq_len</span> <span class="op">=</span> <span class="dv">2048</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">[compile]</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="dt">enable</span> <span class="op">=</span> <span class="cn">true</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Expected Performance:</strong> 44.66% MFU, 20,849 tok/s, 50% memory usage</p>
+<p><strong>Production Setup (maximum performance):</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[parallelism]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">data_parallel_replicate_degree</span> <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="dt">data_parallel_shard_degree</span> <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[training]</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="dt">local_batch_size</span> <span class="op">=</span> <span class="dv">32</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="dt">seq_len</span> <span class="op">=</span> <span class="dv">2048</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">[compile]</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="dt">enable</span> <span class="op">=</span> <span class="cn">true</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Expected Performance:</strong> 45% MFU, 20,963 tok/s, 95% memory usage</p>
+<hr>
+</section>
+<section id="for-qwen3-32b-or-similar-32b-models" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="for-qwen3-32b-or-similar-32b-models"><span class="header-section-number">7.2</span> For Qwen3-32B (or similar 32B models)</h3>
+<p><strong>Production Setup:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[parallelism]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">tensor_parallel_degree</span> <span class="op">=</span> <span class="dv">2</span>          <span class="co"># MANDATORY for 32B</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dt">data_parallel_shard_degree</span> <span class="op">=</span> <span class="dv">4</span>      <span class="co"># Optimal balance</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">data_parallel_replicate_degree</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="dt">pipeline_parallel_degree</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="dt">context_parallel_degree</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">[training]</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="dt">local_batch_size</span> <span class="op">=</span> <span class="dv">16</span>               <span class="co"># Sweet spot (32 for +0.7% if needed)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="dt">seq_len</span> <span class="op">=</span> <span class="dv">2048</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="kw">[compile]</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="dt">enable</span> <span class="op">=</span> <span class="cn">true</span>                       <span class="co"># NON-NEGOTIABLE (+28% throughput)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">[activation_checkpoint]</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="dt">mode</span> <span class="op">=</span> <span class="st">"selective"</span>                  <span class="co"># Balance memory/speed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Expected Performance:</strong> 38.67% MFU, 4,249 tok/s, 74% memory usage, excellent stability</p>
+<hr>
+</section>
+</section>
+<section id="golden-rules-for-production-training" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="golden-rules-for-production-training"><span class="header-section-number">8</span> Golden Rules for Production Training</h2>
+<section id="for-8b-models" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="for-8b-models"><span class="header-section-number">8.1</span> For 8B Models:</h3>
+<ol type="1">
+<li><strong>Keep it simple</strong> - Pure FSDP or HSDP provides best performance</li>
+<li><strong>Avoid tensor parallelism</strong> - Introduces 15-25% overhead</li>
+<li><strong>Enable compilation</strong> - Mandatory for 10% throughput gain</li>
+<li><strong>Use batch size 16-32</strong> - Good scaling up to bs=32</li>
+<li><strong>Memory is abundant</strong> - 50% usage provides huge experimentation headroom</li>
+</ol>
+</section>
+<section id="for-32b-models" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="for-32b-models"><span class="header-section-number">8.2</span> For 32B+ Models:</h3>
+<ol type="1">
+<li><strong>Tensor parallelism is mandatory</strong> - Without TP=2, performance collapses to 17% MFU</li>
+<li><strong>Compilation is essential</strong> - Provides 28% throughput improvement, cannot skip</li>
+<li><strong>TP+FSDP &gt; TP+HSDP</strong> - Simpler configuration wins (74% vs 89% memory)</li>
+<li><strong>Batch size doesn’t scale</strong> - bs=16 is optimal, bs=32 wastes memory for negligible gain</li>
+<li><strong>Memory pressure dominates</strong> - Activations are the primary constraint, not parameters</li>
+</ol>
+</section>
+<section id="universal-rules" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="universal-rules"><span class="header-section-number">8.3</span> Universal Rules:</h3>
+<ol type="1">
+<li><strong>Always enable torch compilation</strong> - Benefits scale with model size</li>
+<li><strong>Match parallelism to actual constraints</strong> - Test empirically rather than following theoretical recommendations</li>
+<li><strong>Simpler is often better</strong> - Lower dimensional parallelism typically outperforms complex 3D/4D approaches</li>
+<li><strong>Hardware matters</strong> - GB200’s 192GB memory enables strategies impossible on smaller GPUs</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="industry-context-and-validation" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="industry-context-and-validation"><span class="header-section-number">9</span> Industry Context and Validation</h2>
+<p><strong>Our Results:</strong></p>
+<ul>
+<li>Llama 3.1 8B: 45% MFU on GB200</li>
+<li>Qwen3-32B: 38.67% MFU on GB200</li>
+</ul>
+<p><strong>Industry Benchmarks:</strong></p>
+<ul>
+<li>Meta Llama 3 70B: 40-45% MFU on H100 clusters</li>
+<li>Typical 30B-70B models: 35-40% MFU</li>
+<li>OpenAI GPT-3: ~35% MFU (reported)</li>
+</ul>
+<p><strong>Verdict:</strong> Both results are production-grade and competitive with industry leaders. The 8B result at 45% MFU is exceptional, while the 32B result at 38.67% MFU aligns perfectly with industry standards for this model scale.</p>
+<hr>
+</section>
+<section id="future-research-directions" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="future-research-directions"><span class="header-section-number">10</span> Future Research Directions</h2>
+<section id="high-priority-experiments" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="high-priority-experiments"><span class="header-section-number">10.1</span> High-Priority Experiments:</h3>
+<p><strong>For 8B Models:</strong></p>
+<ol type="1">
+<li><p>Test pipeline parallelism with extreme sequence lengths (32K-128K tokens)</p></li>
+<li><p>Evaluate performance on GPUs with smaller memory (A100 80GB) where TP might become beneficial</p></li>
+<li><p>Explore gradient accumulation strategies for memory-constrained scenarios</p></li>
+</ol>
+<p><strong>For 32B Models:</strong></p>
+<ol type="1">
+<li><p>Test TP=4 to validate diminishing returns hypothesis</p></li>
+<li><p>Try full activation checkpointing to reduce 74% → ~60% memory and enable longer sequences</p></li>
+<li><p>Evaluate long-context training at seq_len = 8192, 16384 with TP+FSDP</p></li>
+<li><p>Test TP=2, PP=2, FSDP=2 configuration for extreme sequences (32K+)</p></li>
+<li><p>Compare gradient accumulation: bs=16 grad_accum=2 vs bs=32 grad_accum=1</p></li>
+</ol>
+<p><strong>For Both:</strong></p>
+<ol type="1">
+<li><p>Multi-node scaling experiments (16-32 GPUs) to understand communication patterns at larger scale</p></li>
+<li><p>Mixed precision experiments with FP8 for further memory reduction</p></li>
+<li><p>Profiling to identify remaining bottlenecks beyond current optimizations</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="conclusions" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">11</span> Conclusions</h2>
+<p>This comprehensive analysis reveals that optimal distributed training strategies are highly dependent on model scale, with a critical inflection point between 8B and 32B parameters where tensor parallelism transitions from performance-degrading overhead to essential requirement.</p>
+<p><strong>Key Insights:</strong></p>
+<p>For 8B models on well-provisioned hardware like GB200, simplicity wins. Pure FSDP achieves 44.66% MFU using only 50% memory, while HSDP reaches 45% MFU at the cost of 95% memory usage. Tensor parallelism introduces 15-25% overhead with no benefit, and complex 3D parallelism configurations consistently underperform simpler 2D approaches. Torch compilation provides a consistent 10% throughput improvement with 30-70% memory reduction and should always be enabled.</p>
+<p>For 32B models, the landscape transforms completely. Tensor parallelism becomes mandatory, providing a 72% throughput improvement by splitting activation memory across GPUs and preventing the 98% memory saturation that cripples training without it. The simpler TP+FSDP configuration outperforms complex TP+HSDP while using 15% less memory. Compilation impact scales to 28% throughput improvement, and batch size scaling effectiveness diminishes as memory bandwidth saturation occurs at lower batch sizes.</p>
+<p>The systematic discovery of this inflection point demonstrates the critical importance of empirical testing across model scales rather than relying on theoretical guidelines. A strategy that is optimal for 8B models (avoiding tensor parallelism) becomes catastrophic for 32B models (17% MFU without TP), while the reverse is equally true.</p>
+<p><strong>Production Recommendations:</strong></p>
+<p>For 8B models, use pure FSDP with batch size 16 for development (44.66% MFU, 50% memory) or HSDP with batch size 32 for maximum performance (45% MFU, 95% memory). Always enable compilation. Never use tensor parallelism unless deploying on memory-constrained GPUs.</p>
+<p>For 32B models, use TP+FSDP with TP=2, FSDP=4, batch size 16, and compilation enabled (38.67% MFU, 74% memory). Tensor parallelism is non-negotiable—without it, performance collapses to unusable levels. Compilation is essential, providing nearly 30% throughput improvement. Avoid increasing batch size beyond 16 as gains diminish while memory pressure increases.</p>
+<p>These findings provide actionable guidance for production LLM training and establish empirical benchmarks for evaluating parallelism strategies across the critical 8B-32B parameter range where optimal approaches undergo fundamental transitions.</p>
+<hr>
+</section>
+<section id="references" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="references"><span class="header-section-number">12</span> References</h2>
+<ol type="1">
+<li><p><strong>TorchTitan: A PyTorch Native Library for Large Scale LLM Training</strong> GitHub Repository: <a href="https://github.com/pytorch/torchtitan">https://github.com/pytorch/torchtitan</a></p></li>
+<li><p><strong>TorchTitan Paper</strong> <em>TorchTitan: One-stop PyTorch native solution for production ready LLM pre-training</em> arXiv preprint (2024) <a href="https://arxiv.org/abs/2410.06511">https://arxiv.org/abs/2410.06511</a></p></li>
+</ol>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/your-website-url\.example\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Scaling LLM Pre-Training with TorchTitan: From Simple FSDP to 4D Parallelism at Scale"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "A comprehensive performance analysis of distributed training strategies using TorchTitan on NVIDIA GB200 GPUs, revealing the critical inflection point where tensor parallelism transitions from overhead to essential requirement as we scale from 8B to 32B parameters"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Dipankar Baisya"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-01-05"</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [distributed-training, torchtitan, parallelism, llm, fsdp, tensor-parallel, pipeline-parallel, pytorch]</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: false</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: true</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>{{&lt; include ./3d.md &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

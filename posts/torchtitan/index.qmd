@@ -1,0 +1,16 @@
+---
+title: "Scaling LLM Pre-Training with TorchTitan: From Simple FSDP to 4D Parallelism at Scale"
+description: "A comprehensive performance analysis of distributed training strategies using TorchTitan on NVIDIA GB200 GPUs, revealing the critical inflection point where tensor parallelism transitions from overhead to essential requirement as we scale from 8B to 32B parameters"
+author: "Dipankar Baisya"
+date: "2026-01-05"
+categories: [distributed-training, torchtitan, parallelism, llm, fsdp, tensor-parallel, pipeline-parallel, pytorch]
+format:
+  html:
+    code-fold: false
+    code-tools: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+{{< include ./3d.md >}}

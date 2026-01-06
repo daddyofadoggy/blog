@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/torchtitan/index.html",
       "/posts/fp8/index.html",
       "/posts/Today's-Learning-Nugget/index.html",
       "/posts/ddp_fsdp/index.html",

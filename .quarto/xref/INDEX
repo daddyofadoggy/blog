@@ -108,5 +108,11 @@
   },
   "posts/fp8/fp8_blog.md": {
     "fp8_blog.html": "3113728e"
+  },
+  "posts/torchtitan/3d.md": {
+    "3d.html": "27fa3c13"
+  },
+  "posts/torchtitan/index.qmd": {
+    "index.html": "e289ea18"
   }
 }
